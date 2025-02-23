@@ -1,0 +1,33 @@
+lzc-sdk-version: 0.1
+name: Filezilla
+package: ink.akawa.ety001.filezilla
+version: 3.68.1
+description: FileZilla Client is a fast and reliable cross-platform FTP, FTPS and SFTP client with lots of useful features and an intuitive graphical user interface.
+license: https://filezilla-project.org/license.php
+homepage: https://filezilla-project.org/
+author: FileZilla
+min_os_version: 1.3.0
+unsupported_platforms:
+  - ios
+  - android
+application:
+  subdomain: filezilla
+  background_task: true
+  multi_instance: false
+  routes:
+    - /=http://filezilla.ink.akawa.ety001.filezilla.lzcapp:3000
+services:
+  filezilla:
+    image: registry.lazycat.cloud/ety001/ety001/filezilla:3c242683efd31c9b
+    environments:
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/config:/config
+      - /lzcapp/run/mnt/home:/home
+locales:
+  zh:
+    description: "FileZilla 客户端是一个快速、可靠的跨平台 FTP、FTPS 和 SFTP 客户端，具有大量有用的功能和直观的图形用户界面。"
+  zh_CN:
+    description: "FileZilla 客户端是一个快速、可靠的跨平台 FTP、FTPS 和 SFTP 客户端，具有大量有用的功能和直观的图形用户界面。"
+  en:
+    description: "FileZilla Client is a fast and reliable cross-platform FTP, FTPS and SFTP client with lots of useful features and an intuitive graphical user interface."
