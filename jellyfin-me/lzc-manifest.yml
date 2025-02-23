@@ -4,6 +4,7 @@ version: 10.10.6
 name: Jellyfin Me
 description: 由 ETY001 封装的 Jellyfin，主要是把网络改为了 HOST
 homepage: https://jellyfin.org/
+#homepage: https://github.com/ety001/lzc-appdb/tree/master/jellyfin-me
 author: Jellyfin
 application:
   gpu_accel: true
@@ -19,12 +20,6 @@ services:
     #image: linuxserver/jellyfin:10.10.6
     image: registry.lazycat.cloud/ety001/linuxserver/jellyfin:d550c06870254f34
     network_mode: "host"
-    environment:
-      - OAUTH2_ENABLE=true
-      - OAUTH2_LOGIN_STYLE=redirect
-      - OAUTH2_CLIENT_ID=${LAZYCAT_AUTH_OIDC_CLIENT_ID}
-      - OAUTH2_CLIENT_SECRET=${LAZYCAT_AUTH_OIDC_CLIENT_SECRET}
-      - OAUTH2_SERVER_URL=${LAZYCAT_AUTH_OIDC_ISSUER_URL}
     binds:
       - /lzcapp/var/config:/config
       - /lzcapp/run/mnt/home:/home
