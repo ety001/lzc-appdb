@@ -1,0 +1,34 @@
+lzc-sdk-version: 0.1
+name: Kdenlive
+package: ink.akawa.ety001.kdenlive
+version: 23.08.5
+description: Kdenlive is an acronym for KDE Non-Linear Video Editor. It works on GNU/Linux, Windows and BSD.
+license: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+homepage: https://kdenlive.org/
+author: Kdenlive
+min_os_version: 1.3.0
+unsupported_platforms:
+  - ios
+  - android
+application:
+  subdomain: kdenlive
+  background_task: true
+  multi_instance: false
+  gpu_accel: true
+  routes:
+    - /=http://kdenlive.ink.akawa.ety001.kdenlive.lzcapp:3000
+services:
+  kdenlive:
+    image: registry.lazycat.cloud/ety001/ety001/kdenlive:0c03972cab9098b6
+    environments:
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/config:/config
+      - /lzcapp/run/mnt/home:/home
+locales:
+  zh:
+    description: "Kdenlive 是 KDE 非线性视频编辑器的缩写。它在 GNU/Linux、Windows 和 BSD 上工作。"
+  zh_CN:
+    description: "Kdenlive 是 KDE 非线性视频编辑器的缩写。它在 GNU/Linux、Windows 和 BSD 上工作。"
+  en:
+    description: "Kdenlive is an acronym for KDE Non-Linear Video Editor. It works on GNU/Linux, Windows and BSD."
