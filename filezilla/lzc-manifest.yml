@@ -13,7 +13,7 @@ unsupported_platforms:
 application:
   subdomain: filezilla
   background_task: true
-  multi_instance: false
+  multi_instance: true
   routes:
     - /=http://filezilla.ink.akawa.ety001.filezilla.lzcapp:3000
 services:
@@ -21,9 +21,10 @@ services:
     image: registry.lazycat.cloud/ety001/ety001/filezilla:3c242683efd31c9b
     environments:
       - TZ=Asia/Shanghai
+      - FM_HOME=/home/filezilla
     binds:
       - /lzcapp/var/config:/config
-      - /lzcapp/run/mnt/home:/home
+      - /lzcapp/run/mnt/home:/home/filezilla
 locales:
   zh:
     description: "FileZilla 客户端是一个快速、可靠的跨平台 FTP、FTPS 和 SFTP 客户端，具有大量有用的功能和直观的图形用户界面。"
