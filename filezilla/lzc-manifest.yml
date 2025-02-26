@@ -18,13 +18,12 @@ application:
     - /=http://filezilla.ink.akawa.ety001.filezilla.lzcapp:3000
 services:
   filezilla:
-    image: registry.lazycat.cloud/ety001/ety001/filezilla:3c242683efd31c9b
+    image: registry.lazycat.cloud/ety001/ety001/filezilla:42d8c80635ba9452
     environments:
       - TZ=Asia/Shanghai
-      - FM_HOME=/home/filezilla
     binds:
       - /lzcapp/var/config:/config
-      - /lzcapp/run/mnt/home:/home/filezilla
+      - /lzcapp/run/mnt/home:/home/${LAZYCAT_APP_DEPLOY_UID}
 locales:
   zh:
     description: "FileZilla 客户端是一个快速、可靠的跨平台 FTP、FTPS 和 SFTP 客户端，具有大量有用的功能和直观的图形用户界面。"
