@@ -22,10 +22,10 @@ services:
     image: registry.lazycat.cloud/ety001/ety001/kdenlive:0c03972cab9098b6
     environments:
       - TZ=Asia/Shanghai
-      - FM_HOME=/home/kdenlive
+      - FM_HOME=/home/${LAZYCAT_APP_DEPLOY_UID}
     binds:
       - /lzcapp/var/config:/config
-      - /lzcapp/run/mnt/home:/home/kdenlive
+      - /lzcapp/run/mnt/home:/home/${LAZYCAT_APP_DEPLOY_UID}
 locales:
   zh:
     description: "Kdenlive 是 KDE 非线性视频编辑器的缩写。它在 GNU/Linux、Windows 和 BSD 上工作。"

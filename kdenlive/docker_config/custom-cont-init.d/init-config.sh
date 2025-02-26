@@ -1,0 +1,4 @@
+#!/bin/bash
+mkdir -p /config/.config/filezilla
+[ ! -f /config/.config/kdenliverc ] && cp /lzcapp/pkg/content/kdenliverc /config/.config/kdenliverc
+sed -i "s/LZC_USER_NAME/${LAZYCAT_APP_DEPLOY_UID}/g" /config/.config/kdenliverc
