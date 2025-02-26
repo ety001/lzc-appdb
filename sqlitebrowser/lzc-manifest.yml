@@ -17,7 +17,7 @@ application:
     - /=http://sqlitebrowser.ink.akawa.ety001.sqlitebrowser.lzcapp:3000
 services:
   sqlitebrowser:
-    image: registry.lazycat.cloud/ety001/ety001/sqlitebrowser:e2117f3ab35b7dde
+    image: registry.lazycat.cloud/ety001/ety001/sqlitebrowser:647eb9d8819e6c7a
     environments:
       - TZ=Asia/Shanghai
     binds:
