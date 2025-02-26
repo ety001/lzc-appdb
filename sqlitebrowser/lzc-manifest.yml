@@ -1,0 +1,32 @@
+lzc-sdk-version: 0.1
+name: sqlitebrowser
+package: ink.akawa.ety001.sqlitebrowser
+version: 3.13.1
+description: DB Browser for SQLite (DB4S) is a high quality, visual, open source tool designed for people who want to create, search, and edit SQLite or SQLCipher database files.
+license: https://github.com/sqlitebrowser/sqlitebrowser/blob/master/LICENSE
+homepage: https://sqlitebrowser.org/
+author: sqlitebrowser
+min_os_version: 1.3.0
+unsupported_platforms:
+  - ios
+  - android
+application:
+  subdomain: sqlitebrowser
+  multi_instance: true
+  routes:
+    - /=http://sqlitebrowser.ink.akawa.ety001.sqlitebrowser.lzcapp:3000
+services:
+  sqlitebrowser:
+    image: registry.lazycat.cloud/ety001/ety001/sqlitebrowser:e2117f3ab35b7dde
+    environments:
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/config:/config
+      - /lzcapp/run/mnt/home:/home/${LAZYCAT_APP_DEPLOY_UID}
+locales:
+  zh:
+    description: "DB Browser for SQLite (DB4S) 是一个高质量、可视化的开源工具，旨在为希望创建、搜索和编辑 SQLite 或 SQLCipher 数据库文件的人提供帮助。"
+  zh_CN:
+    description: "DB Browser for SQLite (DB4S) 是一个高质量、可视化的开源工具，旨在为希望创建、搜索和编辑 SQLite 或 SQLCipher 数据库文件的人提供帮助。"
+  en:
+    description: "DB Browser for SQLite (DB4S) is a high quality, visual, open source tool designed for people who want to create, search, and edit SQLite or SQLCipher database files."
