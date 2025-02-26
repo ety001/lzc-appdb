@@ -18,7 +18,7 @@ application:
     - /=http://filezilla.ink.akawa.ety001.filezilla.lzcapp:3000
 services:
   filezilla:
-    image: registry.lazycat.cloud/ety001/ety001/filezilla:d63c2d012e0159f2
+    image: registry.lazycat.cloud/ety001/ety001/filezilla:061b39fc697b02c0
     environments:
       - TZ=Asia/Shanghai
     binds:
