@@ -20,8 +20,9 @@ application:
 services:
   kdenlive:
     image: registry.lazycat.cloud/ety001/ety001/kdenlive:8788c1f716279d07
-    environments:
+    environment:
       - TZ=Asia/Shanghai
+      - FM_HOME=/home/${LAZYCAT_APP_DEPLOY_UID}
     binds:
       - /lzcapp/var/config:/config
       - /lzcapp/run/mnt/home:/home/${LAZYCAT_APP_DEPLOY_UID}

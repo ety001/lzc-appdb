@@ -19,8 +19,9 @@ application:
 services:
   filezilla:
     image: registry.lazycat.cloud/ety001/ety001/filezilla:061b39fc697b02c0
-    environments:
+    environment:
       - TZ=Asia/Shanghai
+      - FM_HOME=/home/${LAZYCAT_APP_DEPLOY_UID}
     binds:
       - /lzcapp/var/config:/config
       - /lzcapp/run/mnt/home:/home/${LAZYCAT_APP_DEPLOY_UID}

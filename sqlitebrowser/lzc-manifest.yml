@@ -18,8 +18,10 @@ application:
 services:
   sqlitebrowser:
     image: registry.lazycat.cloud/ety001/ety001/sqlitebrowser:647eb9d8819e6c7a
-    environments:
+    environment:
       - TZ=Asia/Shanghai
+      - FM_HOME=/home/${LAZYCAT_APP_DEPLOY_UID}
+      - NO_FULL=1
     binds:
       - /lzcapp/var/config:/config
       - /lzcapp/run/mnt/home:/home/${LAZYCAT_APP_DEPLOY_UID}
