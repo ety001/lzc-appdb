@@ -11,6 +11,9 @@ VNC-0=VNC-0
 [Recent Dirs]
 KdenliveClipFolder[$e]=/home/LZC_USER_NAME
 
+[env]
+defaultprojectfolder[$e]=/home/LZC_USER_NAME/Videos/Kdenlive
+
 [UiSettings]
 ColorSchemePath=BreezeDark.colors
 

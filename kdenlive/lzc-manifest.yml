@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: Kdenlive
 package: ink.akawa.ety001.kdenlive
-version: 23.8.7
+version: 23.8.8-r0
 description: Kdenlive is an acronym for KDE Non-Linear Video Editor. It works on GNU/Linux, Windows and BSD.
 license: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 homepage: https://kdenlive.org/
@@ -19,7 +19,7 @@ application:
     - /=http://kdenlive.ink.akawa.ety001.kdenlive.lzcapp:3000
 services:
   kdenlive:
-    image: registry.lazycat.cloud/ety001/ety001/kdenlive:8788c1f716279d07
+    image: registry.lazycat.cloud/ety001/ety001/kdenlive:09ea298bd31b958e
     environment:
       - TZ=Asia/Shanghai
       - PUID=0
