@@ -12,16 +12,12 @@ application:
   background_task: false
   multi_instance: true
   routes:
-    - /=http://authsteem.ink.akawa.ety001.authsteem.lzcapp
+    - /=http://authsteem:80
 services:
   authsteem:
-    image: registry.lazycat.cloud/ety001/ety001/filezilla:061b39fc697b02c0
+    image: registry.lazycat.cloud/ety001/steemfans/authsteem:41a8dff3ee8db3da
     environment:
       - TZ=Asia/Shanghai
-      - PUID=0
-      - PGID=0
-      - NO_FULL=1
-      - FM_HOME=/home/${LAZYCAT_APP_DEPLOY_UID}
     binds:
       - /lzcapp/var/config:/config
 locales:
