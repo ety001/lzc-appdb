@@ -1,0 +1,41 @@
+lzc-sdk-version: 0.1
+name: Banbot
+package: ink.akawa.ety001.banbot
+version: 0.0.1
+description: Banbot is a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading robot.
+license: https://github.com/banbox/banbot?tab=AGPL-3.0-1-ov-file#readme
+homepage: https://www.banbot.site/
+author: banbot
+min_os_version: 1.3.0
+application:
+  subdomain: banbot
+  background_task: true
+  multi_instance: false
+  routes:
+    - /=http://banbot.ink.akawa.ety001.banbot.lzcapp:8000
+services:
+  banbot:
+    image: registry.lazycat.cloud/ety001/banbot/banbot:667d0ebff1164895
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      - timescaledb
+    binds:
+      - /lzcapp/var/config:/config
+      - /lzcapp/var/data:/ban/data
+      - /lzcapp/var/strats:/ban/strats
+    entrypoint: /lzcapp/pkg/content/init.sh
+  timescaledb:
+    image: registry.lazycat.cloud/ety001/timescale/timescaledb:a7eb4b43d24c842e
+    environment:
+      - TZ=Asia/Shanghai
+      - POSTGRES_PASSWORD=123456
+    binds:
+      - /lzcapp/var/pgdata:/var/lib/postgresql/data
+locales:
+  zh:
+    description: "Banbot是一款高性能、易用的多币种、多策略、多周期、多账户事件驱动交易机器人"
+  zh_CN:
+    description: "Banbot是一款高性能、易用的多币种、多策略、多周期、多账户事件驱动交易机器人"
+  en:
+    description: "Banbot is a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading robot"

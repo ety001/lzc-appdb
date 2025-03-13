@@ -1,0 +1,2 @@
+database:
+  url: postgresql://postgres:123456@[datahost]:5432/ban
