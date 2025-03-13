@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: AuthSteem
 package: ink.akawa.ety001.authsteem
-version: 0.0.1
+version: 0.0.2
 description: An offline sign program for Steem Blockchain.
 license: https://github.com/steemfans/authsteem#MIT-1-ov-file
 homepage: https://github.com/steemfans/authsteem
@@ -12,14 +12,15 @@ application:
   background_task: false
   multi_instance: true
   routes:
-    - /=http://authsteem:80
+    - /=http://authsteem:5000
 services:
   authsteem:
-    image: registry.lazycat.cloud/ety001/steemfans/authsteem:41a8dff3ee8db3da
+    # ety001/authsteem-for-lazycat:edge
+    image: registry.lazycat.cloud/ety001/ety001/authsteem-for-lazycat:4a8fd1d40ceba5fb
     environment:
       - TZ=Asia/Shanghai
     binds:
-      - /lzcapp/var/config:/config
+      - /lzcapp/var/db:/app/db
 locales:
   zh:
     description: "一款 Steem 区块链离线签名程序"
