@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: Banbot
 package: ink.akawa.ety001.banbot
-version: 0.0.1
+version: 0.0.2
 description: Banbot is a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading robot.
 license: https://github.com/banbox/banbot?tab=AGPL-3.0-1-ov-file#readme
 homepage: https://www.banbot.site/
@@ -32,6 +32,12 @@ services:
       - POSTGRES_PASSWORD=123456
     binds:
       - /lzcapp/var/pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "postgres"]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 60s
 locales:
   zh:
     description: "Banbot是一款高性能、易用的多币种、多策略、多周期、多账户事件驱动交易机器人"
