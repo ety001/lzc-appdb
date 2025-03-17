@@ -16,6 +16,7 @@ if [ -f "$envfile" ]; then
             # parse key and value
             key=$(echo "$line" | cut -d'=' -f1)
             value=$(echo "$line" | cut -d'=' -f2)
+            echo "TEST ENV: $key=$value"
             # set env
             export "$key"="$value"
         fi
@@ -23,28 +24,27 @@ if [ -f "$envfile" ]; then
 else
     echo "$envfile not exist, pass this part."
 fi
-/ban/bot -config /config/config.yml -host 0.0.0.0
 
-# 定义重试次数和间隔时间
-#x=10  # 重试次数
-#y=10  # 间隔时间（秒）
-#
-#attempt=0
-#while [ $attempt -lt $x ]; do
-#  /ban/bot -config /config/config.yml -host 0.0.0.0
-#  exit_status=$?
-#  if [ $exit_status -eq 0 ]; then
-#    # 程序成功执行，退出循环
-#    break
-#  else
-#    attempt=$((attempt + 1))
-#    if [ $attempt -lt $x ]; then
-#      echo "程序执行失败，将在 $y 秒后进行第 $attempt 次重试..."
-#      sleep $y
-#    fi
-#  fi
-#done
-#
-#if [ $attempt -eq $x ]; then
-#  echo "程序经过 $x 次重试后仍然失败。"
-#fi
+# config retry times
+retry=20  # retry times
+interval=10  # interval (seconds)
+
+attempt=0
+while [ $attempt -lt $retry ]; do
+  /ban/bot -config /config/config.yml -host 0.0.0.0
+  exit_status=$?
+  if [ $exit_status -eq 0 ]; then
+    # do success and exit loop
+    break
+  else
+    attempt=$((attempt + 1))
+    if [ $attempt -lt $retry ]; then
+      echo "程序执行失败，将在 $y 秒后进行第 $attempt 次重试..."
+      sleep $interval
+    fi
+  fi
+done
+
+if [ $attempt -eq $retry ]; then
+  echo "程序经过 $retry 次重试后仍然失败。"
+fi
