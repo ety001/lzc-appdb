@@ -1,0 +1,34 @@
+lzc-sdk-version: 0.1
+name: NarratoAI
+package: ink.akawa.ety001.narratoai
+version: 0.0.1
+description: NarratoAI is a one-stop AI video narration and automated clipping tool.
+license: https://github.com/linyqh/NarratoAI?tab=MIT-1-ov-file#readme
+homepage: https://github.com/linyqh/NarratoAI
+author: linyqh
+min_os_version: 1.3.0
+application:
+  subdomain: narratoai
+  background_task: true
+  multi_instance: false
+  gpu_accel: true
+  routes:
+    - /=http://narratoai.ink.akawa.ety001.narratoai.lzcapp:8501
+services:
+  narratoai:
+    image: registry.lazycat.cloud/ety001/linyq1/narratoai:18b5c4b222d91113
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONMALLOC=malloc
+      - OPENCV_OPENCL_RUNTIME=disabled
+      - OPENCV_CPU_DISABLE=0
+    binds:
+      - /lzcapp/var/:/NarratoAI
+    entrypoint: /lzcapp/pkg/content/init.sh
+locales:
+  zh:
+    description: "一站式 AI 影视解说+自动化剪辑工具🎬🎞️"
+  zh_CN:
+    description: "一站式 AI 影视解说+自动化剪辑工具🎬🎞️"
+  en:
+    description: "NarratoAI is a one-stop AI video narration and automated clipping tool."
