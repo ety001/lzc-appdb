@@ -39,7 +39,7 @@ while [ $attempt -lt $retry ]; do
   else
     attempt=$((attempt + 1))
     if [ $attempt -lt $retry ]; then
-      echo "程序执行失败，将在 $y 秒后进行第 $attempt 次重试..."
+      echo "程序执行失败, 将在 $y 秒后进行第 $attempt 次重试..."
       sleep $interval
     fi
   fi
