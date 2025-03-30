@@ -1,17 +1,29 @@
 lzc-sdk-version: "0.1"
 package: ink.akawa.ety001.jellyfinme
-version: 10.10.6
+version: 0.0.1
 name: Jellyfin Me
-description: 由 ETY001 封装的 Jellyfin, 主要是把网络改为了 HOST
-homepage: https://jellyfin.org/
+description: 由 NyanMisaka 封装的 中国特供版 Jellyfin, 内置了显卡驱动, 避免了折腾, 开箱即用
+homepage: https://github.com/nyanmisaka
 #homepage: https://github.com/ety001/lzc-appdb/tree/master/jellyfin-me
-author: Jellyfin
+author: nyanmisaka
+usage: |
+  该版本为中国特供版，来自 nyanmisaka, 由于 Jellyfin 的 GPL 协议和 Intel 的 media-driver (iHD) Linux 驱动 (部分开源) 在协议上不兼容的缘故, Jellyfin 官方的 Docker 镜像: jellyfin/jellyfin 并不包含 Intel Linux 核显驱动.
+  但是 Intel 的 QuickSync QSV 硬件加速依赖于该驱动, 并且 Intel 10 代酷睿 (Comet Lake) 以及更新的处理器需要该驱动才能正常使用硬件加速. 另外 VPP/OpenCL 色调映射也需要该驱动才能正常运作.
+  ----------------------------------
+  该版本使用 Host 网络模式, 如果用户需要 DLNA, 可以自行安装 DLNA 插件即可.
+  ----------------------------------
+  资源目录在 /home 下.
+  ----------------------------------
+  如果需要设置代理，可以在 "应用数据" => "jellyfinme" => "config" 目录下创建一个名为 "envfile.txt" 的文件，文件内容为：
+  http_proxy=http://192.168.11.1:7890
+  https_proxy=http://192.168.11.1:7890
+  把上面的地址换成自己的代理地址, 重启应用即可.
+  
 application:
   gpu_accel: true
   usb_accel: true
   multi_instance: false
   background_task: true
-  user_app: true
   routes:
     - /=http://jellyfin.ink.akawa.ety001.jellyfinme.lzcapp:8096
   depends_on:
@@ -19,11 +31,53 @@ application:
   subdomain: jellyfinme
 services:
   jellyfin:
-    #image: linuxserver/jellyfin:10.10.6
-    image: registry.lazycat.cloud/ety001/linuxserver/jellyfin:fc337a25bef5cca8
+    # nyanmisaka/jellyfin:latest
+    image: registry.lazycat.cloud/ety001/nyanmisaka/jellyfin:43daa0b923fc6f43
     network_mode: "host"
+    user: 0:0
     environment:
       - TZ=Asia/Shanghai
+      - JELLYFIN_PublishedServerUrl=https://${LAZYCAT_APP_DOMAIN}
     binds:
       - /lzcapp/var/config:/config
+      - /lzcapp/var/cache:/cache
       - /lzcapp/run/mnt/home:/home
+    entrypoint: /lzcapp/pkg/content/init.sh
+locales:
+  zh:
+    description: 由 NyanMisaka 封装的 中国特供版 Jellyfin, 内置了显卡驱动, 避免了折腾, 开箱即用
+    usage: |
+      该版本为中国特供版，来自 nyanmisaka, 由于 Jellyfin 的 GPL 协议和 Intel 的 media-driver (iHD) Linux 驱动 (部分开源) 在协议上不兼容的缘故, Jellyfin 官方的 Docker 镜像: jellyfin/jellyfin 并不包含 Intel Linux 核显驱动.
+      但是 Intel 的 QuickSync QSV 硬件加速依赖于该驱动, 并且 Intel 10 代酷睿 (Comet Lake) 以及更新的处理器需要该驱动才能正常使用硬件加速. 另外 VPP/OpenCL 色调映射也需要该驱动才能正常运作.
+      ----------------------------------
+      该版本使用 Host 网络模式, 如果用户需要 DLNA, 可以自行安装 DLNA 插件即可.
+      ----------------------------------
+      资源目录在 /home 下.
+      ----------------------------------
+      如果需要设置代理，可以在 "应用数据" => "jellyfinme" => "config" 目录下创建一个名为 "envfile.txt" 的文件，文件内容为：
+      http_proxy=http://192.168.11.1:7890
+      https_proxy=http://192.168.11.1:7890
+      把上面的地址换成自己的代理地址, 重启应用即可.
+  zh_CN:
+    description: 由 NyanMisaka 封装的 中国特供版 Jellyfin, 内置了显卡驱动, 避免了折腾, 开箱即用
+    usage: |
+      该版本为中国特供版，来自 nyanmisaka, 由于 Jellyfin 的 GPL 协议和 Intel 的 media-driver (iHD) Linux 驱动 (部分开源) 在协议上不兼容的缘故, Jellyfin 官方的 Docker 镜像: jellyfin/jellyfin 并不包含 Intel Linux 核显驱动.
+      但是 Intel 的 QuickSync QSV 硬件加速依赖于该驱动, 并且 Intel 10 代酷睿 (Comet Lake) 以及更新的处理器需要该驱动才能正常使用硬件加速. 另外 VPP/OpenCL 色调映射也需要该驱动才能正常运作.
+      ----------------------------------
+      该版本使用 Host 网络模式, 如果用户需要 DLNA, 可以自行安装 DLNA 插件即可.
+      ----------------------------------
+      资源目录在 /home 下.
+      ----------------------------------
+      如果需要设置代理，可以在 "应用数据" => "jellyfinme" => "config" 目录下创建一个名为 "envfile.txt" 的文件，文件内容为：
+      http_proxy=http://192.168.11.1:7890
+      https_proxy=http://192.168.11.1:7890
+      把上面的地址换成自己的代理地址, 重启应用即可.
+  en:
+    description: Jellyfin Me is a Chinese version of Jellyfin, which is bundled with NVIDIA drivers to avoid hassle.
+    usage: |
+      This is a Chinese version of Jellyfin, bundled with NVIDIA drivers to avoid hassle. Since the GPL license of Jellyfin and the iHD Linux driver (partially open-source) are incompatible on the license, the official Jellyfin Docker image: jellyfin/jellyfin does not contain the NVIDIA Linux graphics driver.
+      However, Intel's QuickSync QSV hardware acceleration depends on the driver, and Intel 10th generation cores (Comet Lake) and newer processors need the driver to use hardware acceleration. Also, VPP/OpenCL tone mapping also needs the driver to work properly.
+      ----------------------------------
+      This version uses the Host network mode, if you need DLNA, you can install the DLNA plugin yourself.
+      ----------------------------------
+      The resource directory is in /home.
