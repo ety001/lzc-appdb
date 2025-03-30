@@ -2,12 +2,14 @@ lzc-sdk-version: "0.1"
 package: ink.akawa.ety001.jellyfinme
 version: 10.10.6
 name: Jellyfin Me
-description: 由 ETY001 封装的 Jellyfin，主要是把网络改为了 HOST
+description: 由 ETY001 封装的 Jellyfin, 主要是把网络改为了 HOST
 homepage: https://jellyfin.org/
 #homepage: https://github.com/ety001/lzc-appdb/tree/master/jellyfin-me
 author: Jellyfin
 application:
   gpu_accel: true
+  usb_accel: true
+  multi_instance: false
   background_task: true
   user_app: true
   routes:
@@ -18,8 +20,10 @@ application:
 services:
   jellyfin:
     #image: linuxserver/jellyfin:10.10.6
-    image: registry.lazycat.cloud/ety001/linuxserver/jellyfin:d550c06870254f34
+    image: registry.lazycat.cloud/ety001/linuxserver/jellyfin:fc337a25bef5cca8
     network_mode: "host"
+    environment:
+      - TZ=Asia/Shanghai
     binds:
       - /lzcapp/var/config:/config
       - /lzcapp/run/mnt/home:/home
