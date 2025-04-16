@@ -1,0 +1,25 @@
+lzc-sdk-version: 0.1
+name: 哪吒流量警告规则生成器
+package: ink.akawa.ety001.nezharulegenerator
+version: 0.0.1
+description: "这是一个为 哪吒监控 生成流量使用警报 JSON 规则的小工具。使用本工具,即使不懂 JSON 格式语法,也可以通过可视化的方式轻松生成流量监控警报规则。"
+license: https://github.com/WizisCool/Nezha-Traffic-Alarm-Generator/blob/main/LICENSE
+homepage: https://github.com/WizisCool/Nezha-Traffic-Alarm-Generator
+author: WizisCool
+min_os_version: 1.3.0
+application:
+  subdomain: nezharulegenerator
+  background_task: false
+  multi_instance: false
+  routes:
+    - /=file:///lzcapp/pkg/content/
+locales:
+  zh:
+    name: "哪吒流量警告规则生成器"
+    description: "这是一个为 哪吒监控 生成流量使用警报 JSON 规则的小工具。使用本工具,即使不懂 JSON 格式语法,也可以通过可视化的方式轻松生成流量监控警报规则。"
+  zh_CN:
+    name: "哪吒流量警告规则生成器"
+    description: "这是一个为 哪吒监控 生成流量使用警报 JSON 规则的小工具。使用本工具,即使不懂 JSON 格式语法,也可以通过可视化的方式轻松生成流量监控警报规则。"
+  en:
+    name: "Nezha Traffic Alarm Generator"
+    description: "This is a small tool for generating traffic usage alarm JSON rules for Nezha monitoring. With this tool, you can easily generate traffic monitoring alarm rules through a visual interface, even if you don't understand JSON syntax."
