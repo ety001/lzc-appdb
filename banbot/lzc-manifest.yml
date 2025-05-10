@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: Banbot
 package: ink.akawa.ety001.banbot
-version: 0.0.4
+version: 0.0.5
 description: Banbot is a high-performance, easy-to-use, multi-symbol, multi-strategy, multi-period, multi-account event-driven trading robot.
 license: https://github.com/banbox/banbot?tab=AGPL-3.0-1-ov-file#readme
 homepage: https://www.banbot.site/
@@ -23,8 +23,8 @@ application:
     - /=http://banbot.ink.akawa.ety001.banbot.lzcapp:8000
 services:
   banbot:
-    # banbot/banbot:v0.2.14
-    image: registry.lazycat.cloud/ety001/banbot/banbot:bb56ca8c99c7579d
+    # banbot/banbot:v0.2.15-beta.5
+    image: registry.lazycat.cloud/ety001/banbot/banbot:5d080eb56344e617
     environment:
       - TZ=Asia/Shanghai
     depends_on:
