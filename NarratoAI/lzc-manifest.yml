@@ -16,6 +16,7 @@ application:
     - /=http://narratoai.ink.akawa.ety001.narratoai.lzcapp:8501
 services:
   narratoai:
+    # linyq1/narratoai:0.5.2
     image: registry.lazycat.cloud/ety001/linyq1/narratoai:18b5c4b222d91113
     environment:
       - PYTHONUNBUFFERED=1
