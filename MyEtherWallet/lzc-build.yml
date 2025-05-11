@@ -1,0 +1,5 @@
+manifest: ./lzc-manifest.yml
+pkgout: ./
+buildscript: ./build.sh
+contentdir: ./dist
+icon: ./lzc-icon.png
