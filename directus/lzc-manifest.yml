@@ -1,0 +1,53 @@
+lzc-sdk-version: 0.1
+name: Directus
+package: ink.akawa.ety001.directus
+version: 0.0.1
+description: Turn your DB into a headless CMS, admin panels, or apps with a custom UI, instant APIs, auth & more.
+license: https://github.com/directus/directus/tree/main#License-1-ov-file
+homepage: https://directus.io/
+author: directus
+min_os_version: 1.3.5
+application:
+  subdomain: directus
+  oidc_redirect_path: /auth/login/lazycat/callback
+  background_task: true
+  multi_instance: false
+  routes:
+    - /=http://directus.ink.akawa.ety001.directus.lzcapp:8055
+services:
+  directus:
+    # directus/directus:11.7.2
+    image: registry.lazycat.cloud/ety001/directus/directus:ac5f652f12d84a6e
+    environment:
+      - PUBLIC_URL=https://${LAZYCAT_APP_DOMAIN}/
+      - SECRET=${LAZYCAT_AUTH_OIDC_CLIENT_SECRET}
+      - CACHE_ENABLED=false
+      - AUTH_DISABLE_DEFAULT=true
+      - AUTH_PROVIDERS=lazycat
+      - AUTH_LAZYCAT_DRIVER=openid
+      - AUTH_LAZYCAT_MODE=session
+      - AUTH_LAZYCAT_CLIENT_ID=${LAZYCAT_AUTH_OIDC_CLIENT_ID}
+      - AUTH_LAZYCAT_CLIENT_SECRET=${LAZYCAT_AUTH_OIDC_CLIENT_SECRET}
+      - AUTH_LAZYCAT_SCOPE=openid profile email groups
+      - AUTH_LAZYCAT_DEFAULT_ROLE_ID=530170dd-5d45-4db4-8901-131e81c3d27a
+      - AUTH_LAZYCAT_ISSUER_URL=${LAZYCAT_AUTH_OIDC_ISSUER_URI}
+      - AUTH_LAZYCAT_ALLOW_PUBLIC_REGISTRATION=true
+      - AUTH_LAZYCAT_SYNC_USER_INFO=true
+      - DB_CLIENT=sqlite3
+      - DB_FILENAME=/directus/database/database.sqlite
+    binds:
+      - /lzcapp/var/database:/directus/database
+      - /lzcapp/var/uploads:/directus/uploads
+      - /lzcapp/var/extensions:/directus/extensions
+    setup_script: |
+      if [ ! -f "/directus/database/database.sqlite" ]; then
+        cp /lzcapp/pkg/content/database.sqlite /directus/database/database.sqlite
+        echo "[init] database.sqlite copied to /directus/database/database.sqlite"
+      fi
+locales:
+  zh:
+    description: "把你的数据库变成一个无头CMS, 管理面板, 或应用程序, 具有自定义UI, 即时API."
+  zh_CN:
+    description: "把你的数据库变成一个无头CMS, 管理面板, 或应用程序, 具有自定义UI, 即时API."
+  en:
+    description: "Turn your DB into a headless CMS, admin panels, or apps with a custom UI, instant APIs, auth & more."
