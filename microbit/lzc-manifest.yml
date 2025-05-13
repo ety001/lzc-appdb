@@ -2,7 +2,7 @@ lzc-sdk-version: 0.1
 name: Microbit
 package: ink.akawa.ety001.microbit
 version: 0.0.1
-description: Turn your DB into a headless CMS, admin panels, or apps with a custom UI, instant APIs, auth & more.
+description: The Micro Bit (also referred to as micro:bit) is an open source hardware ARM-based embedded system designed by the BBC for use in computer education in the United Kingdom.
 license: https://github.com/microsoft/pxt-microbit#License-1-ov-file
 homepage: https://microbit.org/
 author: microbit
@@ -19,8 +19,8 @@ services:
     image: registry.lazycat.cloud/ety001/ety001/microbit:914cd649953453e9
 locales:
   zh:
-    description: "把你的数据库变成一个无头CMS, 管理面板, 或应用程序, 具有自定义UI, 即时API."
+    description: Micro Bit 是 BBC 为计算机教育设计的一种开源硬件ARM系统。
   zh_CN:
-    description: "把你的数据库变成一个无头CMS, 管理面板, 或应用程序, 具有自定义UI, 即时API."
+    description: Micro Bit 是 BBC 为计算机教育设计的一种开源硬件ARM系统。
   en:
-    description: "Turn your DB into a headless CMS, admin panels, or apps with a custom UI, instant APIs, auth & more."
+    description: The Micro Bit (also referred to as micro:bit) is an open source hardware ARM-based embedded system designed by the BBC for use in computer education in the United Kingdom.
