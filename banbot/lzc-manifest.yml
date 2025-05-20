@@ -37,7 +37,6 @@ services:
       - POSTGRES_PASSWORD=123456
     binds:
       - /lzcapp/var/pgdata:/var/lib/postgresql/data
-      - /lzcapp/var/pg_healthcheck_log:/var/log/healthcheck
     health_check:
       test: ["CMD-SHELL", "/lzcapp/pkg/content/healthcheck.sh"]
       start_period: 180s
