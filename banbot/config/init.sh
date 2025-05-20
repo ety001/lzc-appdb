@@ -14,11 +14,28 @@ if [ -z "$(ls -A /ban/data/uidist)" ]; then
     tar -xzvf /lzcapp/pkg/content/uidist.tar.gz -C /ban/data/uidist/
 fi
 
-#/ban/bot --config /lzcapp/pkg/content/init.yml
+# config retry times
+retry=1  # retry times
+interval=10  # interval (seconds)
 
-/ban/bot --config /lzcapp/pkg/content/init.yml
-exit_status=$?
-if [ $exit_status -ne 0 ]; then
+attempt=0
+while [ $attempt -lt $retry ]; do
+  /ban/bot --config /lzcapp/pkg/content/init.yml
+  exit_status=$?
+  if [ $exit_status -eq 0 ]; then
+    # do success and exit loop
+    break
+  else
+    attempt=$((attempt + 1))
+    if [ $attempt -lt $retry ]; then
+      echo "程序执行失败, 将在 $interval 秒后进行第 $attempt 次重试..."
+      sleep $interval
+    fi
+  fi
+done
+
+if [ $attempt -eq $retry ]; then
+  echo "程序经过 $retry 次重试后仍然失败。"
   cp -r /lzcapp/pkg/content/error /tmp/error
 
   sed -i "s/UID/$LAZYCAT_APP_DEPLOY_UID/g" /tmp/error/index.html

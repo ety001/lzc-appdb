@@ -14,9 +14,6 @@ application:
   subdomain: banbot
   background_task: true
   multi_instance: false
-  handlers:
-    error_page_templates:
-      500: /lzcapp/pkg/content/error.html.tpl
   routes:
     - /=http://banbot.ink.akawa.ety001.banbot.lzcapp:8000
 services:
@@ -24,7 +21,6 @@ services:
     # banbot/banbot:v0.2.16
     image: registry.lazycat.cloud/ety001/banbot/banbot:4dc1d43e832070f3
     environment:
-      - TZ=Asia/Shanghai
       - BanDataDir=/ban/data
       - BanStratDir=/ban/strats
     depends_on:
@@ -41,9 +37,10 @@ services:
       - POSTGRES_PASSWORD=123456
     binds:
       - /lzcapp/var/pgdata:/var/lib/postgresql/data
+      - /lzcapp/var/pg_healthcheck_log:/var/log/healthcheck
     health_check:
-      test: ["CMD-SHELL", "pg_isready", "-U", "postgres", "-h", "localhost"]
-      start_period: 120s
+      test: ["CMD-SHELL", "/lzcapp/pkg/content/healthcheck.sh"]
+      start_period: 180s
 locales:
   zh:
     description: "Banbot是一款高性能、易用的多币种、多策略、多周期、多账户事件驱动交易机器人"
