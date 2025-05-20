@@ -1,50 +1,32 @@
 #!/bin/bash
-if [ ! -f "/config/config.yml" ]; then
-  cp /lzcapp/pkg/content/init.yml /config/config.yml
-  #sed -i "s/datahost/timescaledb.${LAZYCAT_APP_ID}.lzcapp/g" /config/config.yml
-  sed -i "s/datahost/timescaledb/g" /config/config.yml
+
+# 检查/ban/strats 目录是否为空
+mkdir -p /ban/strats
+if [ -z "$(ls -A /ban/strats)" ]; then
+    echo "Directory /ban/strats is empty, extracting files..."
+    tar -xzvf /lzcapp/pkg/content/banstrats.tar.gz -C /ban/strats/
 fi
 
-envfile="/config/envfile"
-
-# check if file exists
-if [ -f "$envfile" ]; then
-    # read file line by line
-    while IFS= read -r line; do
-        # ignore empty line and comment line
-        if [[ -n "$line" && ! "$line" =~ ^# ]]; then
-            # parse key and value
-            key=$(echo "$line" | cut -d'=' -f1)
-            value=$(echo "$line" | cut -d'=' -f2)
-            echo "TEST ENV: $key=$value"
-            # set env
-            export "$key"="$value"
-        fi
-    done < "$envfile"
-else
-    echo "$envfile not exist, pass this part."
+# 检查/ban/data/uidist 目录是否为空
+mkdir -p /ban/data/uidist
+if [ -z "$(ls -A /ban/data/uidist)" ]; then
+    echo "Directory /ban/data/uidist is empty, extracting files..."
+    tar -xzvf /lzcapp/pkg/content/uidist.tar.gz -C /ban/data/uidist/
 fi
 
-# config retry times
-retry=20  # retry times
-interval=10  # interval (seconds)
+#/ban/bot --config /lzcapp/pkg/content/init.yml
 
-attempt=0
-while [ $attempt -lt $retry ]; do
-  /ban/bot -config /config/config.yml -host 0.0.0.0
-  exit_status=$?
-  if [ $exit_status -eq 0 ]; then
-    # do success and exit loop
-    break
-  else
-    attempt=$((attempt + 1))
-    if [ $attempt -lt $retry ]; then
-      echo "程序执行失败, 将在 $y 秒后进行第 $attempt 次重试..."
-      sleep $interval
-    fi
-  fi
-done
+/ban/bot --config /lzcapp/pkg/content/init.yml
+exit_status=$?
+if [ $exit_status -ne 0 ]; then
+  cp -r /lzcapp/pkg/content/error /tmp/error
 
-if [ $attempt -eq $retry ]; then
-  echo "程序经过 $retry 次重试后仍然失败。"
+  sed -i "s/UID/$LAZYCAT_APP_DEPLOY_UID/g" /tmp/error/index.html
+  sed -i "s/APPID/$LAZYCAT_APP_ID/g" /tmp/error/index.html
+  sed -i "s/BOXDOMAIN/$LAZYCAT_BOX_DOMAIN/g" /tmp/error/index.html
+
+  echo "Copy error log to /tmp/error/"
+  cp /ban/data/logs/ban.log /tmp/error/ban.log
+  echo "Start service failed and run a temporary web server to display error page ..."
+  /lzcapp/pkg/content/webserv -d /tmp/error/ -p 8000
 fi

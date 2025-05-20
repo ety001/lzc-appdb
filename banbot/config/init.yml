@@ -1,2 +1,2 @@
-database:
-  url: postgresql://postgres:123456@datahost:5432/ban
+database: 
+  url: postgresql://postgres:123456@timescaledb:5432/ban
