@@ -8,7 +8,7 @@ MEMORY=4096
 HA_PORT=8123
 PKG_PATH="/lzcapp/pkg/content"
 
-func start() {
+function start() {
   qemu-system-x86_64 \
     -name "haos" \
     -machine q35,accel=kvm \
@@ -26,7 +26,7 @@ func start() {
     -vnc :0 -k en-us
 }
 
-func main() {
+function main() {
   if [ ! -f ${IMG} ]; then
     echo "Image ${IMG} not found"
     cp ${PKG_PATH}/haos_ova-${VER}.qcow2.xz ${IMG_PATH}
@@ -38,3 +38,5 @@ func main() {
   start
 
 }
+
+main
