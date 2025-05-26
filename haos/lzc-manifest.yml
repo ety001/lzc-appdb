@@ -1,0 +1,110 @@
+lzc-sdk-version: 0.1
+name: HomeAssistant OS
+package: ink.akawa.ety001.haos
+# home assistant os version: 15.2
+version: 0.0.1
+description: |
+  HomeAssistant Operating System (formerly HAOS) 
+
+  HAOS is a Linux based operating system optimized to host HomeAssistant and its Add-ons.
+
+  HACS is also installed by default.
+  Users can easily install plugins like Xiaomi Miot Auto via the community store.
+
+  If you want to restore HAOS, stop the application in the LazyCat panel.
+  And then delete the `APP Data/HomeAssistant OS/vm` directory.
+
+  if you want to access the system, use vnc client to access `haos.<your lazycat name>.heiyu.space:5900`
+license: https://github.com/home-assistant/operating-system#Apache-2.0-1-ov-file
+homepage: https://github.com/home-assistant/operating-system
+author: Home Assistant
+usage: |
+  The first start may take 10--20 minutes
+min_os_version: 1.3.0
+application:
+  subdomain: haos
+  background_task: true
+  multi_instance: false
+  kvm_accel: true
+  ingress:
+    - protocol: tcp
+      port: 5900
+      service: haos
+  routes:
+    - /=http://haos.ink.akawa.ety001.haos.lzcapp:8123
+  depends_on:
+    - haos
+services:
+  haos:
+    # ety001/haos-for-lzc:15.2
+    image: registry.lazycat.cloud/ety001/ety001/haos-for-lzc:6376fa05d18f1802
+    #environment:
+    #  - TZ=Asia/Shanghai
+    network_mode: host
+    health_check:
+      test:
+        - CMD-SHELL
+        - "curl -X GET -I http://localhost:8123 || exit 1"
+      start_period: 60s
+      disable: false
+    binds:
+      - /lzcapp/var/vm:/haos
+    # command: /bin/bash -c "while true; do sleep 1000; done"
+locales:
+  zh:
+    usage: |
+      首次启动大概需要10--20分钟
+    description: |
+      Home Assistant 满血版 (HAOS)
+
+      该版本基于 KVM 部署了 HAOS, 包含了 HomeAssistant 的所有功能.
+
+      各个类型的部署的区别可以参考官方文档: 
+      https://www.home-assistant.io/installation/#about-installation-methods 
+
+      除此之外还默认集成了 HACS (Home Assistant Community Store). 
+      用户可以方便的通过社区商店安装类似 Xiaomi Miot Auto 等的插件.
+
+      这里附带两个文档地址:
+      * **HACS 初始化配置**: https://hacs.xyz/docs/use/configuration/basic/
+      * **Xiaomi Miot Auto 安装文档**: https://mp.weixin.qq.com/s/1y_EV6xcg17r743aV-2eRw
+
+      如果想要重置系统, 在懒猫面板中停止应用后， 删除 `应用数据/HomeAssistant OS/vm` 目录即可.
+
+      如果想要访问系统端, 使用 vnc 客户端访问 `haos.<你的懒猫名>.heiyu.space:5900` 即可.
+  zh_CN:
+    usage: |
+      首次启动大概需要10--20分钟
+    description: |
+      Home Assistant 满血版 (HAOS)
+
+      该版本基于 KVM 部署了 HAOS, 包含了 HomeAssistant 的所有功能.
+
+      各个类型的部署的区别可以参考官方文档: 
+      https://www.home-assistant.io/installation/#about-installation-methods 
+
+      除此之外还默认集成了 HACS (Home Assistant Community Store). 
+      用户可以方便的通过社区商店安装类似 Xiaomi Miot Auto 等的插件.
+
+      这里附带两个文档地址:
+      * **HACS 初始化配置**: https://hacs.xyz/docs/use/configuration/basic/
+      * **Xiaomi Miot Auto 安装文档**: https://mp.weixin.qq.com/s/1y_EV6xcg17r743aV-2eRw
+
+      如果想要重置系统, 在懒猫面板中停止应用后， 删除 `应用数据/HomeAssistant OS/vm` 目录即可.
+
+      如果想要访问系统端, 使用 vnc 客户端访问 `haos.<你的懒猫名>.heiyu.space:5900` 即可.
+  en:
+    usage: |
+      The first start may take 10--20 minutes
+    description: |
+      HomeAssistant Operating System (formerly HAOS) 
+
+      HAOS is a Linux based operating system optimized to host HomeAssistant and its Add-ons.
+
+      HACS is also installed by default.
+      Users can easily install plugins like Xiaomi Miot Auto via the community store.
+
+      If you want to restore HAOS, stop the application in the LazyCat panel.
+      And then delete the `APP Data/HomeAssistant OS/vm` directory.
+
+      If your want to access the system, use vnc client to access `haos.<your lazycat name>.heiyu.space:5900` .
