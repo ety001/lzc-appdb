@@ -19,7 +19,10 @@ license: https://github.com/home-assistant/operating-system#Apache-2.0-1-ov-file
 homepage: https://github.com/home-assistant/operating-system
 author: Home Assistant
 usage: |
-  The first start may take 10--20 minutes
+  The first start may take 10-30 minutes to download image.
+  The download progress can be viewed from dozzle.
+  If there is error info, please don't restart the application.
+  You could visit http://lazycat_ip_on_your_lan:8123 to confirm HAOS is ready.
 min_os_version: 1.3.0
 application:
   subdomain: haos
@@ -45,15 +48,19 @@ services:
       test:
         - CMD-SHELL
         - "curl -X GET -I http://localhost:8123 || exit 1"
-      start_period: 60s
+      start_period: 1800s
       disable: false
     binds:
       - /lzcapp/var/vm:/haos
     # command: /bin/bash -c "while true; do sleep 1000; done"
+    command: /lzcapp/pkg/content/temp_run.sh
 locales:
   zh:
     usage: |
-      首次启动大概需要10--20分钟
+      首次启动大概需要 10-30 分钟下载镜像, 下载进度从 dozzle 中查看
+      如果启动页面报错, 请不要重启应用.
+      你可以通过 http://lazycat_ip_on_your_lan:8123 确认 HAOS 是否启动成功.
+      启动成功后, 即可通过懒猫的应用域名访问 HAOS.
     description: |
       Home Assistant 满血版 (HAOS)
 
@@ -74,7 +81,10 @@ locales:
       如果想要访问系统端, 使用 vnc 客户端访问 `haos.<你的懒猫名>.heiyu.space:5900` 即可.
   zh_CN:
     usage: |
-      首次启动大概需要10--20分钟
+      首次启动大概需要 10-30 分钟下载镜像, 下载进度从 dozzle 中查看
+      如果启动页面报错, 请不要重启应用.
+      你可以通过 http://lazycat_ip_on_your_lan:8123 确认 HAOS 是否启动成功.
+      启动成功后, 即可通过懒猫的应用域名访问 HAOS.
     description: |
       Home Assistant 满血版 (HAOS)
 
@@ -95,7 +105,10 @@ locales:
       如果想要访问系统端, 使用 vnc 客户端访问 `haos.<你的懒猫名>.heiyu.space:5900` 即可.
   en:
     usage: |
-      The first start may take 10--20 minutes
+      The first start may take 10-30 minutes to download image.
+      The download progress can be viewed from dozzle.
+      If there is error info, please don't restart the application.
+      You could visit http://lazycat_ip_on_your_lan:8123 to confirm HAOS is ready.
     description: |
       HomeAssistant Operating System (formerly HAOS) 
 
