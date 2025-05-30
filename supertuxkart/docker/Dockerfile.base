@@ -15,4 +15,4 @@ ADD ./sshd.conf /etc/supervisor/conf.d/sshd.conf
 
 EXPOSE 10000
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
