@@ -1,0 +1,42 @@
+FROM ubuntu:noble-20250529
+
+# other options:
+# REPO="xpra-lts"
+# REPO="xpra-beta"
+ENV REPO xpra-lts
+ENV DISTRO noble
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt update -y && \
+    apt upgrade -y && \
+    apt install -y ca-certificates wget gpg openssh-server supervisor sudo \
+        vim apt-transport-https software-properties-common && \
+    add-apt-repository -y ppa:kobuk-team/intel-graphics && \
+    apt-get install -y libze-intel-gpu1 libze1 intel-metrics-discovery intel-opencl-icd clinfo intel-gsc && \
+    wget -O "/usr/share/keyrings/xpra.asc" https://xpra.org/xpra.asc && \
+    wget -O "/etc/apt/sources.list.d/xpra.sources" https://raw.githubusercontent.com/Xpra-org/xpra/master/packaging/repos/$DISTRO/${REPO}.sources && \
+    apt update && \
+    apt install -y xserver-xorg xpra && \
+    apt clean && \
+    rm -rf /var/lib/apt/lists/*
+
+ADD ./sshd.conf /etc/supervisor/conf.d/sshd.conf
+
+RUN mkdir -p /run/sshd && \
+    mkdir -p /run/user/1001 && \
+    groupadd -r lzc && \
+    useradd -m -d /home/lzc -g lzc -G render,sudo,video,sgx -s /bin/bash lzc && \
+    chown -R lzc:lzc /run/user/1001 && \
+    sed -i 's/^%sudo.*/%sudo ALL=(ALL) NOPASSWD:ALL/' /etc/sudoers && \
+    sed -i 's/^#\?PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^#\?PasswordAuthentication .*/PasswordAuthentication no/' /etc/ssh/sshd_config && \
+    sed -i 's/^#\?PubkeyAuthentication .*/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+
+WORKDIR /home/lzc
+USER lzc
+
+EXPOSE 10000
+
+#CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+
+CMD ["/lzcapp/pkg/content/entry.sh"]

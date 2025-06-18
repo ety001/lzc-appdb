@@ -1,10 +1,9 @@
-FROM debian:bookworm-slim
+#FROM ety001/xpra-base:latest
+FROM ety001/xpra-base:ubuntu-noble
 
-ARG REPOFILE=https://raw.githubusercontent.com/Xpra-org/xpra/master/packaging/repos/bookworm/xpra-lts.sources
+RUN sudo apt update -y && \
+    sudo apt install -y supertuxkart && \
+    sudo apt clean && \
+    sudo rm -rf /var/lib/apt/lists/*
 
-RUN apt update && \
-    apt upgrade -y && \
-    apt install -y ca-certificates && \
-    wget -O "/usr/share/keyrings/xpra.asc" https://xpra.org/xpra.asc && \
-    cd /etc/apt/sources.list.d && wget $REPOFILE && \
-    apt update && apt install xorg-server xpra
+EXPOSE 10000
