@@ -9,8 +9,8 @@ exec xpra start :100 \
   --video-encoders=vaapi \
   --compressors=lz4 \
   --dpi=96 \
-  --quality=20 \
-  --speed=30 \
+  --quality=40 \
+  --speed=50 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
   --webcam=no \
