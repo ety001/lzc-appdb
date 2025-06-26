@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export XDG_RUNTIME_DIR=/dev/shm/runtime
+mkdir -p "${XDG_RUNTIME_DIR}"
+
 program="/usr/bin/brave-browser --no-sandbox"
 
 exec xpra start :100 \
