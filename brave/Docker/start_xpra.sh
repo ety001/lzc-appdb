@@ -2,7 +2,7 @@
 
 program="/usr/bin/brave-browser --no-sandbox"
 
-xpra start :100 \
+exec xpra start :100 \
   --daemon=no \
   --opengl=yes \
   --encoding=h264 \
@@ -14,4 +14,4 @@ xpra start :100 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
   --webcam=no \
-  --start="${program}"
+  --start-child="${program}"
