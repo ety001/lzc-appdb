@@ -4,3 +4,5 @@ RUN sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https
     sudo apt-get update && \
     sudo apt-get install -y brave-browser && \
     sudo rm -rfv /var/lib/apt/lists/*
+ADD ./start_xpra.sh /usr/local/bin/start_xpra.sh
+ADD ./xpra.conf /etc/supervisor/conf.d/xpra.conf
