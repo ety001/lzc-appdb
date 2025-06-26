@@ -1,0 +1,34 @@
+lzc-sdk-version: 0.1
+name: Brave Browser
+package: ink.akawa.ety001.brave
+version: 1.79.126
+description: A Web3 browser that focuses on privacy and ad-free access.
+license: https://github.com/brave/brave-browser#MPL-2.0-1-ov-file
+homepage: https://brave.com/
+author: Brave
+min_os_version: 1.3.8
+application:
+  subdomain: brave
+  background_task: true
+  multi_instance: true
+  gpu_accel: true
+  usb_accel: true
+  routes:
+    - /=http://brave.ink.akawa.ety001.brave.lzcapp:10000
+services:
+  brave:
+    # ety001/brave-browser:ubuntu-noble
+    image: registry.lazycat.cloud/ety001/ety001/brave-browser:f75c9c098fcd35c2
+    shm_size: "512m"
+    environment:
+    binds:
+      - /lzcapp/var/home:/home/lzc
+      - /lzcapp/cache/supervisor:/var/log/supervisor
+    setup_script: /lzcapp/pkg/content/init.sh
+locales:
+  zh:
+    description: "️一款注重隐私，去广告访问的 Web3 浏览器"
+  zh_CN:
+    description: "️一款注重隐私，去广告访问的 Web3 浏览器"
+  en:
+    description: "A Web3 browser that focuses on privacy and ad-free access."
