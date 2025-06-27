@@ -11,13 +11,13 @@ export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
 main_program="/usr/bin/brave-browser --no-sandbox --start-maximized"
 
-exec xpra start :100 \
+exec xpra start :0 \
   --daemon=no \
   --opengl=yes \
   --encoding=h264 \
   --video-encoders=vaapi \
   --dpi=96 \
-  --quality=40 \
+  --quality=50 \
   --speed=50 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
