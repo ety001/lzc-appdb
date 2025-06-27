@@ -22,7 +22,7 @@ application:
 services:
   brave:
     # ety001/brave-browser:ubuntu-noble
-    image: registry.lazycat.cloud/ety001/ety001/brave-browser:28f7037135abbdd8
+    image: registry.lazycat.cloud/ety001/ety001/brave-browser:647d9ef064ebd2cf
     shm_size: "512m"
     tmpfs:
       - /run
