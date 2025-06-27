@@ -9,7 +9,7 @@ export QT_IM_MODULE=ibus
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
 echo "启动IBus守护进程..."
-ibus-daemon --xim --replace --verbose --panel=default
+ibus-daemon --xim -drx
 
 echo "等待IBus初始化..."
 sleep 3 # 等待2秒确保IBus完全启动
@@ -17,11 +17,3 @@ sleep 3 # 等待2秒确保IBus完全启动
 echo "设置拼音输入法为默认..."
 ibus engine pinyin
 ibus-daemon -drx
-
-echo "IBus拼音输入法已激活"
-
-# 更优雅的进程保持方式
-trap "ibus exit; exit 0" SIGTERM SIGINT
-while true; do
-    sleep 1
-done

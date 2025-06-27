@@ -8,7 +8,6 @@ sudo chown -R lzc:lzc "${XDG_RUNTIME_DIR}"
 sudo chmod 0700 "${XDG_RUNTIME_DIR}"
 
 main_program="/usr/bin/brave-browser --no-sandbox --start-maximized"
-im_program="/usr/local/bin/start_ibus.sh"
 
 exec xpra start :100 \
   --daemon=no \
@@ -21,5 +20,4 @@ exec xpra start :100 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
   --webcam=no \
-  --start="${main_program}" \
-  --start="${im_program}"
+  --start="bash -i -c '${main_program}'"
