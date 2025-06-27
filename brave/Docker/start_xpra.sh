@@ -13,6 +13,10 @@ export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
+# Set up IBus for Chinese input method
+dbus-launch gsettings set org.freedesktop.ibus.general preload-engines "['pinyin']"
+dbus-launch gsettings set org.freedesktop.ibus.general.engines-order "['pinyin']"
+
 main_program="/usr/bin/brave-browser --no-sandbox"
 im_program="/usr/bin/ibus-daemon --xim --replace --verbose"
 
