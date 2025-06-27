@@ -2,10 +2,7 @@
 
 export LIBVA_DRIVER_NAME=iHD
 export LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri/
-export XDG_RUNTIME_DIR=/dev/shm/run/user/1001
-mkdir -p "${XDG_RUNTIME_DIR}"
-sudo chown -R lzc:lzc "${XDG_RUNTIME_DIR}"
-sudo chmod 0700 "${XDG_RUNTIME_DIR}"
+export XDG_RUNTIME_DIR=/run/user/1001
 
 main_program="/usr/bin/brave-browser --no-sandbox --start-maximized"
 
