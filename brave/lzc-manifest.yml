@@ -22,10 +22,12 @@ application:
 services:
   brave:
     # ety001/brave-browser:ubuntu-noble
-    image: registry.lazycat.cloud/ety001/ety001/brave-browser:279b977af56fbac9
+    image: registry.lazycat.cloud/ety001/ety001/brave-browser:1aee5098982bd7d8
     shm_size: "512m"
-    netadmin: true
+    tmpfs:
+      - /run
     environment:
+      - XDG_RUNTIME_DIR=/run/user/1001
     binds:
       - /lzcapp/var/home:/home/lzc
       - /lzcapp/var/home_ssh:/home/lzc/.ssh
