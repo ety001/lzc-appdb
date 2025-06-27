@@ -3,6 +3,11 @@
 export LIBVA_DRIVER_NAME=iHD
 export LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri/
 export XDG_RUNTIME_DIR=/run/user/1001
+export IBUS_ENABLE_SYNC_MODE=1
+export GTK_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+export QT_IM_MODULE=ibus
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
 main_program="/usr/bin/brave-browser --no-sandbox --start-maximized"
 
