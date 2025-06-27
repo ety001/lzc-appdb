@@ -16,6 +16,7 @@ sleep 3 # 等待2秒确保IBus完全启动
 
 echo "设置拼音输入法为默认..."
 ibus engine pinyin
+ibus-daemon -drx
 
 echo "IBus拼音输入法已激活"
 
