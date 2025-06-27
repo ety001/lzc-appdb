@@ -6,5 +6,5 @@ RUN curl -fsSLo ~/obsidian.deb https://github.com/obsidianmd/obsidian-releases/r
     sudo sed -i 's|^\(Exec=/opt/Obsidian/obsidian\)\(.*\)|\1 --no-sandbox\2|' /usr/share/applications/obsidian.desktop
 
 ADD ./start_xpra.sh /usr/local/bin/start_xpra.sh
-ADD ./isbus-restart.desktop /usr/share/applications/ibus-restart.desktop
+ADD ./ibus-restart.desktop /usr/share/applications/ibus-restart.desktop
 ADD ./xpra.conf /etc/supervisor/conf.d/xpra.conf
