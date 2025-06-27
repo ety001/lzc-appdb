@@ -7,5 +7,4 @@ RUN sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https
     sudo sed -i 's|^\(Exec=/usr/bin/brave-browser-stable\)\(.*\)|\1 --no-sandbox\2|' /usr/share/applications/brave-browser.desktop
 
 ADD ./start_xpra.sh /usr/local/bin/start_xpra.sh
-ADD ./bashrc /home/lzc/.bashrc
 ADD ./xpra.conf /etc/supervisor/conf.d/xpra.conf

@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: Brave Browser
 package: ink.akawa.ety001.brave
-version: 1.79.126
+version: 1.80.113
 description: A Web3 browser that focuses on privacy and ad-free access.
 license: https://github.com/brave/brave-browser#MPL-2.0-1-ov-file
 homepage: https://brave.com/
@@ -13,16 +13,24 @@ application:
   multi_instance: true
   gpu_accel: true
   usb_accel: true
+  ingress:
+    - protocol: tcp
+      port: 22
+      service: brave
   routes:
     - /=http://brave.ink.akawa.ety001.brave.lzcapp:10000
 services:
   brave:
     # ety001/brave-browser:ubuntu-noble
-    image: registry.lazycat.cloud/ety001/ety001/brave-browser:f75c9c098fcd35c2
+    image: registry.lazycat.cloud/ety001/ety001/brave-browser:279b977af56fbac9
     shm_size: "512m"
+    netadmin: true
     environment:
     binds:
       - /lzcapp/var/home:/home/lzc
+      - /lzcapp/var/home_ssh:/home/lzc/.ssh
+      - /lzcapp/var/home_config:/home/lzc/.config
+      - /lzcapp/cache/home_cache:/home/lzc/.cache
       - /lzcapp/cache/supervisor:/var/log/supervisor
     setup_script: /lzcapp/pkg/content/init.sh
 locales:

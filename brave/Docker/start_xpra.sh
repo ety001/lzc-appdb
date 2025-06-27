@@ -2,7 +2,7 @@
 
 export LIBVA_DRIVER_NAME=iHD
 export LIBVA_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri/
-export XDG_RUNTIME_DIR=/run/user/1001
+export XDG_RUNTIME_DIR=/dev/shm/run/user/1001
 mkdir -p "${XDG_RUNTIME_DIR}"
 sudo chown -R lzc:lzc "${XDG_RUNTIME_DIR}"
 sudo chmod 0700 "${XDG_RUNTIME_DIR}"
@@ -20,4 +20,4 @@ exec xpra start :100 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
   --webcam=no \
-  --start="bash -i -c '${main_program}'"
+  --start="${main_program}"
