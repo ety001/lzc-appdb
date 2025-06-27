@@ -11,7 +11,7 @@ export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
 main_program="/opt/Obsidian/obsidian --no-sandbox"
 
-exec xpra start :100 \
+exec xpra start :0 \
   --daemon=no \
   --opengl=yes \
   --encoding=h264 \
