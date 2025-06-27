@@ -19,5 +19,8 @@ ibus engine pinyin
 
 echo "IBus拼音输入法已激活"
 
-# 保持脚本运行，防止Xpra认为进程已退出
-tail -f /dev/null
+# 更优雅的进程保持方式
+trap "ibus exit; exit 0" SIGTERM SIGINT
+while true; do
+    sleep 1
+done
