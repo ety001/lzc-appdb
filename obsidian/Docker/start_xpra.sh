@@ -9,7 +9,7 @@ export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
-main_program="/usr/bin/obsidian --no-sandbox"
+main_program="/opt/Obsidian/obsidian --no-sandbox"
 
 exec xpra start :100 \
   --daemon=no \
