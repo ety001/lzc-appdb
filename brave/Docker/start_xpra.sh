@@ -7,13 +7,7 @@ mkdir -p "${XDG_RUNTIME_DIR}"
 sudo chown -R lzc:lzc "${XDG_RUNTIME_DIR}"
 sudo chmod 0700 "${XDG_RUNTIME_DIR}"
 
-export IBUS_ENABLE_SYNC_MODE=1
-export GTK_IM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-export QT_IM_MODULE=ibus
-export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
-
-main_program="/usr/bin/brave-browser --no-sandbox"
+main_program="/usr/bin/brave-browser --no-sandbox --start-maximized"
 im_program="/usr/local/bin/start_ibus.sh"
 
 exec xpra start :100 \
