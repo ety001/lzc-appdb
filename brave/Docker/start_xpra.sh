@@ -21,5 +21,6 @@ exec xpra start :100 \
   --speed=50 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
+  --exec-wrapper="vglrun" \
   --webcam=no \
   --start="${main_program}"
