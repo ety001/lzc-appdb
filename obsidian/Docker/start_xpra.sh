@@ -16,8 +16,8 @@ exec xpra start :0 \
   --opengl=yes \
   --encoding=h264 \
   --video-encoders=vaapi \
-  --dpi=96 \
-  --quality=40 \
+  --dpi=120 \
+  --quality=50 \
   --speed=50 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
