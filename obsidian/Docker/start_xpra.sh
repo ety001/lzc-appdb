@@ -9,7 +9,7 @@ export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
-main_program="/opt/Obsidian/obsidian --no-sandbox"
+main_program="/usr/bin/vglrun /opt/Obsidian/obsidian --no-sandbox"
 
 exec xpra start :0 \
   --daemon=no \
@@ -17,10 +17,10 @@ exec xpra start :0 \
   --encoding=h264 \
   --video-encoders=vaapi \
   --dpi=120 \
+  --xvfb="Xvfb -screen 0 1920x1080x24" \
   --quality=50 \
   --speed=50 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
-  --exec-wrapper="vglrun" \
   --webcam=no \
   --start="${main_program}"
