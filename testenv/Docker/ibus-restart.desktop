@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=ibus-restart
+Exec=ibus-daemon -drx
+Terminal=false
+Type=Application
+Icon=ibus
+Comment=ibus restart
+Categories=Application;
