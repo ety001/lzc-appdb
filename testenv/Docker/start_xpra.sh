@@ -9,8 +9,6 @@ export XMODIFIERS=@im=ibus
 export QT_IM_MODULE=ibus
 export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1001/bus
 
-main_program="/usr/bin/vglrun /opt/Obsidian/obsidian --no-sandbox"
-
 exec xpra start :0 \
   --daemon=no \
   --opengl=yes \
@@ -22,5 +20,4 @@ exec xpra start :0 \
   --speed=50 \
   --html=on \
   --bind-tcp=0.0.0.0:10000 \
-  --webcam=no \
-  --start="${main_program}"
+  --webcam=no
