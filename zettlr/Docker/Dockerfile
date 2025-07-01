@@ -1,7 +1,7 @@
 FROM ety001/xpra-base:ubuntu-noble
 
-RUN curl -s --compressed "https://apt.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_apt.gpg > /dev/null
-RUN curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://apt.zettlr.com/zettlr.list" && apt update && \
+RUN curl -s --compressed "https://apt.zettlr.com/KEY.gpg" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/zettlr_apt.gpg > /dev/null && \
+    sudo curl -s --compressed -o /etc/apt/sources.list.d/zettlr.list "https://apt.zettlr.com/zettlr.list" && apt update && \
     apt install -y zettlr && \
     rm -rfv /var/lib/apt/lists/*
     
