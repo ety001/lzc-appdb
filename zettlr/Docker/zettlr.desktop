@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Zettlr
+Comment=Your one-stop publication workbench.
+GenericName=Markdown Editor
+Exec=/usr/bin/vglrun zettlr --no-sandbox %U
+Icon=zettlr
+Type=Application
+StartupNotify=true
+Categories=Office;Education;Science;
+MimeType=text/markdown;application/x-tex;application/json;application/yaml;
+
