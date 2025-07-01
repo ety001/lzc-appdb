@@ -19,8 +19,8 @@ application:
     - /=http://testenv.ink.akawa.ety001.testenv.lzcapp:10000
 services:
   testenv:
-    # ety001/xpra-base:ubuntu-noble
-    image: registry.lazycat.cloud/ety001/ety001/xpra-base:ebd8c86acea1c8c7
+    # ety001/testenv:ubuntu-noble
+    image: registry.lazycat.cloud/ety001/ety001/testenv:94644a4bdd53f772
     shm_size: "512m"
     tmpfs:
       - /run
