@@ -9,7 +9,6 @@ CPU=2
 MEMORY=4096
 HA_PORT=8123
 PKG_PATH="/lzcapp/pkg/content"
-IMG_REMOTE="https://alist.serv.mypi.win/d/data/haos_ova-15.2.qcow2.xz?sign=rZOnO27OStbV60bqKaCHuz55WDpP5vFH126AbYKrL-4=:0"
 
 function start() {
   qemu-system-x86_64 \
@@ -32,20 +31,10 @@ function start() {
 function main() {
   if [ ! -f ${IMG} ]; then
     echo "Image ${IMG} not found"
-    # install axel
-    dpkg -i /lzcapp/pkg/content/axel.deb
-    # start download
-    echo "We will download remote image"
-    until axel -n 2 -o "${IMG_PATH}/haos_ova-${VER}.qcow2.xz" "${IMG_REMOTE}"; do
-      echo "Download failed, retrying in 10 seconds..."
-      sleep 10 
-    done
     # unzip
     echo ""
     echo "Start Unzip Image"
-    cd ${IMG_PATH} && xz -d ${IMG_PATH}/haos_ova-${VER}.qcow2.xz
-    mv ${IMG_PATH}/haos_ova-${VER}.qcow2 ${IMG}
-    rm -rf ${IMG_PATH}/haos_ova-${VER}.qcow2.xz
+    xz -dc ${PKG_PATH}/haos_ova-${VER}.qcow2.xz > ${IMG}
     echo ""
     echo "Image Ready"
     echo ""

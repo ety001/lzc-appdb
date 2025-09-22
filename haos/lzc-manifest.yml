@@ -2,7 +2,7 @@ lzc-sdk-version: 0.1
 name: HomeAssistant OS
 package: ink.akawa.ety001.haos
 # home assistant os version: 15.2
-version: 0.0.1
+version: 0.0.2
 description: |
   HomeAssistant Operating System (formerly HAOS) 
 
@@ -36,9 +36,9 @@ application:
       port: 5900
       service: haos
   routes:
-    - /=http://haos.ink.akawa.ety001.haos.lzcapp:8080
-  #depends_on:
-  #  - haos
+    - /=http://haos.ink.akawa.ety001.haos.lzcapp:8123
+  depends_on:
+    - haos
 services:
   haos:
     # ety001/haos-for-lzc:15.2
@@ -50,14 +50,12 @@ services:
       test:
         - CMD-SHELL
         - "curl -X GET -I http://localhost:8123 || exit 1"
-      start_period: 1800s
-      disable: true
+      start_period: 600s
+      # disable: true
     binds:
       - /lzcapp/var/vm:/haos
       - /lzcapp/var/proxy:/root/status
-    # command: /bin/bash -c "while true; do sleep 1000; done"
-    # command: /lzcapp/pkg/content/temp_run.sh
-    command: /lzcapp/pkg/content/haos_entry
+    command: /lzcapp/pkg/content/run.sh
 locales:
   zh:
     usage: |
