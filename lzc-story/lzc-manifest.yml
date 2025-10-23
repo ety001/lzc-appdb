@@ -1,0 +1,34 @@
+lzc-sdk-version: 0.1
+name: LazyCat Story
+package: ink.akawa.ety001.lzcstory
+version: 0.0.1
+description: A story reader for LazyCat
+license: https://github.com/ety001/lzc-story#MIT
+homepage: https://github.com/ety001/lzc-story
+author: ETY001
+min_os_version: 1.3.8
+ext_config:
+  enable_document_access: true
+  enable_media_access: true
+application:
+  subdomain: lzcstory
+  background_task: true
+  multi_instance: false
+  routes:
+    - /=http://lzcstory.ink.akawa.ety001.lzcstory.lzcapp:3000
+services:
+  lzcstory:
+    image: registry.lazycat.cloud/ety001/ety001/lzc-story:90fa88670a4422a3
+    environment:
+    binds:
+      - /lzcapp/var/data:/app/data
+locales:
+  zh:
+    name: 懒猫故事机
+    description: "️一款面向 LazyCat 的故事机"
+  zh_CN:
+    name: 懒猫故事机
+    description: "️一款面向 LazyCat 的故事机"
+  en:
+    name: LazyCat Story
+    description: "A story reader for LazyCat"
