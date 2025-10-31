@@ -16,20 +16,21 @@ application:
       port: 22
       service: testenv
   routes:
-    - /=http://testenv.ink.akawa.ety001.testenv.lzcapp:10000
-services:
-  testenv:
-    # ety001/testenv:ubuntu-noble
-    image: registry.lazycat.cloud/ety001/ety001/testenv:94644a4bdd53f772
-    shm_size: "512m"
-    tmpfs:
-      - /run
-    environment:
-      - XDG_RUNTIME_DIR=/run/user/1001
-    binds:
-      - /lzcapp/var/home:/home/lzc
-      - /lzcapp/var/home_ssh:/home/lzc/.ssh
-      - /lzcapp/var/home_config:/home/lzc/.config
-      - /lzcapp/cache/home_cache:/home/lzc/.cache
-      - /lzcapp/cache/supervisor:/var/log/supervisor
-    setup_script: /lzcapp/pkg/content/init.sh
+    #- /=http://testenv.ink.akawa.ety001.testenv.lzcapp:10000
+    - /=http://192.168.199.11:3000
+#services:
+#  testenv:
+#    # ety001/testenv:ubuntu-noble
+#    image: registry.lazycat.cloud/ety001/ety001/testenv:94644a4bdd53f772
+#    shm_size: "512m"
+#    tmpfs:
+#      - /run
+#    environment:
+#      - XDG_RUNTIME_DIR=/run/user/1001
+#    binds:
+#      - /lzcapp/var/home:/home/lzc
+#      - /lzcapp/var/home_ssh:/home/lzc/.ssh
+#      - /lzcapp/var/home_config:/home/lzc/.config
+#      - /lzcapp/cache/home_cache:/home/lzc/.cache
+#      - /lzcapp/cache/supervisor:/var/log/supervisor
+#    setup_script: /lzcapp/pkg/content/init.sh
