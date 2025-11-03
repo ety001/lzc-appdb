@@ -1,0 +1,31 @@
+lzc-sdk-version: 0.1
+name: ET Tools
+package: ink.akawa.ety001.ettools
+version: 0.0.1
+description: A collection of tools from ET
+license: https://github.com/ety001/et-tools#MIT
+homepage: https://github.com/ety001/et-tools
+author: ETY001
+min_os_version: 1.3.8
+ext_config:
+  enable_document_access: true
+  enable_media_access: true
+application:
+  subdomain: ettools
+  background_task: true
+  multi_instance: false
+  routes:
+    - /=http://ettools.ink.akawa.ety001.ettools.lzcapp:3000
+services:
+  ettools:
+    image: registry.lazycat.cloud/ety001/ety001/et-tools:7faf349747f5f78d
+locales:
+  zh:
+    name: ET的小工具
+    description: "常用小工具集合"
+  zh_CN:
+    name: ET的小工具
+    description: "常用小工具集合"
+  en:
+    name: ET Tools
+    description: "A collection of tools from ET"
