@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: RcloneNg
 package: ink.akawa.ety001.rcloneng
-version: 0.0.1
+version: 0.0.2
 description: RcloneNg is an enhancement of the current Rclone in the store. It adds a scheduled task function.
 license: https://github.com/rclone/rclone?tab=MIT-1-ov-file#readme
 homepage: https://rclone.org/
