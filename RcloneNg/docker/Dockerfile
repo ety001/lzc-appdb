@@ -23,16 +23,16 @@ RUN curl -L -o /tmp/rclone.zip \
     && rm -rf /tmp/rclone.zip /tmp/rclone-${RCLONE_VERSION}-linux-amd64
 
 # 创建必要的目录
-RUN mkdir -p /etc/supervisor/conf.d && \
+RUN mkdir -p /etc/supervisor.d/ && \
     mkdir -p /var/log/supervisor && \
     mkdir -p /var/run && \
     mkdir -p /root/.cache/rclone/webgui/current/build/ && \
     echo "v2.0.5" > /root/.cache/rclone/webgui/tag
 
 # 复制 supervisor 配置文件
-COPY supervisord.conf /etc/supervisor/supervisord.conf
-COPY rclone-webui.conf /etc/supervisor/conf.d/rclone-webui.conf
-COPY cronie.conf /etc/supervisor/conf.d/cronie.conf
+COPY supervisord.conf /etc/supervisord.conf
+COPY rclone-webui.conf /etc/supervisor.d/rclone-webui.conf
+COPY cronie.conf /etc/supervisor.d/cronie.conf
 
 # 复制 webui 文件
 COPY webui/ /root/.cache/rclone/webgui/current/build/

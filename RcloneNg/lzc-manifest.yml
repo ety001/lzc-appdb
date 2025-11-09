@@ -15,7 +15,7 @@ application:
     - /=http://rcloneng.ink.akawa.ety001.rcloneng.lzcapp:8080
 services:
   rcloneng:
-    image: registry.lazycat.cloud/ety001/ety001/rclone-ng:e46a140f6599d690
+    image: registry.lazycat.cloud/ety001/ety001/rclone-ng:bd73a29b2709c7d2
     environment:
     binds:
       - /lzcapp/var/crontabs/config:/etc/crontabs

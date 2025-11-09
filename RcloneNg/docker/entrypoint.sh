@@ -6,6 +6,7 @@ echo "开始初始化..."
 if [ ! -f /etc/crontabs/root ]; then
     echo "创建 /etc/crontabs/root 文件..."
     cat > /etc/crontabs/root << 'EOF'
+MAILTO=""
 # do daily/weekly/monthly maintenance
 # min   hour    day     month   weekday command
 */15    *       *       *       *       run-parts /etc/periodic/15min
@@ -28,4 +29,4 @@ fi
 
 echo "初始化完成，开始启动 supervisor..."
 # 启动 supervisor
-exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+exec /usr/bin/supervisord -c /etc/supervisord.conf
