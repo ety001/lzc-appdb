@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: ET Tools
 package: ink.akawa.ety001.ettools
-version: 0.0.2
+version: 0.0.2.2
 description: A collection of tools from ET
 license: https://github.com/ety001/et-tools#MIT
 homepage: https://github.com/ety001/et-tools
@@ -18,7 +18,7 @@ application:
     - /=http://ettools.ink.akawa.ety001.ettools.lzcapp:3000
 services:
   ettools:
-    image: registry.lazycat.cloud/ety001/ety001/et-tools:84fa152e1599a9ae
+    image: registry.lazycat.cloud/ety001/ety001/et-tools:5c77308e4518143d
 locales:
   zh:
     name: ET的小工具
