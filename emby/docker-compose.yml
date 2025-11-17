@@ -1,0 +1,82 @@
+services:
+  emby:
+    image: cloudron/media.emby.cloudronapp:20211207-014603-84108885c
+    labels:
+      ingress-8096: emby
+    volumes:
+    - normal--data:/app/data
+    - type: bind
+      source: ${BOX_HOME}/Documents
+      target: /sdcard
+      read_only: false
+      bind:
+        propagation: rshared
+volumes:
+  normal--data: {}
+version: '3.9'
+x-lazycat-app:
+  quality: normal
+  addons:
+    localstorage:
+      ftp:
+        uid: 1000
+        uname: cloudron
+  categories:
+  - movies
+  - mediacenter
+  - plex
+  - photos
+  - videos
+  - media
+  description: 'This app packages Emby <upstream>4.6.7.0</upstream>
+
+
+    ### Overview
+
+
+    Emby Server is a personal media server with apps on just about every device.
+
+
+    Bringing all of your home videos, music, and photos together into one place has
+
+    never been easier. Your personal Emby Server automatically converts and streams
+
+    your media on-the-fly to play on any device.
+
+
+    ### Features
+
+    * Your Media on Any Device
+
+    * Easy Access
+
+    * Live TV
+
+    * Mobile Sync
+
+    * Manage Your Home
+
+    * Chromecast
+
+    * Beautiful Displays
+
+    * Parental Controls
+
+    * Cloud Sync
+
+    * Manage Your Media
+
+    * Easy DLNA
+
+    * Web-Based Management
+
+    '
+  icon: icon_emby.png
+  id: emby
+  screenshots:
+  - screenshot_emby0.png
+  - screenshot_emby1.png
+  - screenshot_emby2.png
+  summary: Take your Media anywhere
+  title: Emby
+  version: 1.9.0

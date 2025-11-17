@@ -1,0 +1,3 @@
+manifest: lzc-manifest.yml
+icon: ./icon_emby.png
+pkgout: ./
