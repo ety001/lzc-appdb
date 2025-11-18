@@ -31,7 +31,13 @@ alwaysApply: true
 1. **新增应用**：在项目根目录下创建新的应用目录，并按照上述文件结构创建必需文件
 2. **修改应用**：在对应的应用目录下进行修改，遵循现有的文件结构
 3. **文档参考**：开发或移植时参考 `.docs` 目录下的开发文档
-4. **Git 管理**：
+4. **Docker 镜像同步**：
+   - 创建新应用时，必须询问用户是否需要同步 Docker 镜像
+   - 如果用户提供了 Docker 镜像名称（如 `gogs/gogs`），则执行 `lzc-cli appstore copy-image <镜像名>`
+   - 执行完成后，将返回的镜像名（以 `registry.lazycat.cloud` 开头）更新到 `lzc-manifest.yml` 文件中
+   - 镜像配置位置在 `services` 部分的 `image` 字段中，更新前需要向用户确认具体更新位置
+   - 如果应用有多个服务，需要确认每个服务对应的镜像更新位置
+5. **Git 管理**：
    - `.cursor` 目录需要提交到 git
    - `.docs` 目录不提交到 git
    - `*.lpk` 文件不提交到 git（已在 `.gitignore` 中排除）
