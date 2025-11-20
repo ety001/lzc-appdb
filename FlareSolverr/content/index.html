@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlareSolverr - 懒猫微服</title>
+    <style>
+        :root {
+            --primary-color: #f6821f;
+            /* Cloudflare orange-ish */
+            --bg-color: #f4f4f9;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --code-bg: #2d2d2d;
+            --code-text: #f8f8f2;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+            margin: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        h2 {
+            color: #444;
+            border-left: 4px solid var(--primary-color);
+            padding-left: 10px;
+            margin-top: 1.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        }
+
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>FlareSolverr</h1>
+            <div class="subtitle">Cloudflare 盾防护绕过代理服务</div>
+        </header>
+
+        <section>
+            <h2>简介</h2>
+            <p>FlareSolverr 是一个代理服务器，用于绕过 Cloudflare 和 WAF 保护。它启动一个带有 Selenium 和 ChromeDriver 的浏览器实例，解决挑战，并将 Cookie 和
+                User-Agent 返回给调用者。</p>
+        </section>
+
+        <section>
+            <h2>如何使用</h2>
+            <p>本服务已通过 <code>/ap</code> 路径暴露 API 接口。您可以通过向以下地址发送 POST 请求来使用服务：</p>
+
+            <div class="code-block">
+                http://flaresolverr.[您的子域名].heiyu.space:8191/v1
+            </div>
+
+            <h3>示例请求 (Curl)</h3>
+            <p>以下命令尝试访问被 Cloudflare 保护的网站（例如 <code>https://www.google.com</code>，仅作示例）：</p>
+            <div class="code-block">
+                curl -L -X POST 'http://flaresolverr.[您的子域名].heiyu.space:8191/v1' \
+                -H 'Content-Type: application/json' \
+                --data-raw '{
+                "cmd": "request.get",
+                "url": "https://www.google.com",
+                "maxTimeout": 60000
+                }'
+            </div>
+        </section>
+
+        <section>
+            <h2>配置信息</h2>
+            <p>当前服务配置如下：</p>
+            <ul>
+                <li><strong>Log Level:</strong> info</li>
+                <li><strong>Browser Timeout:</strong> 40000ms</li>
+                <li><strong>Timezone:</strong> Asia/Shanghai</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>环境变量说明</h2>
+            <p>以下是 FlareSolverr 支持的环境变量列表，你可以通过懒猫的设置面板进行配置：</p>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="background-color: #f2f2f2; text-align: left;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">变量名</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">默认值</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>LOG_LEVEL</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">info</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">日志级别。使用 <code>debug</code> 获取更多信息。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>LOG_FILE</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">none</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">
+                                日志文件路径。例如：<code>/config/flaresolver.log</code>。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>LOG_HTML</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">false</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">仅用于调试。如果为 <code>true</code>，所有通过代理的 HTML
+                                将在 <code>debug</code> 级别下记录到控制台。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>CAPTCHA_SOLVER</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">none</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">验证码解决方法。当遇到验证码时使用。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>TZ</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">UTC</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">日志和 Web
+                                浏览器使用的时区。例如：<code>Asia/Shanghai</code>。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>LANG</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">none</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">Web 浏览器使用的语言。例如：<code>zh_CN</code>。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>BROWSER_TIMEOUT</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">40000</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">浏览器操作超时时间（毫秒）。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>TEST_URL</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">https://www.google.com</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">启动时请求的测试 URL，用于确认浏览器工作正常。</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;"><strong>PROXY_URL</strong></td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">none</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">上游代理
+                                URL。例如：<code>http://127.0.0.1:8080</code>。</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <div class="note">
+            <strong>注意：</strong> 请将示例中的 <code>[您的子域名]</code> 替换为您实际的应用访问地址。
+        </div>
+
+        <footer>
+            <p>更多信息请访问 <a href="https://github.com/FlareSolverr/FlareSolverr" target="_blank">FlareSolverr GitHub 仓库</a>
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>
