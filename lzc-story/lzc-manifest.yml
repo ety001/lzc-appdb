@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: LazyCat Story
 package: ink.akawa.ety001.lzcstory
-version: 0.0.1
+version: 0.0.2
 description: A story reader for LazyCat
 license: https://github.com/ety001/lzc-story#MIT
 homepage: https://github.com/ety001/lzc-story
@@ -18,7 +18,7 @@ application:
     - /=http://lzcstory.ink.akawa.ety001.lzcstory.lzcapp:3000
 services:
   lzcstory:
-    image: registry.lazycat.cloud/ety001/ety001/lzc-story:957bb4b1792a7397
+    image: registry.lazycat.cloud/ety001/ety001/lzc-story:5f7a97d21199c528
     environment:
     binds:
       - /lzcapp/var/data:/app/data
