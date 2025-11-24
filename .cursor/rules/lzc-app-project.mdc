@@ -31,7 +31,7 @@ alwaysApply: true
 1. **新增应用**：在项目根目录下创建新的应用目录，并按照上述文件结构创建必需文件
 2. **修改应用**：在对应的应用目录下进行修改，遵循现有的文件结构
 3. **文档参考**：开发或移植时参考 `.docs` 目录下的开发文档
-4. **Docker 镜像同步**：
+4. **Docker 镜像同步到懒猫服务器**：
    - 创建新应用时，必须询问用户是否需要同步 Docker 镜像
    - 如果用户提供了 Docker 镜像名称（如 `gogs/gogs`），则执行 `lzc-cli appstore copy-image <镜像名>`
    - 执行完成后，将返回的镜像名（以 `registry.lazycat.cloud` 开头）更新到 `lzc-manifest.yml` 文件中
@@ -42,8 +42,283 @@ alwaysApply: true
    - `.docs` 目录不提交到 git
    - `*.lpk` 文件不提交到 git（已在 `.gitignore` 中排除）
 
+## 从 docker-compose.yml 移植到 lzc-manifest.yml
+
+### 移植流程概述
+
+1. **分析原始配置**: 理解 docker-compose.yml 中每个服务的作用和依赖关系
+2. **识别核心服务**: 区分必须保留的核心服务和可以移除的辅助服务
+3. **服务映射**: 将 docker-compose 服务映射到 lzc-manifest 服务
+4. **路由转换**: 将 nginx 反向代理配置转换为 application.routes
+5. **环境变量适配**: 区分服务间通信和外部访问的 URL
+6. **数据持久化**: 将 volumes 转换为 binds
+7. **健康检查**: 转换健康检查配置
+8. **镜像同步**: 同步 Docker 镜像到懒猫服务器
+
+### 服务映射和简化
+
+#### 服务识别原则
+- **核心服务**: 应用的主要功能服务，必须保留
+- **辅助服务**: 数据库、缓存、存储等基础设施服务，通常保留
+- **平台服务**: nginx 等反向代理服务，由懒猫平台提供，需要移除
+- **可选服务**: 管理界面、监控工具等，根据需求决定是否保留
+
+#### 服务名简化
+- 去掉服务名前缀（如 `appflowy_cloud` → `appflowy`）
+- 保持服务名简洁明了
+- 确保服务名在 lzc-manifest.yml 中唯一
+
+#### 服务替换
+- 可能需要替换数据库镜像（如 postgres → timescaledb）
+- 确保替换后的服务兼容原有功能
+
+### 路由配置转换
+
+#### application 项的特殊性
+
+在懒猫应用配置文件中，`application` 项是一个特殊的容器，里面运行了 nginx 服务。这个容器负责处理所有外部请求的路由分发。
+
+**关键点**:
+- `application` 容器由懒猫平台自动管理
+- 内部运行 nginx，负责反向代理和路由分发
+- 不需要单独配置 nginx 容器
+
+#### 路由配置的两种方式
+
+懒猫平台提供了两种方式来实现流量路由：
+
+**方式一：使用 application.routes 配置（推荐）**
+- 简单直接，配置在 `lzc-manifest.yml` 的 `application.routes` 中
+- 懒猫平台会自动处理路由转发
+- 路由配置格式：`- /path/=http://service:port/path/`
+- 对于根路径，格式为：`- /=http://service:port`（必须使用完整的 URL，包括 `http://` 协议）
+- 懒猫平台有自签名服务，只需要关注 80 端口，不需要额外配置证书
+
+**方式二：使用自定义 nginx 配置替换**
+- 可以完全自定义 nginx 配置
+- 适合复杂的路由需求
+- 需要参考懒猫文档（`.docs`）了解如何替换容器内原有的配置
+
+#### nginx location → application.routes
+
+**转换规则**:
+- nginx 的 `location /path/` 转换为 `- /path/=http://service:port/path/`
+- 对于根路径 `/`，格式为：`- /=http://service:port`（必须使用完整的 URL，包括 `http://` 协议）
+- 路径和 URL 之间使用 `=` 连接，URL 必须包含协议（`http://` 或 `ws://`）
+- 路径前缀会自动处理，通常不需要显式的 rewrite 规则
+- 懒猫平台有自签名服务，只需要配置 80 端口，不需要额外配置证书
+
+**示例转换**:
+```yaml
+# nginx 配置
+location /api {
+    proxy_pass http://appflowy_cloud:8000;
+}
+
+# lzc-manifest.yml 配置
+routes:
+  - /api/=http://appflowy:8000/api/
+```
+
+#### 特殊路由处理
+
+1. **WebSocket 路由**:
+   - nginx 中需要特殊配置 Upgrade 和 Connection 头
+   - 懒猫平台通常自动支持 WebSocket，但需要确认路径是否正确
+   - 如果 WebSocket 路径特殊（如 `/ws`），可能需要单独配置路由
+
+2. **大文件上传**:
+   - nginx 中可以配置 `client_max_body_size` 和 `proxy_request_buffering off`
+   - 懒猫平台可能需要特殊配置，需要确认平台支持
+
+3. **流式响应**:
+   - nginx 中可以配置 `proxy_buffering off` 和 `chunked_transfer_encoding`
+   - 需要确认懒猫平台是否支持流式响应
+
+4. **路径重写**:
+   - nginx 的 `rewrite` 规则在懒猫平台中通常不需要
+   - 路由配置会自动处理路径前缀
+
+### 环境变量适配
+
+#### 服务间通信 URL
+
+**格式**: `http://service-name:port` 或 `protocol://service-name:port`
+
+**特点**:
+- 使用 Docker 服务名（在 lzc-manifest.yml 的 services 中定义）
+- 不包含域名，直接使用服务名
+- 只在容器网络内部使用
+
+**示例**:
+```yaml
+APPFLOWY_GOTRUE_BASE_URL=http://gotrue:9999
+APPFLOWY_DATABASE_URL=postgres://postgres:password@timescaledb:5432/postgres
+APPFLOWY_REDIS_URI=redis://redis:6379
+```
+
+#### 外部访问 URL
+
+**格式**: `http://subdomain.namespace.package.lzcapp` 或 `ws://subdomain.namespace.package.lzcapp`
+
+**域名组成**:
+- `subdomain`: 在 `application.subdomain` 中定义
+- `namespace`: 通常是 `ink.akawa.ety001`
+- `package`: 在 `package` 字段中定义（格式：`ink.akawa.ety001.appname`）
+- 完整格式: `<subdomain>.<namespace>.<package>.lzcapp`
+
+**特点**:
+- 使用完整域名
+- 包含协议（http:// 或 ws://）
+- 用于客户端（浏览器、移动应用）访问
+
+**示例**:
+```yaml
+APPFLOWY_BASE_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp
+APPFLOWY_WS_BASE_URL=ws://appflowy.ink.akawa.ety001.appflowy.lzcapp/ws/v2
+```
+
+#### 环境变量使用建议
+
+**硬编码方式**（当前 AppFlowy 使用）:
+```yaml
+APPFLOWY_BASE_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp
+```
+
+**平台变量方式**（推荐，如果平台支持）:
+```yaml
+APPFLOWY_BASE_URL=http://${LAZYCAT_APP_DOMAIN}
+```
+
+### 数据持久化转换
+
+#### volumes → binds
+
+**转换规则**:
+- docker-compose 的 named volumes 转换为 bind mounts
+- **必须**使用 `/lzcapp/var/` 作为数据目录前缀
+- 保持容器内的路径不变
+
+**路径规范**:
+- **按服务区分路径**: 每个服务使用独立的挂载路径，格式为 `/lzcapp/var/服务名`
+  - 例如：minio 服务挂载 `/lzcapp/var/minio` 到容器的指定目录
+- **多路径持久化**: 如果一个容器有多个路径需要做持久化存储，路径格式为 `/lzcapp/var/容器名_服务名`
+  - 例如：如果 appflowy 服务需要挂载配置和数据两个目录，可以使用：
+    - `/lzcapp/var/appflowy_config:/config`
+    - `/lzcapp/var/appflowy_data:/data`
+
+**示例**:
+```yaml
+# docker-compose.yml
+volumes:
+  - postgres_data:/var/lib/postgresql/data
+  - minio_data:/data
+
+# lzc-manifest.yml
+binds:
+  - /lzcapp/var/pgdata:/var/lib/postgresql/data
+  - /lzcapp/var/minio:/data
+```
+
+### 健康检查转换
+
+#### healthcheck → health_check
+
+**格式转换**:
+- docker-compose 使用数组格式: `test: ["CMD", "command", "args"]`
+- lzc-manifest 使用字符串格式: `test: ["CMD-SHELL", "command"]`
+
+**示例**:
+```yaml
+# docker-compose.yml
+healthcheck:
+  test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres", "-p", "5432"]
+  interval: 5s
+  timeout: 5s
+  retries: 12
+
+# lzc-manifest.yml
+health_check:
+  test: ["CMD-SHELL", "pg_isready", "-U", "postgres", "-h", "localhost"]
+  start_period: 60s
+```
+
+**注意事项**:
+- `start_period` 用于设置服务启动等待时间，对于数据库等需要初始化时间的服务很重要
+- 关键服务（如数据库、主应用服务）应该配置健康检查
+
+### 依赖关系配置
+
+#### depends_on 保留
+
+**原则**:
+- 保留服务间的依赖关系
+- 确保服务启动顺序正确
+- 依赖关系影响服务的启动顺序
+
+**示例**:
+```yaml
+services:
+  appflowy:
+    depends_on:
+      - timescaledb
+      - redis
+      - minio
+      - gotrue
+```
+
+### 镜像同步流程
+
+1. **识别需要同步的镜像**: 列出所有服务的 Docker 镜像
+2. **执行同步命令**: 对每个镜像执行 `lzc-cli appstore copy-image <镜像名>`
+3. **获取同步后的镜像名**: 命令返回以 `registry.lazycat.cloud` 开头的镜像名
+4. **更新 lzc-manifest.yml**: 将同步后的镜像名更新到对应服务的 `image` 字段
+
+**镜像命名格式**: `registry.lazycat.cloud/ety001/namespace/image:hash`
+
+### 常见问题和解决方案
+
+#### 1. admin_frontend 等可选服务缺失
+- **问题**: 原始配置中有管理界面等服务，但移植版本中未包含
+- **解决**: 根据实际需求决定是否添加，如果用户需要管理功能，应该添加相应服务
+
+#### 2. WebSocket 路由未配置
+- **问题**: nginx 中配置了 WebSocket 路由，但移植版本中未显式配置
+- **解决**: 检查平台是否自动支持 WebSocket，或添加显式的 WebSocket 路由配置
+
+#### 3. 大文件上传支持
+- **问题**: nginx 中配置了大文件上传（256M, 2G），但平台可能有限制
+- **解决**: 确认平台是否支持大文件上传，或使用其他方案（如直接上传到对象存储）
+
+#### 4. 环境变量硬编码
+- **问题**: 移植版本中很多环境变量被硬编码，不够灵活
+- **解决**: 考虑使用懒猫平台提供的环境变量（如 `${LAZYCAT_APP_DOMAIN}`）
+
+#### 5. 健康检查配置缺失
+- **问题**: 移植版本中部分服务的健康检查被移除
+- **解决**: 为关键服务添加健康检查配置，确保服务启动顺序正确
+
+#### 6. 数据库镜像替换
+- **问题**: 从 postgres 替换为 timescaledb 等
+- **解决**: 确认替换后的数据库是否支持原有功能（如扩展、特性等）
+
+### 移植检查清单
+
+- [ ] 所有核心服务已映射
+- [ ] 路由配置已正确转换
+- [ ] 服务间通信 URL 使用服务名
+- [ ] 外部访问 URL 使用完整域名
+- [ ] 数据持久化路径已转换
+- [ ] 关键服务已配置健康检查
+- [ ] 服务依赖关系已配置
+- [ ] 所有镜像已同步到懒猫服务器
+- [ ] 环境变量已正确适配
+- [ ] WebSocket 路由已确认（如需要）
+- [ ] 大文件上传已确认（如需要）
+
 ## 注意事项
 
 - 确保每个应用目录都包含必需的文件（lzc-manifest.yml, lzc-icon.png, lzc-build.yml）
 - 遵循 `.docs` 目录下文档中定义的标准和规范
 - 保持应用目录结构的统一性
+- 移植复杂应用时，参考 AppFlowy 的移植案例（见 `AppFlowy/移植分析.md`）
