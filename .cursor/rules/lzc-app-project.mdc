@@ -13,6 +13,7 @@ alwaysApply: true
 ### 文档目录
 - 开发文档和移植文档位于 `.docs` 目录下
 - `.docs` 目录不提交到 git（已在 `.gitignore` 中排除）
+- `.docs` 目录是一个独立的 git 仓库，必要时可以执行 `cd .docs && git pull` 拉取最新版本的文档
 
 ### 应用目录结构
 - 项目根目录下的每个子目录代表一个应用
@@ -240,11 +241,13 @@ healthcheck:
 # lzc-manifest.yml
 health_check:
   test: ["CMD-SHELL", "pg_isready", "-U", "postgres", "-h", "localhost"]
-  start_period: 60s
+  start_period: 180s
 ```
 
 **注意事项**:
 - `start_period` 用于设置服务启动等待时间，对于数据库等需要初始化时间的服务很重要
+- **数据库服务的 `start_period` 建议设置为 180s**，因为数据库初始化可能需要较长时间
+- 其他关键服务（如主应用服务）的 `start_period` 可以根据实际情况设置（通常 40s-60s）
 - 关键服务（如数据库、主应用服务）应该配置健康检查
 
 ### 依赖关系配置
