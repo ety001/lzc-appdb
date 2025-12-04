@@ -68,6 +68,7 @@ alwaysApply: true
 - 去掉服务名前缀（如 `appflowy_cloud` → `appflowy`）
 - 保持服务名简洁明了
 - 确保服务名在 lzc-manifest.yml 中唯一
+- **服务名不能为 `app`**：`app` 是保留字，不能用作服务名
 
 #### 服务替换
 - 可能需要替换数据库镜像（如 postgres → timescaledb）
