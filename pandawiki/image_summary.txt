@@ -1,0 +1,17 @@
+=== PandaWiki 镜像同步结果总结 ===
+同步时间: Thu Nov 27 02:25:27 AM CST 2025
+
+正确的镜像地址:
+1. nginx: registry.lazycat.cloud/ety001/chaitin/panda-wiki-nginx:3fca10659856f662
+2. frontend (app): registry.lazycat.cloud/ety001/chaitin/panda-wiki-app:dd3fb96b8a24ea95
+3. api: registry.lazycat.cloud/ety001/chaitin/panda-wiki-api:c1fcc56a33b0ffe7
+4. consumer: registry.lazycat.cloud/ety001/chaitin/panda-wiki-consumer:4056bbe5e4303fb7
+5. postgres: registry.lazycat.cloud/ety001/chaitin/panda-wiki-postgres:f84a0722c40c47a1
+6. redis: registry.lazycat.cloud/ety001/chaitin/panda-wiki-redis:fa932cd95273266b
+7. minio: registry.lazycat.cloud/ety001/chaitin/panda-wiki-minio:4a3dde8fccd3b2a9
+8. nats: registry.lazycat.cloud/ety001/chaitin/panda-wiki-nats:fba4e6e6b3fbeee8
+9. qdrant: registry.lazycat.cloud/ety001/chaitin/panda-wiki-qdrant:8549fe80d759d8b9
+10. crawler (anydoc): registry.lazycat.cloud/ety001/chaitin/anydoc:20d56468ab2604e1
+11. raglite: registry.lazycat.cloud/ety001/chaitin/panda-wiki-raglite:673ed515c4240ebe
+
+✅ 所有镜像已成功同步并更新到 lzc-manifest.yml
