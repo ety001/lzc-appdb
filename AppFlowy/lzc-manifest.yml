@@ -14,15 +14,17 @@ application:
   routes:
     - /=http://web:80
     - /api/=http://appflowy:8000/api/
+    - /ws/=http://appflowy:8000/ws/
     - /gotrue/=http://gotrue:9999/
     - /minio/=http://minio:9000/minio/
+    - /console/=http://admin_frontend:3000/
 services:
   appflowy:
-    image: registry.lazycat.cloud/ety001/appflowy/appflowy:5d080eb56344e617
+    image: registry.lazycat.cloud/ety001/appflowyinc/appflowy_cloud:49e38ca08401c750
     environment:
       - RUST_LOG=info
       - APPFLOWY_ENVIRONMENT=production
-      - APPFLOWY_DATABASE_URL=postgres://postgres:123456@timescaledb:5432/postgres
+      - APPFLOWY_DATABASE_URL=postgres://postgres:123456@postgres:5432/postgres
       - APPFLOWY_REDIS_URI=redis://redis:6379
       - APPFLOWY_GOTRUE_JWT_SECRET=hello456
       - APPFLOWY_GOTRUE_BASE_URL=http://gotrue:9999
@@ -38,15 +40,17 @@ services:
       - AI_SERVER_HOST=ai
       - AI_SERVER_PORT=5001
       - APPFLOWY_WEB_URL=http://web:80
-      - APPFLOWY_BASE_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp
+      - APPFLOWY_BASE_URL=http://${LAZYCAT_APP_DOMAIN}
+    health_check:
+      test: ["CMD-SHELL", "curl --fail http://127.0.0.1:8000/api/health || exit 1"]
     depends_on:
-      - timescaledb
+      - postgres
       - redis
       - minio
       - gotrue
   
-  timescaledb:
-    image: registry.lazycat.cloud/ety001/timescale/timescaledb:a7eb4b43d24c842e
+  postgres:
+    image: registry.lazycat.cloud/ety001/pgvector/pgvector:d93c9fabbfa91a7e
     environment:
       - TZ=Asia/Shanghai
       - POSTGRES_PASSWORD=123456
@@ -59,14 +63,14 @@ services:
       start_period: 60s
 
   redis:
-    image: redis:7.2
+    image: registry.lazycat.cloud/ety001/library/redis:5e3296489545ac5c
     environment:
       - TZ=Asia/Shanghai
   
   minio:
-    image: minio/minio:RELEASE.2024-01-18T22-51-28Z
+    image: registry.lazycat.cloud/ety001/minio/minio:373cb27b18a38a73
     environment:
-      - MINIO_BROWSER_REDIRECT_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp/minio
+      - MINIO_BROWSER_REDIRECT_URL=http://${LAZYCAT_APP_DOMAIN}/minio
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin
     command: server /data --console-address ":9001"
@@ -74,7 +78,7 @@ services:
       - /lzcapp/var/minio:/data
 
   gotrue:
-    image: appflowyinc/gotrue:2.132.3
+    image: registry.lazycat.cloud/ety001/appflowyinc/gotrue:67738a2c4bf8f9ad
     environment:
       - GOTRUE_ADMIN_EMAIL=admin@example.com
       - GOTRUE_ADMIN_PASSWORD=password
@@ -85,25 +89,28 @@ services:
       - GOTRUE_JWT_EXP=604800
       - GOTRUE_JWT_ADMIN_GROUP_NAME=supabase_admin
       - GOTRUE_DB_DRIVER=postgres
-      - API_EXTERNAL_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp/gotrue
-      - DATABASE_URL=postgres://postgres:123456@timescaledb:5432/postgres?search_path=auth
+      - API_EXTERNAL_URL=http://${LAZYCAT_APP_DOMAIN}/gotrue
+      - DATABASE_URL=postgres://postgres:123456@postgres:5432/postgres?search_path=auth
       - PORT=9999
       - GOTRUE_MAILER_URLPATHS_CONFIRMATION=/gotrue/verify
       - GOTRUE_MAILER_URLPATHS_INVITE=/gotrue/verify
       - GOTRUE_MAILER_URLPATHS_RECOVERY=/gotrue/verify
       - GOTRUE_MAILER_URLPATHS_EMAIL_CHANGE=/gotrue/verify
       - GOTRUE_MAILER_AUTOCONFIRM=true
+    health_check:
+      test: ["CMD-SHELL", "curl --fail http://127.0.0.1:9999/health || exit 1"]
+      start_period: 40s
     depends_on:
-      - timescaledb
+      - postgres
 
   worker:
-    image: appflowyinc/appflowy_worker:0.5.6
+    image: registry.lazycat.cloud/ety001/appflowyinc/appflowy_worker:6e26c0e996dd7de3
     environment:
       - RUST_LOG=info
       - APPFLOWY_ENVIRONMENT=production
       - APPFLOWY_WORKER_REDIS_URL=redis://redis:6379
       - APPFLOWY_WORKER_ENVIRONMENT=production
-      - APPFLOWY_WORKER_DATABASE_URL=postgres://postgres:123456@timescaledb:5432/postgres
+      - APPFLOWY_WORKER_DATABASE_URL=postgres://postgres:123456@postgres:5432/postgres
       - APPFLOWY_WORKER_DATABASE_NAME=postgres
       - APPFLOWY_WORKER_IMPORT_TICK_INTERVAL=30
       - APPFLOWY_S3_USE_MINIO=true
@@ -113,39 +120,51 @@ services:
       - APPFLOWY_S3_BUCKET=appflowy
       - APPFLOWY_S3_REGION=us-east-1
     depends_on:
-      - timescaledb
+      - postgres
       - redis
       - minio
 
   web:
-    image: appflowyinc/appflowy_web:0.5.8
+    image: registry.lazycat.cloud/ety001/appflowyinc/appflowy_web:bc653e86c1ba35be
     environment:
-      - APPFLOWY_BASE_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp
-      - APPFLOWY_GOTRUE_BASE_URL=http://appflowy.ink.akawa.ety001.appflowy.lzcapp/gotrue
-      - APPFLOWY_WS_BASE_URL=ws://appflowy.ink.akawa.ety001.appflowy.lzcapp/ws/v2
+      - APPFLOWY_BASE_URL=http://${LAZYCAT_APP_DOMAIN}
+      - APPFLOWY_GOTRUE_BASE_URL=http://${LAZYCAT_APP_DOMAIN}/gotrue
+      - APPFLOWY_WS_BASE_URL=ws://${LAZYCAT_APP_DOMAIN}/ws/v2
     depends_on:
       - appflowy
 
-  ai:
-    image: appflowyinc/appflowy_ai:0.3.6
+  admin_frontend:
+    image: registry.lazycat.cloud/ety001/appflowyinc/admin_frontend:28273c23ae8886ac
     environment:
-      - AI_SERVER_PORT=5001
-      - DEFAULT_AI_MODEL=gpt-4.1-mini
-      - DEFAULT_AI_COMPLETION_MODEL=gpt-4.1-mini
-      - APPFLOWY_S3_ACCESS_KEY=minioadmin
-      - APPFLOWY_S3_SECRET_KEY=minioadmin
-      - APPFLOWY_S3_BUCKET=appflowy
-      - APPFLOWY_S3_REGION=us-east-1
-      - AI_DATABASE_URL=postgres://postgres:123456@timescaledb:5432/postgres
-      - AI_REDIS_URL=redis://redis:6379
-      - AI_USE_MINIO=true
-      - AI_MINIO_URL=http://minio:9000
-      - AI_APPFLOWY_HOST=http://appflowy.ink.akawa.ety001.appflowy.lzcapp
-      - APPFLOWY_GOTRUE_JWT_SECRET=hello456
+      - APPFLOWY_BASE_URL=http://${LAZYCAT_APP_DOMAIN}
+      - APPFLOWY_GOTRUE_BASE_URL=http://${LAZYCAT_APP_DOMAIN}/gotrue
     depends_on:
-      - timescaledb
-      - redis
-      - minio
+      - gotrue
+      - appflowy
+
+  #ai:
+  #  image: registry.lazycat.cloud/ety001/appflowyinc/appflowy_ai:48885b46a3972ed5
+  #  environment:
+  #    - AI_SERVER_PORT=https://ollama-ai.ecat.heiyu.space/v1
+  #    - DEFAULT_AI_MODEL=qwen3:1.7b
+  #    - DEFAULT_AI_COMPLETION_MODEL=qwen3:1.7b
+  #    - APPFLOWY_S3_ACCESS_KEY=minioadmin
+  #    - APPFLOWY_S3_SECRET_KEY=minioadmin
+  #    - APPFLOWY_S3_BUCKET=appflowy
+  #    - APPFLOWY_S3_REGION=us-east-1
+  #    - AI_DATABASE_URL=postgres://postgres:123456@postgres:5432/postgres
+  #    - AI_REDIS_URL=redis://redis:6379
+  #    - AI_USE_MINIO=true
+  #    - AI_MINIO_URL=http://minio:9000
+  #    - AI_APPFLOWY_HOST=http://${LAZYCAT_APP_DOMAIN}
+  #    - APPFLOWY_GOTRUE_JWT_SECRET=hello456
+  #  health_check:
+  #    test: ["CMD-SHELL", "curl -f http://localhost:5001/health || exit 1"]
+  #    start_period: 40s
+  #  depends_on:
+  #    - postgres
+  #    - redis
+  #    - minio
 
 locales:
   zh:

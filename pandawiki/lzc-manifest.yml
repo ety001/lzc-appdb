@@ -1,0 +1,216 @@
+lzc-sdk-version: 0.1
+name: PandaWiki
+package: ink.akawa.ety001.pandawiki
+version: 3.47.1
+description: PandaWiki is an intelligent document management system based on knowledge graphs, providing AI-powered document processing and search capabilities.
+license: https://github.com/chaitin/panda-wiki
+homepage: https://github.com/chaitin/panda-wiki
+author: Chaitin
+min_os_version: 1.3.0
+application:
+  subdomain: pandawiki
+  background_task: true
+  multi_instance: false
+  routes:
+    - /=http://panda-wiki-nginx:8080
+services:
+  panda-wiki-nginx:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-nginx:3fca10659856f662
+    depends_on:
+      - panda-wiki-app
+      - panda-wiki-api
+    binds:
+      - /lzcapp/var/nginx_ssl:/etc/nginx/ssl
+    environment:
+      - API_HOST=panda-wiki-api:8000
+      - APP_HOST=panda-wiki-app:8080
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080 || exit 1"]
+      start_period: 120s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  panda-wiki-app:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-app:dd3fb96b8a24ea95
+
+  panda-wiki-api:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-api:c1fcc56a33b0ffe7
+    depends_on:
+      - panda-wiki-postgres
+      - panda-wiki-nats
+      - panda-wiki-redis
+      - panda-wiki-minio
+    binds:
+      - /lzcapp/var/api_conf:/data
+    environment:
+      - NATS_PASSWORD=pandawiki789
+      - POSTGRES_PASSWORD=pandawiki123
+      - REDIS_PASSWORD=pandawiki456
+      - S3_SECRET_KEY=pandawikiminio123
+      - JWT_SECRET=pandawikijwt456
+      - ADMIN_PASSWORD=admin123
+      - POSTGRES_HOST=panda-wiki-postgres
+      - NATS_HOST=panda-wiki-nats
+      - REDIS_HOST=panda-wiki-redis
+      - S3_ENDPOINT=panda-wiki-minio:9000
+      - QDRANT_HOST=panda-wiki-qdrant
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      start_period: 150s
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+  panda-wiki-consumer:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-consumer:4056bbe5e4303fb7
+    depends_on:
+      - panda-wiki-nats
+      - panda-wiki-postgres
+      - panda-wiki-redis
+      - panda-wiki-minio
+    environment:
+      - NATS_PASSWORD=pandawiki789
+      - POSTGRES_PASSWORD=pandawiki123
+      - REDIS_PASSWORD=pandawiki456
+      - S3_SECRET_KEY=pandawikiminio123
+      - JWT_SECRET=pandawikijwt456
+      - POSTGRES_HOST=panda-wiki-postgres
+      - NATS_HOST=panda-wiki-nats
+      - REDIS_HOST=panda-wiki-redis
+      - S3_ENDPOINT=panda-wiki-minio:9000
+      - QDRANT_HOST=panda-wiki-qdrant
+
+  panda-wiki-postgres:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-postgres:f84a0722c40c47a1
+    environment:
+      - POSTGRES_USER=panda-wiki
+      - POSTGRES_PASSWORD=pandawiki123
+      - POSTGRES_DB=panda-wiki
+    binds:
+      - /lzcapp/var/postgres:/var/lib/postgresql/data
+    health_check:
+      test: ["CMD-SHELL", "pg_isready", "-U", "panda-wiki", "-h", "localhost"]
+      start_period: 180s
+
+  db-init:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-postgres:f84a0722c40c47a1
+    depends_on:
+      - panda-wiki-postgres
+    environment:
+      - PGPASSWORD=pandawiki123
+    command: >
+      bash -c "
+      until pg_isready -h panda-wiki-postgres -U panda-wiki; do sleep 2; done &&
+      psql -h panda-wiki-postgres -U panda-wiki -d panda-wiki -c 'CREATE DATABASE raglite;' || echo 'Database raglite may already exist' &&
+      echo 'Database initialization completed'
+      "
+    health_check:
+      test: ["CMD-SHELL", "echo 'DB init completed'"]
+      start_period: 180s
+
+  panda-wiki-redis:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-redis:fa932cd95273266b
+    command: redis-server --requirepass pandawiki456 --appendonly yes --appendfilename appendonly.aof --save "900 1" --save "300 10" --save "60 10000"
+    binds:
+      - /lzcapp/var/redis:/data
+    health_check:
+      test: ["CMD-SHELL", "redis-cli -a pandawiki456 ping || exit 1"]
+      start_period: 30s
+
+  panda-wiki-minio:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-minio:4a3dde8fccd3b2a9
+    command: minio server /data --console-address ":9001"
+    binds:
+      - /lzcapp/var/minio:/data
+    environment:
+      - MINIO_ROOT_USER=s3panda-wiki
+      - MINIO_ROOT_PASSWORD=pandawikiminio123
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live || exit 1"]
+      start_period: 60s
+
+  panda-wiki-nats:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-nats:fba4e6e6b3fbeee8
+    command: nats-server -c /etc/nats/nats.conf --user panda-wiki --pass pandawiki789
+    binds:
+      - /lzcapp/var/nats:/data
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:8222/healthz || exit 1"]
+      start_period: 45s
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  panda-wiki-qdrant:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-qdrant:8549fe80d759d8b9
+    binds:
+      - /lzcapp/var/qdrant:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__API_KEY=pandawikiqdrant789
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/health || exit 1"]
+      start_period: 60s
+
+  panda-wiki-crawler:
+    image: registry.lazycat.cloud/ety001/chaitin/anydoc:20d56468ab2604e1
+    init: true
+    depends_on:
+      - panda-wiki-nats
+      - panda-wiki-minio
+    environment:
+      - GLOG_GLOBAL_LEVEL=info
+      - NAMESPACE=anydoc
+      - MQ_NATS_URL=nats://panda-wiki-nats:4222
+      - MQ_NATS_USER=panda-wiki
+      - MQ_NATS_PASSWORD=pandawiki789
+      - OSS_MINIO_ACCESS_KEY=s3panda-wiki
+      - OSS_MINIO_SECRET_KEY=pandawikiminio123
+      - OSS_MINIO_ENDPOINT=panda-wiki-minio:9000
+      - OSS_MINIO_BUCKET=anydoc
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      start_period: 90s
+
+  panda-wiki-raglite:
+    image: registry.lazycat.cloud/ety001/chaitin/panda-wiki-raglite:673ed515c4240ebe
+    binds:
+      - /lzcapp/var/raglite:/data
+    environment:
+      - GIN_MODE=release
+      - DATABASE_HOST=panda-wiki-postgres
+      - DATABASE_PORT=5432
+      - DATABASE_USER=panda-wiki
+      - DATABASE_PASSWORD=pandawiki123
+      - DATABASE_NAME=raglite
+      - MINIO_HOST=panda-wiki-minio:9000
+      - MINIO_USER=s3panda-wiki
+      - MINIO_PASSWORD=pandawikiminio123
+      - QDRANT_HOST=panda-wiki-qdrant
+      - QDRANT_PORT=6333
+      - QDRANT_API_KEY=pandawikiqdrant789
+      - MQ_NATS_URL=nats://panda-wiki-nats:4222
+      - MQ_NATS_USER=panda-wiki
+      - MQ_NATS_PASSWORD=pandawiki789
+    depends_on:
+      - db-init
+      - panda-wiki-minio
+      - panda-wiki-qdrant
+      - panda-wiki-nats
+    health_check:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
+      start_period: 180s
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+locales:
+  zh:
+    name: 熊猫知识库
+    description: "基于知识图谱的智能文档管理系统，提供AI驱动的文档处理和搜索功能"
+  zh_CN:
+    name: 熊猫知识库
+    description: "基于知识图谱的智能文档管理系统，提供AI驱动的文档处理和搜索功能"
+  en:
+    name: PandaWiki
+    description: "PandaWiki is an intelligent document management system based on knowledge graphs, providing AI-powered document processing and search capabilities"

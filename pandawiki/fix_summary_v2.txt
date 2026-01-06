@@ -1,0 +1,30 @@
+=== PandaWiki 第二轮问题修复总结 ===
+修复时间: Thu Nov 27 04:11:50 AM CST 2025
+
+主要修复内容:
+1. 添加完整的服务连接环境变量
+2. 创建 db-init 服务来初始化 raglite 数据库
+3. 优化服务依赖关系和启动顺序
+4. 增加健康检查的等待时间
+
+新增服务:
+- db-init: 数据库初始化服务
+
+新增文件:
+- init/init-db.sh: 数据库初始化脚本
+- 问题修复记录.md: 详细的问题分析和修复记录
+
+配置文件更新:
+- lzc-manifest.yml: 添加完整环境变量和 db-init 服务
+- lzc-build.yml: 添加 contentdir 来包含初始化脚本
+=== 调试建议 ===
+根据 Docker 配置分析，发现以下问题:
+1. postgres 和 minio 容器正常退出 (ExitCode: 0)
+2. 健康检查显示 unhealthy，但 postgres 实际运行正常
+3. 可能是其他服务启动失败导致整个应用停止
+
+建议调试步骤:
+1. 检查所有容器状态: docker ps -a --filter "name=pandawiki"
+2. 查看关键服务日志: docker logs <container_name>
+3. 特别关注 db-init, api, consumer 服务的启动情况
+4. 考虑简化配置，先测试基础服务

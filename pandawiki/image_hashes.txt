@@ -1,0 +1,12 @@
+=== 提取镜像 Hash ===
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-nginx:3fca10659856f662
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-app:dd3fb96b8a24ea95
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-api:c1fcc56a33b0ffe7
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-consumer:4056bbe5e4303fb7
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-postgres:f84a0722c40c47a1
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-redis:fa932cd95273266b
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-minio:4a3dde8fccd3b2a9
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-nats:fba4e6e6b3fbeee8
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-qdrant:8549fe80d759d8b9
+uploaded:  registry.lazycat.cloud/ety001/chaitin/anydoc:20d56468ab2604e1
+uploaded:  registry.lazycat.cloud/ety001/chaitin/panda-wiki-raglite:673ed515c4240ebe

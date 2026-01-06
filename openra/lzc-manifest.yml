@@ -1,0 +1,60 @@
+lzc-sdk-version: 0.1
+name: OpenRA
+package: ink.akawa.ety001.openra
+version: 0.0.1
+description: A Libre/Free Real Time Strategy game engine supporting early Westwood classics.
+license: https://github.com/OpenRA/OpenRA#GPL-3.0-1-ov-file
+homepage: https://www.openra.net/
+author: OpenRA
+min_os_version: 1.3.0
+application:
+  subdomain: openra
+  background_task: false
+  multi_instance: false
+  gpu_accel: true
+  ingress:
+    - protocol: tcp
+      port: 22
+      service: openra
+  routes:
+    - /=http://openra.ink.akawa.ety001.openra.lzcapp:10000
+services:
+  openra:
+    # ety001/xpra-base:ubuntu-noble
+    #image: registry.lazycat.cloud/ety001/ety001/xpra-base:157ba7b07588e5a6
+    # ety001/openra:ubuntu
+    image: registry.lazycat.cloud/ety001/ety001/openra:d216e1581340ee95
+    environment:
+    binds:
+      - /lzcapp/var/ssh:/home/lzc/.ssh
+      - /lzcapp/cache:/home/lzc/.cache
+    #setup_script: |
+    #  cp /lzcapp/pkg/content/sources.list /etc/apt/sources.list
+    #command: /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+    command: /bin/bash -c "while true; do sleep 1000; done"
+    #command: xpra start :100 --daemon=no --html=on --bind-tcp=0.0.0.0:10000 --webcam=no --exec-wrapper="vglrun" --start=/usr/games/supertuxkart
+    #command: xpra start :100 --daemon=no --html=on --bind-tcp=0.0.0.0:10000 --webcam=no --start="/usr/games/supertuxkart --fullscreen --render-driver=vulkan"
+  #  xpra start :100 \
+  #--start-child=steam \
+  #--daemon=no \
+  #--opengl=yes \
+  #--encoding=h264 \
+  #--video-encoders=vaapi \
+  #--quality=80 \
+  #--speed=60 \
+  #--compressors=lz4 \
+  #--dpi=96 \
+  #--clipboard=no \
+  #--pulseaudio=no \
+  #--notifications=no \
+  #--min-quality=40 \
+  #--min-speed=30 \
+  #--bandwidth-limit=20000 \
+  #--env=XPRA_DISABLE_AUDIO=1
+locales:
+  zh:
+    description: 一款 Libre/Free 实时战略游戏引擎，支持早期的 Westwood 经典游戏。
+  zh_CN:
+    description: 一款 Libre/Free 实时战略游戏引擎，支持早期的 Westwood 经典游戏。
+  en:
+    description: A Libre/Free Real Time Strategy game engine supporting early Westwood classics.
