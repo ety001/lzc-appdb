@@ -1,0 +1,65 @@
+lzc-sdk-version: 0.1
+name: LazyCat Mobile
+package: ink.akawa.ety001.lzcmobile
+version: 0.0.1
+description: A lightweight SIP communication app for LazyCat
+license: https://github.com/ety001/lzc-mobile
+homepage: https://github.com/ety001/lzc-mobile
+author: ETY001
+min_os_version: 1.3.8
+ext_config:
+  enable_document_access: true
+  enable_media_access: true
+application:
+  subdomain: lzcmobile
+  background_task: true
+  multi_instance: false
+  usb_accel: true
+  oidc_redirect_path: /auth/oidc/callback
+  routes:
+    - /=http://lzcmobile.ink.akawa.ety001.lzcmobile.lzcapp:8071
+  ingress:
+    - protocol: tcp
+      description: SIP通信端口
+      port: 5060
+      service: lzcmobile
+    - protocol: udp
+      description: SIP通信端口
+      port: 5060
+      service: lzcmobile
+    - protocol: udp
+      description: RTP通信端口
+      service: lzcmobile
+      publish_port: 40890-40900
+services:
+  lzcmobile:
+    #image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:4778b8cddc0a29a5
+    image: dev.ecat.heiyu.space/ety001/lzc-mobile:1769207573
+    network_mode: host
+    environment:
+      - WEB_PORT=8071
+      - DB_PATH=/var/lib/lzc-mobile/data.db
+      - ASTERISK_CONFIG_DIR=/etc/asterisk
+      - ASTERISK_TEMPLATE_DIR=/app/configs/asterisk
+      - ASTERISK_LOG_PATH=/var/log/asterisk/full
+      - LAZYCAT_AUTH_BASE_URL=https://${LAZYCAT_APP_DOMAIN}
+      - LAZYCAT_AUTH_OIDC_CLIENT_ID=${LAZYCAT_AUTH_OIDC_CLIENT_ID}
+      - LAZYCAT_AUTH_OIDC_CLIENT_SECRET=${LAZYCAT_AUTH_OIDC_CLIENT_SECRET}
+      - LAZYCAT_AUTH_OIDC_AUTH_URI=${LAZYCAT_AUTH_OIDC_AUTH_URI}
+      - LAZYCAT_AUTH_OIDC_TOKEN_URI=${LAZYCAT_AUTH_OIDC_TOKEN_URI}
+      - LAZYCAT_AUTH_OIDC_USERINFO_URI=${LAZYCAT_AUTH_OIDC_USERINFO_URI}
+      - ASTERISK_AMI_USERNAME=admin
+      - ASTERISK_AMI_PASSWORD={{ stable_secret "admin_password" }}
+    binds:
+      - /lzcapp/var/data:/var/lib/lzc-mobile/
+      - /lzcapp/var/logs:/var/log/asterisk/
+locales:
+  zh:
+    name: 懒猫通讯
+    description: "️一款面向 LazyCat 的轻量 SIP 通讯应用"
+  zh_CN:
+    name: 懒猫通讯
+    description: "️一款面向 LazyCat 的轻量 SIP 通讯应用"
+  en:
+    name: LazyCat Mobile
+    description: "A lightweight SIP communication app for LazyCat"
