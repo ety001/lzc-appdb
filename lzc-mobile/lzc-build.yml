@@ -1,0 +1,17 @@
+#buildscript: ./build.sh
+manifest: ./lzc-manifest.yml
+# contentdir: ./
+pkgout: ./
+icon: ./lzc-mobile.png
+
+compose_override:
+  services:
+    # 指定服务名称
+    lzcmobile:
+      privileged: true
+      devices:
+        - /dev/ttyUSB0:/dev/ttyUSB0
+        - /dev/ttyUSB1:/dev/ttyUSB1
+        - /dev/ttyUSB2:/dev/ttyUSB2
+        - /dev/ttyUSB3:/dev/ttyUSB3
+        - /dev/snd:/dev/snd

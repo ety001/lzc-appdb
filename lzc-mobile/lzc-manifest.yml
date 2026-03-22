@@ -33,8 +33,8 @@ application:
       publish_port: 40890-40900
 services:
   lzcmobile:
-    #image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:4778b8cddc0a29a5
-    image: dev.ecat.heiyu.space/ety001/lzc-mobile:1769207573
+    image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:2c0a1faa8891a343
+    #image: dev.ecat.heiyu.space/ety001/lzc-mobile:1774085383
     network_mode: host
     environment:
       - WEB_PORT=8071
