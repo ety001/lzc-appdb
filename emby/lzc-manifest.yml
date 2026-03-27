@@ -1,6 +1,6 @@
 lzc-sdk-version: "0.1"
 package: ink.akawa.ety001.embysingle
-version: 4.9.2.6
+version: 4.10.0.6
 name: emby
 description: Emby Server 是一个家庭媒体服务器，建立在其他流行的开源技术之上，例如 Service Stack、jQuery、jQuery mobile 和 .NET Core。
 homepage: https://emby.media/
@@ -17,7 +17,8 @@ application:
 
 services:
   server:
-    image: registry.lazycat.cloud/ety001/emby/embyserver:fe77961f4100708e
+    # emby/embyserver:4.10.0.6
+    image: registry.lazycat.cloud/ety001/emby/embyserver:a35fef2d3e761b0d
     network_mode: "host"
     environment:
       - UID=0
