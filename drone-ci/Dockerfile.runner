@@ -1,0 +1,8 @@
+FROM drone/drone-runner-docker:1
+
+RUN apk add --no-cache docker-cli docker-engine
+
+COPY entrypoint-runner.sh /entrypoint-runner.sh
+RUN chmod +x /entrypoint-runner.sh
+
+ENTRYPOINT ["/entrypoint-runner.sh"]

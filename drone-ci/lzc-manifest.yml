@@ -31,7 +31,7 @@ services:
       - DRONE_SERVER_PROTO=https
       - DRONE_USER_CREATE=username:{{ .U.admin_user }},admin:true
   drone-runner:
-    image: registry.lazycat.cloud/ety001/drone/drone-runner-docker:d11930bf6e481ce6
+    image: registry.lazycat.cloud/ety001/ety001/drone-runner-docker:dfac963834868ea6
     runtime: sysbox-runc
     environment:
       - DRONE_RPC_PROTO=http
