@@ -32,8 +32,7 @@ services:
       - DRONE_USER_CREATE=username:{{ .U.admin_user }},admin:true
   drone-runner:
     image: registry.lazycat.cloud/ety001/drone/drone-runner-docker:d11930bf6e481ce6
-    binds:
-      - /var/run/docker.sock:/var/run/docker.sock
+    runtime: sysbox-runc
     environment:
       - DRONE_RPC_PROTO=http
       - DRONE_RPC_HOST=drone-server.ink.akawa.ety001.drone-ci.lzcapp
