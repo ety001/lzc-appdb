@@ -1,6 +1,4 @@
 application:
-  public_path:
-    - /
   subdomain: drone
   background_task: true
   multi_instance: false
