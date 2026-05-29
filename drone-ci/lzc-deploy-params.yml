@@ -1,0 +1,117 @@
+params:
+  - id: scm_type
+    type: string
+    name: "SCM 类型"
+    description: "选择代码托管平台类型：gogs / github / gitlab / gitea / bitbucket"
+    default_value: "gogs"
+
+  - id: gogs_server
+    type: string
+    name: "Gogs 服务器地址"
+    description: "Gogs 平台的完整访问地址"
+    optional: true
+
+  - id: github_client_id
+    type: string
+    name: "GitHub Client ID"
+    description: "GitHub OAuth App 的 Client ID"
+    optional: true
+
+  - id: github_client_secret
+    type: secret
+    name: "GitHub Client Secret"
+    description: "GitHub OAuth App 的 Client Secret"
+    optional: true
+
+  - id: gitlab_client_id
+    type: string
+    name: "GitLab Client ID"
+    description: "GitLab OAuth App 的 Client ID"
+    optional: true
+
+  - id: gitlab_client_secret
+    type: secret
+    name: "GitLab Client Secret"
+    description: "GitLab OAuth App 的 Client Secret"
+    optional: true
+
+  - id: gitea_server
+    type: string
+    name: "Gitea 服务器地址"
+    description: "Gitea 平台的完整访问地址"
+    optional: true
+
+  - id: gitea_client_id
+    type: string
+    name: "Gitea Client ID"
+    description: "Gitea OAuth App 的 Client ID"
+    optional: true
+
+  - id: gitea_client_secret
+    type: secret
+    name: "Gitea Client Secret"
+    description: "Gitea OAuth App 的 Client Secret"
+    optional: true
+
+  - id: bitbucket_client_id
+    type: string
+    name: "Bitbucket Client ID"
+    description: "Bitbucket OAuth Consumer 的 Key"
+    optional: true
+
+  - id: bitbucket_client_secret
+    type: secret
+    name: "Bitbucket Client Secret"
+    description: "Bitbucket OAuth Consumer 的 Secret"
+    optional: true
+
+  - id: admin_user
+    type: string
+    name: "管理员用户名"
+    description: "Drone CI 管理员在 SCM 平台上的用户名"
+    default_value: "admin"
+    optional: true
+
+locales:
+  zh:
+    params:
+      - scm_type: "SCM 类型"
+      - gogs_server: "Gogs 服务器地址"
+      - github_client_id: "GitHub Client ID"
+      - github_client_secret: "GitHub Client Secret"
+      - gitlab_client_id: "GitLab Client ID"
+      - gitlab_client_secret: "GitLab Client Secret"
+      - gitea_server: "Gitea 服务器地址"
+      - gitea_client_id: "Gitea Client ID"
+      - gitea_client_secret: "Gitea Client Secret"
+      - bitbucket_client_id: "Bitbucket Client ID"
+      - bitbucket_client_secret: "Bitbucket Client Secret"
+      - admin_user: "管理员用户名"
+  zh_CN:
+    params:
+      - scm_type: "SCM 类型"
+      - gogs_server: "Gogs 服务器地址"
+      - github_client_id: "GitHub Client ID"
+      - github_client_secret: "GitHub Client Secret"
+      - gitlab_client_id: "GitLab Client ID"
+      - gitlab_client_secret: "GitLab Client Secret"
+      - gitea_server: "Gitea 服务器地址"
+      - gitea_client_id: "Gitea Client ID"
+      - gitea_client_secret: "Gitea Client Secret"
+      - bitbucket_client_id: "Bitbucket Client ID"
+      - bitbucket_client_secret: "Bitbucket Client Secret"
+      - admin_user: "管理员用户名"
+  en:
+    params:
+      - scm_type: "SCM Type"
+      - gogs_server: "Gogs Server URL"
+      - github_client_id: "GitHub Client ID"
+      - github_client_secret: "GitHub Client Secret"
+      - gitlab_client_id: "GitLab Client ID"
+      - gitlab_client_secret: "GitLab Client Secret"
+      - gitea_server: "Gitea Server URL"
+      - gitea_client_id: "Gitea Client ID"
+      - gitea_client_secret: "Gitea Client Secret"
+      - bitbucket_client_id: "Bitbucket Client ID"
+      - bitbucket_client_secret: "Bitbucket Client Secret"
+      - admin_user: "Admin Username"

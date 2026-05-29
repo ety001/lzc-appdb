@@ -1,0 +1,28 @@
+package: ink.akawa.ety001.drone-ci
+version: 0.0.1
+name: Drone CI
+description: |
+  Drone CI 是一个基于容器的持续集成/持续部署平台。
+  支持 Gogs、GitHub、GitLab、Gitea、Bitbucket 等 SCM 平台。
+  安装时选择对应的 SCM 类型并填写相关配置即可。
+  Gogs 只需填写服务器地址；GitHub/GitLab/Gitea/Bitbucket 需要填写 Client ID 和 Client Secret。
+author: ETY001
+license: https://github.com/harness/drone/blob/master/LICENSE
+homepage: https://drone.io
+min_os_version: 1.5.0
+
+locales:
+  zh:
+    name: Drone CI
+    description: "基于容器的持续集成/持续部署平台，支持 Gogs、GitHub、GitLab、Gitea、Bitbucket。安装时选择 SCM 类型并填写对应配置即可。"
+  zh_CN:
+    name: Drone CI
+    description: "基于容器的持续集成/持续部署平台，支持 Gogs、GitHub、GitLab、Gitea、Bitbucket。安装时选择 SCM 类型并填写对应配置即可。"
+  en:
+    name: Drone CI
+    description: "Container-native CI/CD platform. Supports Gogs, GitHub, GitLab, Gitea, Bitbucket. Select your SCM type and fill in the corresponding config during installation."
+
+permissions:
+  required:
+    - net.internet
+    - net.lan
