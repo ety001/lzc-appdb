@@ -6,8 +6,8 @@ description: |
   支持 Gogs、GitHub、GitLab、Gitea、Bitbucket 等 SCM 平台。
   安装时选择对应的 SCM 类型并填写相关配置即可。
   Gogs 只需填写服务器地址；GitHub/GitLab/Gitea/Bitbucket 需要填写 Client ID 和 Client Secret。
-author: ETY001
-license: https://github.com/harness/drone/blob/master/LICENSE
+author: Drone
+license: https://github.com/drone/drone-go#Apache-2.0-1-ov-file
 homepage: https://drone.io
 min_os_version: 1.5.0
 
