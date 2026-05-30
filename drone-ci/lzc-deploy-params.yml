@@ -8,7 +8,7 @@ params:
   - id: gogs_server
     type: string
     name: "Gogs 服务器地址"
-    description: "Gogs 平台的完整访问地址。注意：如果 Gogs 部署在懒猫微服上，必须使用端口映射地址（如 http://局域网IP:端口），不能使用懒猫域名（*.heiyu.space），因为懒猫网关会拦截非浏览器请求"
+    description: "Gogs 平台的完整访问地址。注意：如果 Gogs 部署在懒猫微服上，必须使用端口映射地址（如 http://局域网IP:端口），不能使用懒猫域名（*.heiyu.space），因为懒猫网关会拦截非浏览器请求. 如果你这是重装，记得删除之前在 Gogs 上有 Drone CI 创建的令牌."
     optional: true
 
   - id: github_client_id
@@ -65,53 +65,89 @@ params:
     description: "Bitbucket OAuth Consumer 的 Secret"
     optional: true
 
-  - id: admin_user
-    type: string
-    name: "管理员用户名"
-    description: "Drone CI 管理员在 SCM 平台上的用户名"
-    default_value: "admin"
-    optional: true
+  # - id: admin_user
+  #   type: string
+  #   name: "管理员用户名"
+  #   description: "Drone CI 管理员在 SCM 平台上的用户名"
+  #   default_value: "admin"
+  #   optional: true
 
 locales:
   zh:
     params:
       scm_type: "SCM 类型"
+      scm_type.description: "选择代码托管平台类型：gogs / github / gitlab / gitea / bitbucket"
       gogs_server: "Gogs 服务器地址"
+      gogs_server.description: "Gogs 平台的完整访问地址。注意：如果 Gogs 部署在懒猫微服上，必须使用端口映射地址（如 http://局域网IP:端口），不能使用懒猫域名（*.heiyu.space），因为懒猫网关会拦截非浏览器请求。"
       github_client_id: "GitHub Client ID"
+      github_client_id.description: "GitHub OAuth App 的 Client ID"
       github_client_secret: "GitHub Client Secret"
+      github_client_secret.description: "GitHub OAuth App 的 Client Secret"
       gitlab_client_id: "GitLab Client ID"
+      gitlab_client_id.description: "GitLab OAuth App 的 Client ID"
       gitlab_client_secret: "GitLab Client Secret"
+      gitlab_client_secret.description: "GitLab OAuth App 的 Client Secret"
       gitea_server: "Gitea 服务器地址"
+      gitea_server.description: "Gitea 平台的完整访问地址"
       gitea_client_id: "Gitea Client ID"
+      gitea_client_id.description: "Gitea OAuth App 的 Client ID"
       gitea_client_secret: "Gitea Client Secret"
+      gitea_client_secret.description: "Gitea OAuth App 的 Client Secret"
       bitbucket_client_id: "Bitbucket Client ID"
+      bitbucket_client_id.description: "Bitbucket OAuth Consumer 的 Key"
       bitbucket_client_secret: "Bitbucket Client Secret"
+      bitbucket_client_secret.description: "Bitbucket OAuth Consumer 的 Secret"
       admin_user: "管理员用户名"
+      admin_user.description: "Drone CI 管理员在 SCM 平台上的用户名"
   zh_CN:
     params:
       scm_type: "SCM 类型"
+      scm_type.description: "选择代码托管平台类型：gogs / github / gitlab / gitea / bitbucket"
       gogs_server: "Gogs 服务器地址"
+      gogs_server.description: "Gogs 平台的完整访问地址。注意：如果 Gogs 部署在懒猫微服上，必须使用端口映射地址（如 http://局域网IP:端口），不能使用懒猫域名（*.heiyu.space），因为懒猫网关会拦截非浏览器请求。"
       github_client_id: "GitHub Client ID"
+      github_client_id.description: "GitHub OAuth App 的 Client ID"
       github_client_secret: "GitHub Client Secret"
+      github_client_secret.description: "GitHub OAuth App 的 Client Secret"
       gitlab_client_id: "GitLab Client ID"
+      gitlab_client_id.description: "GitLab OAuth App 的 Client ID"
       gitlab_client_secret: "GitLab Client Secret"
+      gitlab_client_secret.description: "GitLab OAuth App 的 Client Secret"
       gitea_server: "Gitea 服务器地址"
+      gitea_server.description: "Gitea 平台的完整访问地址"
       gitea_client_id: "Gitea Client ID"
+      gitea_client_id.description: "Gitea OAuth App 的 Client ID"
       gitea_client_secret: "Gitea Client Secret"
+      gitea_client_secret.description: "Gitea OAuth App 的 Client Secret"
       bitbucket_client_id: "Bitbucket Client ID"
+      bitbucket_client_id.description: "Bitbucket OAuth Consumer 的 Key"
       bitbucket_client_secret: "Bitbucket Client Secret"
+      bitbucket_client_secret.description: "Bitbucket OAuth Consumer 的 Secret"
       admin_user: "管理员用户名"
+      admin_user.description: "Drone CI 管理员在 SCM 平台上的用户名"
   en:
     params:
       scm_type: "SCM Type"
+      scm_type.description: "Select the code hosting platform type: gogs / github / gitlab / gitea / bitbucket"
       gogs_server: "Gogs Server URL"
+      gogs_server.description: "Full access URL of the Gogs platform. Note: If Gogs is deployed on the same LCMD device, you must use the port mapping address (e.g. http://LAN-IP:port) instead of the LCMD domain (*.heiyu.space), as the LCMD gateway intercepts non-browser requests."
       github_client_id: "GitHub Client ID"
+      github_client_id.description: "The Client ID of your GitHub OAuth App"
       github_client_secret: "GitHub Client Secret"
+      github_client_secret.description: "The Client Secret of your GitHub OAuth App"
       gitlab_client_id: "GitLab Client ID"
+      gitlab_client_id.description: "The Client ID of your GitLab OAuth App"
       gitlab_client_secret: "GitLab Client Secret"
+      gitlab_client_secret.description: "The Client Secret of your GitLab OAuth App"
       gitea_server: "Gitea Server URL"
+      gitea_server.description: "Full access URL of the Gitea platform"
       gitea_client_id: "Gitea Client ID"
+      gitea_client_id.description: "The Client ID of your Gitea OAuth App"
       gitea_client_secret: "Gitea Client Secret"
+      gitea_client_secret.description: "The Client Secret of your Gitea OAuth App"
       bitbucket_client_id: "Bitbucket Client ID"
+      bitbucket_client_id.description: "The Key of your Bitbucket OAuth Consumer"
       bitbucket_client_secret: "Bitbucket Client Secret"
+      bitbucket_client_secret.description: "The Secret of your Bitbucket OAuth Consumer"
       admin_user: "Admin Username"
+      admin_user.description: "The SCM platform username of the Drone CI admin"
