@@ -31,7 +31,7 @@ services:
       - DRONE_RPC_SECRET={{ stable_secret "rpc_secret" }}
       - DRONE_SERVER_HOST={{ .S.AppDomain }}
       - DRONE_SERVER_PROTO=https
-      - DRONE_USER_CREATE=username:{{ .U.admin_user }},admin:true
+      # - DRONE_USER_CREATE=username:{{ .U.admin_user }},admin:true
   drone-runner:
     image: registry.lazycat.cloud/ety001/ety001/drone-runner-docker:dfac963834868ea6
     runtime: sysbox-runc
