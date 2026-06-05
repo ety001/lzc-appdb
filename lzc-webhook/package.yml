@@ -1,0 +1,27 @@
+package: ink.akawa.ety001.lzc-webhook
+version: 0.0.1
+name: LZC Webhook
+description: |
+  Webhook 管理工具，可创建和管理自定义 Webhook，
+  接收外部回调并触发 Docker 容器执行命令。
+  支持触发规则验证、并发策略控制和执行日志查看。
+author: ety001
+license: MIT
+homepage: https://github.com/ety001/lzc-webhook
+min_os_version: 1.5.0
+
+locales:
+  zh:
+    name: 懒猫机括
+    description: "Webhook 管理工具，接收外部回调并触发 Docker 容器执行命令，支持触发规则、并发控制和日志查看。"
+  zh_CN:
+    name: 懒猫机括
+    description: "Webhook 管理工具，接收外部回调并触发 Docker 容器执行命令，支持触发规则、并发控制和日志查看。"
+  en:
+    name: LZC Webhook
+    description: "Webhook management tool. Receives external callbacks and triggers Docker container commands with rule validation, concurrency control, and execution logging."
+
+permissions:
+  required:
+    - net.internet
+    - net.lan

@@ -1,0 +1,7 @@
+params:
+  - id: encryption_key
+    type: secret
+    name: "加密密钥"
+    description: "用于加密敏感数据的密钥，留空则不加密"
+    default_value: "$random(len=32)"
+    optional: true

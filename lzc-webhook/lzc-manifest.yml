@@ -1,0 +1,19 @@
+application:
+  public_path:
+    - /hooks
+  subdomain: webhook
+  background_task: true
+  multi_instance: true
+  routes:
+    - /=http://webhook:8080
+
+services:
+  webhook:
+    image: registry.lazycat.cloud/ety001/ety001/lzc-webhook:8affc2dc47905d24
+    runtime: sysbox-runc
+    binds:
+      - /lzcapp/var/conf:/data/lzc-webhook/conf
+      - /lzcapp/var/scripts:/data/lzc-webhook/scripts
+    environment:
+      - TZ=Asia/Shanghai
+      - LZC_ENCRYPTION_KEY={{ .U.encryption_key }}
