@@ -9,11 +9,12 @@ application:
 
 services:
   webhook:
-    image: registry.lazycat.cloud/ety001/ety001/lzc-webhook:ad7544c0ec4f3db2
+    image: registry.lazycat.cloud/ety001/ety001/lzc-webhook:3bff167eb55f266e
     runtime: sysbox-runc
     binds:
       - /lzcapp/var/conf:/data/conf
-      - /lzcapp/var/scripts:/data/scripts
+      - /lzcapp/var/workspace:/data/workspace
+      - /lzcapp/var/docker:/var/lib/docker
     environment:
       - TZ=Asia/Shanghai
       - LZC_ENCRYPTION_KEY={{ .U.encryption_key }}
