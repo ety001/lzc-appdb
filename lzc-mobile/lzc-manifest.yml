@@ -1,7 +1,7 @@
 lzc-sdk-version: 0.1
 name: LazyCat Mobile
 package: ink.akawa.ety001.lzcmobile
-version: 0.0.1
+version: 0.0.2
 description: A lightweight SIP communication app for LazyCat
 license: https://github.com/ety001/lzc-mobile
 homepage: https://github.com/ety001/lzc-mobile
@@ -33,7 +33,7 @@ application:
       publish_port: 40890-40900
 services:
   lzcmobile:
-    image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:2c0a1faa8891a343
+    image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:ecdc136f0ac96b26
     #image: dev.ecat.heiyu.space/ety001/lzc-mobile:1774085383
     network_mode: host
     environment:
