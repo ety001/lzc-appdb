@@ -1,0 +1,25 @@
+package: ink.akawa.ety001.lzcmobile
+version: 0.0.2
+name: LazyCat Mobile
+description: A lightweight SIP communication app for LazyCat
+license: https://github.com/ety001/lzc-mobile
+homepage: https://github.com/ety001/lzc-mobile
+author: ETY001
+min_os_version: 1.5.0
+locales:
+  zh:
+    name: 懒猫通讯
+    description: "️一款面向 LazyCat 的轻量 SIP 通讯应用"
+  zh-CN:
+    name: 懒猫通讯
+    description: "️一款面向 LazyCat 的轻量 SIP 通讯应用"
+  en:
+    name: LazyCat Mobile
+    description: "A lightweight SIP communication app for LazyCat"
+permissions:
+  required:
+    - net.internet
+    - net.lan
+    - net.host
+    - device.usb
+    - compose.override
