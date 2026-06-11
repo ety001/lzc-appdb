@@ -9,7 +9,7 @@ application:
 
 services:
   webhook:
-    image: registry.lazycat.cloud/ety001/ety001/linglong-webhook:dccf01b68931bf53
+    image: registry.lazycat.cloud/ety001/ety001/linglong-webhook:1bf8e137556e1397
     runtime: sysbox-runc
     binds:
       - /lzcapp/var/conf:/data/conf
