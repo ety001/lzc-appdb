@@ -6,6 +6,18 @@ application:
   multi_instance: true
   routes:
     - /=http://webhook:8080
+  injects:
+    - id: open-save-chooser
+      on: browser
+      when:
+        - /*
+      do:
+        - src: file:///lzcapp/pkg/content/lazycat-injects/lzc-file-chooser-inject.js
+          params:
+            locale: auto
+            hooks:
+              fileSystemAccess: true
+              fileInput: true
 
 services:
   webhook:
