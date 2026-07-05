@@ -1,0 +1,5 @@
+# 每5分钟从订阅地址更新 mihomo 配置
+# 实际逻辑见 /opt/mihomo/update-config.sh
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+*/5 * * * * root /opt/mihomo/update-config.sh >> /var/log/mihomo-update.log 2>&1

@@ -1,0 +1,70 @@
+lzc-sdk-version: 0.1
+name: Mihomo
+package: ink.akawa.ety001.mihomo
+version: 0.0.1
+description: |
+  Mihomo (Clash.Meta) 内核 + metacubexd 管理面板。
+
+  提供混合代理端口 (7890)、HTTP 代理端口 (8001)、SOCKS5 代理端口 (1081)。
+  内置 metacubexd Web 管理面板 (9090), 可在线切节点、测延迟、看日志。
+  支持定时 (每5分钟) 从订阅地址自动拉取并热加载配置。
+
+  使用方法:
+  1. 在 "应用数据/mihomo/subscribe_url.txt" 写入订阅地址 (每行一个, 取首个)
+  2. 访问面板: http://懒猫IP:9090/ui/ (浏览器打开 metacubexd, 后端地址填 http://懒猫IP:9090)
+  3. 局域网设备把代理指向 懒猫IP:7890 (mixed) / 8001 (http) / 1081 (socks)
+license: https://github.com/MetaCubeX/mihomo/blob/master/LICENSE
+homepage: https://github.com/MetaCubeX/mihomo
+author: MetaCubeX
+min_os_version: 1.3.0
+
+application:
+  background_task: true
+  multi_instance: false
+  # 通过 TCP ingress 暴露端口, 均免懒猫网关认证直连
+  # (网关 HTTP 认证只作用于 routes 子域名路径; 此应用无 routes)
+  ingress:
+    - protocol: tcp
+      description: metacubexd 管理面板 + mihomo API
+      port: 9090
+      service: mihomo
+    - protocol: tcp
+      description: HTTP/SOCKS5 混合代理端口
+      port: 7890
+      service: mihomo
+    - protocol: tcp
+      description: HTTP 代理端口
+      port: 8001
+      service: mihomo
+    - protocol: tcp
+      description: SOCKS5 代理端口
+      port: 1081
+      service: mihomo
+services:
+  mihomo:
+    image: registry.lazycat.cloud/ety001/ety001/mihomo:40ed516b1beeb064
+    binds:
+      - /lzcapp/var:/lzcapp/var
+    command: /lzcapp/pkg/content/init0
+locales:
+  zh:
+    description: |
+      Mihomo (Clash.Meta) 内核 + metacubexd 管理面板。
+
+      提供混合代理端口 (7890)、HTTP 代理端口 (8001)、SOCKS5 代理端口 (1081)。
+      内置 metacubexd Web 管理面板 (9090), 可在线切节点、测延迟、看日志。
+      支持定时 (每5分钟) 从订阅地址自动拉取并热加载配置。
+  zh_CN:
+    description: |
+      Mihomo (Clash.Meta) 内核 + metacubexd 管理面板。
+
+      提供混合代理端口 (7890)、HTTP 代理端口 (8001)、SOCKS5 代理端口 (1081)。
+      内置 metacubexd Web 管理面板 (9090), 可在线切节点、测延迟、看日志。
+      支持定时 (每5分钟) 从订阅地址自动拉取并热加载配置。
+  en:
+    description: |
+      Mihomo (Clash.Meta) kernel + metacubexd dashboard.
+
+      Provides a mixed proxy port (7890), HTTP proxy port (8001), SOCKS5 proxy port (1081).
+      Built-in metacubexd Web UI (9090) for switching nodes, latency tests and logs.
+      Auto-fetches and hot-reloads config from your subscription URL every 5 minutes.

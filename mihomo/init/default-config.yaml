@@ -1,0 +1,56 @@
+# mihomo 默认配置
+# 当用户未配置订阅地址 (/lzcapp/var/subscribe_url.txt) 时使用此配置
+# 这是一个最小可运行配置: mixed 代理端口 + external-controller API
+
+# ---------- 基础 ----------
+mixed-port: 7890                 # HTTP/SOCKS5 混合代理端口
+port: 8001                       # HTTP 代理端口
+socks-port: 1081                 # SOCKS5 代理端口
+allow-lan: true                  # 允许局域网设备使用此代理
+bind-address: '*'                # 监听所有网卡 (供局域网其它设备连接)
+mode: rule
+log-level: info
+ipv6: false
+
+# ---------- 外部控制 (供 metacubexd / 热加载使用) ----------
+# 面板由 mihomo 的 external-ui 直接托管, 9090 同时提供 API + 静态资源
+# 通过 lazyCat ingress (tcp 9090) 暴露, 免网关认证直连
+external-controller: 0.0.0.0:9090
+external-ui: /opt/metacubexd
+# secret 留空 (ingress 已限制为容器端口直连)
+# 如需加强, 可在此填写一个随机字符串, metacubexd 登录时填同样的 secret
+secret: ""
+
+# ---------- DNS ----------
+# 采用 fake-ip 模式, 减少 DNS 污染
+dns:
+  enable: true
+  listen: 0.0.0.0:1053
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  fallback:
+    - https://1.1.1.1/dns-query
+    - https://8.8.8.8/dns-query
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+
+# ---------- 节点 ----------
+# 默认无可用节点, 请通过订阅地址拉取, 或手动在此补充 proxies
+proxies: []
+
+# ---------- 策略组 ----------
+proxy-groups:
+  - name: 🚀 节点选择
+    type: select
+    proxies:
+      - DIRECT
+      # 订阅拉取后, 节点会自动出现在此处 (若订阅使用了 proxy-providers)
+
+# ---------- 规则 ----------
+rules:
+  - GEOIP,CN,DIRECT
+  - MATCH,🚀 节点选择

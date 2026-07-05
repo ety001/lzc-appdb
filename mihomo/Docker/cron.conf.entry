@@ -1,0 +1,10 @@
+; cronie 进程 (前台模式, 每5分钟触发配置更新脚本)
+[program:cron]
+command=/usr/sbin/cron -f
+autostart=true
+autorestart=true
+startsecs=2
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/stderr
+stderr_logfile_maxbytes=0

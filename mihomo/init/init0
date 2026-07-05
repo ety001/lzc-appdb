@@ -1,0 +1,20 @@
+#!/bin/bash
+# init0 - 懒猫应用入口
+# 由 manifest 的 command 字段引用, 实际职责是转交给 supervisord
+# (supervisord 管理 nginx / mihomo / cronie 三个进程)
+#
+# 这里保留一个入口层, 方便后续加启动前预处理 (如权限修复、目录初始化等)
+set -euo pipefail
+
+VAR_DIR="/lzcapp/var"
+
+# 持久化目录就绪
+mkdir -p \
+    "${VAR_DIR}" \
+    "${VAR_DIR}/run" \
+    "/var/log/supervisor" \
+    "/var/run/supervisor" \
+    "/run/nginx"
+
+# 转交给 supervisord (前台模式)
+exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
