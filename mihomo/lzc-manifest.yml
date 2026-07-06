@@ -42,7 +42,7 @@ application:
       service: mihomo
 services:
   mihomo:
-    image: registry.lazycat.cloud/ety001/ety001/mihomo:40ed516b1beeb064
+    image: registry.lazycat.cloud/ety001/ety001/mihomo:c12d23139d96a4d8
     binds:
       - /lzcapp/var:/lzcapp/var
     command: /lzcapp/pkg/content/init0
