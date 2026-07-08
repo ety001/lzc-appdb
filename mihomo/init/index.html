@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mihomo</title>
+<style>
+  body{font:15px/1.7 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:40px 20px}
+  .wrap{max-width:680px;margin:0 auto}
+  h1{color:#38bdf8;margin-top:0}
+  h2{color:#7dd3fc;border-left:3px solid #38bdf8;padding-left:10px;margin-top:32px}
+  code{background:#1e293b;padding:2px 6px;border-radius:4px;color:#fbbf24}
+  .card{background:#1e293b;border-radius:8px;padding:14px 18px;margin:10px 0}
+  .port{display:inline-block;width:60px;color:#34d399;font-weight:bold}
+  a{color:#38bdf8}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Mihomo <span style="font-weight:normal;font-size:14px;color:#94a3b8">Clash.Meta</span></h1>
+
+<h2>访问管理面板</h2>
+<div class="card">
+  浏览器打开 metacubexd:<br>
+  <code>http://&lt;懒猫IP&gt;:9090/ui/</code><br><br>
+  登录时后端地址填 <code>http://&lt;懒猫IP&gt;:9090</code> (secret 留空)
+</div>
+
+<h2>端口说明</h2>
+<div class="card">
+  <span class="port">9090</span> metacubexd 面板 + mihomo API (浏览器访问)<br>
+  <span class="port">7890</span> mixed 代理 (HTTP / SOCKS5 自动识别)<br>
+  <span class="port">8001</span> HTTP 代理<br>
+  <span class="port">1081</span> SOCKS5 代理<br><br>
+  所有端口均免懒猫网关认证, 可直接连接。
+</div>
+
+<h2>配置订阅地址</h2>
+<div class="card">
+  将订阅地址写入应用的「应用数据 / mihomo / subscribe_url.txt」<br>
+  (每行一个, 取首个非注释行)<br><br>
+  示例:<br>
+  <code>https://your-airport.example.com/sub?token=xxxx</code><br><br>
+  每 5 分钟自动下载并热加载一次。
+</div>
+
+<h2>让其他设备走代理</h2>
+<div class="card">
+  局域网设备把代理指向 (任选其一):<br>
+  <code>http://&lt;懒猫IP&gt;:7890</code> (mixed)<br>
+  <code>http://&lt;懒猫IP&gt;:8001</code> (仅 http)<br>
+  <code>socks5://&lt;懒猫IP&gt;:1081</code> (仅 socks5)
+</div>
+</div>
+</body>
+</html>

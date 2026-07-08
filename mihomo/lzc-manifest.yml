@@ -19,10 +19,13 @@ author: MetaCubeX
 min_os_version: 1.3.0
 
 application:
+  # subdomain 是懒猫应用标识, 必填
+  # 本应用主要通过 TCP ingress (端口 9090/7890/8001/1081) 访问, 不依赖 HTTP 子域名路由
+  subdomain: mihomo
   background_task: true
   multi_instance: false
   # 通过 TCP ingress 暴露端口, 均免懒猫网关认证直连
-  # (网关 HTTP 认证只作用于 routes 子域名路径; 此应用无 routes)
+  # (网关 HTTP 认证只作用于 routes 子域名路径)
   ingress:
     - protocol: tcp
       description: metacubexd 管理面板 + mihomo API
@@ -40,9 +43,13 @@ application:
       description: SOCKS5 代理端口
       port: 1081
       service: mihomo
+  # routes: 子域名 Web 入口指向静态说明页 (让应用能被懒猫系统激活进入 Running)
+  # 真正的面板/代理服务走上面的 ingress TCP 端口
+  routes:
+    - /=file:///lzcapp/pkg/content/
 services:
   mihomo:
-    image: registry.lazycat.cloud/ety001/ety001/mihomo:c12d23139d96a4d8
+    image: registry.lazycat.cloud/ety001/ety001/mihomo:011a4942fd19906d
     binds:
       - /lzcapp/var:/lzcapp/var
     command: /lzcapp/pkg/content/init0
