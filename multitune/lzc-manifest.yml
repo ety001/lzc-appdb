@@ -1,0 +1,16 @@
+ext_config:
+  enable_media_access: true
+application:
+  subdomain: multitune
+  multi_instance: false
+  background_task: true
+  routes:
+    - /=http://multitune:8080
+services:
+  multitune:
+    image: registry.lazycat.cloud/ety001/ety001/multitune:718087a2b49269d0
+    binds:
+      - /lzcapp/var/data:/app/data
+    environment:
+      - DATA_PATH=/app/data
+      - PORT=8080
