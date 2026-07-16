@@ -14,3 +14,4 @@ services:
     environment:
       - DATA_PATH=/app/data
       - PORT=8080
+      - LAZYCAT_DEPLOY=true
