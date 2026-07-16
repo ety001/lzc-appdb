@@ -8,7 +8,7 @@ application:
     - /=http://multitune:8080
 services:
   multitune:
-    image: registry.lazycat.cloud/ety001/ety001/multitune:b33f9d294fd14e86
+    image: registry.lazycat.cloud/ety001/ety001/multitune:155d241ee7cb673b
     binds:
       - /lzcapp/var/data:/app/data
     environment:
