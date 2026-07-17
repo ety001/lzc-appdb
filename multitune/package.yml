@@ -1,5 +1,5 @@
 package: ink.akawa.ety001.multitune
-version: 0.1.0
+version: 0.0.1
 name: MultiTune
 description: 车机多身份音乐播放器，上车一键切换身份与歌单。
 author: ETY001
@@ -8,6 +8,7 @@ min_os_version: 1.6.0
 permissions:
   required:
     - media.read
+    - document.read
 locales:
   zh:
     name: 多音盒
