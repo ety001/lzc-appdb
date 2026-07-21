@@ -1,0 +1,18 @@
+package: ink.akawa.ety001.ettools
+version: 0.0.4
+name: ET Tools
+description: A collection of tools from ET
+author: ETY001
+license: MIT
+homepage: https://github.com/ety001/et-tools
+min_os_version: 1.5.0
+locales:
+  zh:
+    name: ET的小工具
+    description: 常用小工具集合
+  zh_CN:
+    name: ET的小工具
+    description: 常用小工具集合
+  en:
+    name: ET Tools
+    description: A collection of tools from ET
