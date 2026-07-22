@@ -38,6 +38,23 @@ dns:
     geoip: true
     geoip-code: CN
 
+# ---------- TUN ----------
+# 虚拟网卡模式, 接管容器/宿主流量做透明代理。
+# dev 打包期已通过 compose_override 注入 privileged + /dev/net/tun,
+# 因此这里用 system stack (走内核 tun 设备, 性能优于 gvisor)。
+tun:
+  enable: true
+  stack: system              # 走内核 tun 设备 (需挂载 /dev/net/tun)
+  dns-hijack:
+    - any:53                 # 劫持所有 53 端口 DNS 请求, 交给 mihomo DNS 模块
+  auto-route: true           # 自动注入路由, 让流量进入 TUN 网卡
+  auto-detect-interface: true  # 自动识别物理出口网卡 (宿主网卡)
+  # 排除懒猫内网/容器网段, 避免接管后打断盒子自身网络
+  route-exclude-address:
+    - 192.168.0.0/16
+    - 172.16.0.0/12
+    - 10.0.0.0/8
+
 # ---------- 节点 ----------
 # 默认无可用节点, 请通过订阅地址拉取, 或手动在此补充 proxies
 proxies: []

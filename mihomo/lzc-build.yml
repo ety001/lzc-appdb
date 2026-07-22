@@ -2,3 +2,14 @@ manifest: ./lzc-manifest.yml
 contentdir: ./init
 pkgout: ./
 icon: ./lzc-icon.png
+
+# TUN 模式需要内核 tun 设备与网络管理权限。
+# LazyCat 生产 LPK 无通用 devices 字段, 这里通过 compose_override
+# 在 dev 打包期注入 privileged + /dev/net/tun (仿 lzc-mobile 做法)。
+# 注意: 仅 dev 容器期生效, 生产 LPK 不保证支持。
+compose_override:
+  services:
+    mihomo:
+      privileged: true
+      devices:
+        - /dev/net/tun:/dev/net/tun

@@ -63,6 +63,29 @@ inject_runtime_fields() {
     else
         printf '\n%s\n' "${ui_line}" >> "${file}"
     fi
+
+    # TUN: 订阅配置通常不含 tun 段, 若不注入则热加载后 TUN 会被关闭。
+    # 这里检测顶层 (行首无缩进) 是否已有 tun: 段;
+    #   - 有 -> 订阅自带, 尊重其设置, 不覆盖
+    #   - 无 -> 追加默认 TUN 段 (与本应用 default-config.yaml 一致)
+    # 不用 sed 处理多行块 (易误伤), 改用 grep 判存在 + heredoc 追加。
+    if ! grep -qE '^tun[[:space:]]*:' "${file}"; then
+        cat >> "${file}" <<'TUN_BLOCK'
+
+# ---------- TUN (由 update-config 注入) ----------
+tun:
+  enable: true
+  stack: system
+  dns-hijack:
+    - any:53
+  auto-route: true
+  auto-detect-interface: true
+  route-exclude-address:
+    - 192.168.0.0/16
+    - 172.16.0.0/12
+    - 10.0.0.0/8
+TUN_BLOCK
+    fi
 }
 
 # ---------- 等待 mihomo 就绪 (最多 ~30s) ----------
