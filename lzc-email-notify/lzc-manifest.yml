@@ -7,7 +7,7 @@ application:
 
 services:
   server:
-    image: registry.lazycat.cloud/ety001/ety001/lzc-email-notify:3db4ac406c56c573
+    image: registry.lazycat.cloud/ety001/ety001/lzc-email-notify:6b42ac7ce7584d70
     binds:
       - /lzcapp/var/data:/data
     environment:
