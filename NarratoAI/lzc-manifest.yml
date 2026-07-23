@@ -1,35 +1,62 @@
-lzc-sdk-version: 0.1
-name: NarratoAI
-package: ink.akawa.ety001.narratoai
-version: 0.0.1
-description: NarratoAI is a one-stop AI video narration and automated clipping tool.
-license: https://github.com/linyqh/NarratoAI?tab=MIT-1-ov-file#readme
-homepage: https://github.com/linyqh/NarratoAI
-author: linyqh
-min_os_version: 1.3.0
 application:
   subdomain: narratoai
   background_task: true
   multi_instance: false
   gpu_accel: true
   routes:
-    - /=http://narratoai.ink.akawa.ety001.narratoai.lzcapp:8501
+    - /=http://narratoai:8501
 services:
   narratoai:
-    # linyq1/narratoai:0.5.2
-    image: registry.lazycat.cloud/ety001/linyq1/narratoai:18b5c4b222d91113
+    # 由 v0.8.7 源码构建，copy-image 至 lazycat 官方源（源镜像 ety001/narratoai:v0.8.7）
+    image: registry.lazycat.cloud/ety001/ety001/narratoai:9a65896a08eabf62
     environment:
       - PYTHONUNBUFFERED=1
-      - PYTHONMALLOC=malloc
-      - OPENCV_OPENCL_RUNTIME=disabled
-      - OPENCV_CPU_DISABLE=0
+      - TZ=Asia/Shanghai
     binds:
-      - /lzcapp/var/:/NarratoAI
-    entrypoint: /lzcapp/pkg/content/init.sh
-locales:
-  zh:
-    description: "一站式 AI 影视解说+自动化剪辑工具🎬🎞️"
-  zh_CN:
-    description: "一站式 AI 影视解说+自动化剪辑工具🎬🎞️"
-  en:
-    description: "NarratoAI is a one-stop AI video narration and automated clipping tool."
+      # 用户数据（视频、脚本、任务产物）
+      - /lzcapp/var/data/storage:/NarratoAI/storage
+      # 持久化目录（config.toml + 字体），由 setup_script 在启动时恢复到应用根目录
+      - /lzcapp/var/data/persist:/lzcapp/var/data/persist
+    # 启动前恢复持久化的 config.toml / 字体，并启动后台回写以保留用户设置
+    setup_script: |
+      set -e
+      PERSIST_DIR="/lzcapp/var/data/persist"
+      APP_CONFIG="/NarratoAI/config.toml"
+      PERSIST_CONFIG="$PERSIST_DIR/config.toml"
+      mkdir -p "$PERSIST_DIR" /NarratoAI/resource/fonts
+
+      # 首次启动用镜像内示例配置初始化持久化配置
+      if [ ! -f "$PERSIST_CONFIG" ] && [ -f /NarratoAI/config.example.toml ]; then
+        cp -f /NarratoAI/config.example.toml "$PERSIST_CONFIG"
+      fi
+      # 恢复配置到应用根目录（应用运行时读写这里）
+      cp -f "$PERSIST_CONFIG" "$APP_CONFIG"
+
+      # 注入中文字体：优先用持久化目录的；没有再退回 LPK 内置字体（/lzcapp/pkg/content/fonts），
+      # 避免应用运行时从 GitHub 下载（国内网络慢）。目标位置已存在则跳过。
+      FONT_DIR="/NarratoAI/resource/fonts"
+      for f in SourceHanSansCN-Regular.otf SourceHanSansSC-Regular.otf; do
+        [ -f "$FONT_DIR/$f" ] && continue
+        if [ -f "$PERSIST_DIR/$f" ]; then
+          cp -f "$PERSIST_DIR/$f" "$FONT_DIR/$f"
+        elif [ -f "/lzcapp/pkg/content/fonts/$f" ]; then
+          cp -f "/lzcapp/pkg/content/fonts/$f" "$FONT_DIR/$f"
+        fi
+      done
+
+      # 依赖已通过 uv sync 内置于镜像，跳过 entrypoint 中耗时的 pip install
+      touch /tmp/installed_packages.txt
+
+      # 上游 v0.8.7 entrypoint 硬编码 --server.enableCORS=true（CLI 参数优先级高于环境变量），
+      # Streamlit 1.56 在反代后因 Origin 与 Host 不一致拒绝 ws 握手（403 Cross origin websockets
+      # not allowed），页面一直 loading。启动前把 entrypoint 补丁为 false。
+      sed -i 's/--server\.enableCORS=true/--server.enableCORS=false/' /usr/local/bin/docker-entrypoint.sh
+
+      # 后台回写 config.toml 到持久化目录，保留 API Key 等设置（set +e 容错）
+      setsid sh -c '
+        while true; do
+          [ -f "/NarratoAI/config.toml" ] && cp -f "/NarratoAI/config.toml" "/lzcapp/var/data/persist/config.toml" 2>/dev/null || true
+          sleep 15
+        done
+      ' >/dev/null 2>&1 < /dev/null &
+      disown 2>/dev/null || true

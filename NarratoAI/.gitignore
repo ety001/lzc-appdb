@@ -1,1 +1,3 @@
-./res/*.tar.gz
+*.lpk
+.lzc-cli-cache/
+.lzc-cli-build*/
