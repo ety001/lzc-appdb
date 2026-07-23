@@ -1,0 +1,18 @@
+package: ink.akawa.ety001.lzcturtle
+version: 0.0.1
+name: Turtle Painter
+description: 用经典 Logo 指令指挥小海龟在画布上作画,支持作品管理与中文命令别名,适合编程启蒙与几何教学。
+author: ETY001
+license: MIT
+homepage: https://github.com/ety001/lzc-turtle
+min_os_version: 1.3.9
+locales:
+  zh:
+    name: 小海龟画图
+    description: 还记得 LOGO 语言里那只听话的小海龟吗?本应用把童年编程启蒙体验搬到懒猫微服上:输入「FD 100 RT 90」这样的命令,海龟就会在画布上一步步走出图案。支持前进、转弯、抬笔落笔、设置颜色与粗细,还能用 REPEAT 循环和中文别名(前进/右转)快速画出五角星、花朵、螺旋等图形。作品可保存(自动生成缩略图)、重新加载、修改或删除,按账号隔离,数据随微服自动持久化。适合编程启蒙、几何教学,也适合随手涂鸦放松,打开就能用。
+  zh_CN:
+    name: 小海龟画图
+    description: 还记得 LOGO 语言里那只听话的小海龟吗?本应用把童年编程启蒙体验搬到懒猫微服上:输入「FD 100 RT 90」这样的命令,海龟就会在画布上一步步走出图案。支持前进、转弯、抬笔落笔、设置颜色与粗细,还能用 REPEAT 循环和中文别名(前进/右转)快速画出五角星、花朵、螺旋等图形。作品可保存(自动生成缩略图)、重新加载、修改或删除,按账号隔离,数据随微服自动持久化。适合编程启蒙、几何教学,也适合随手涂鸦放松,打开就能用。
+  en:
+    name: Turtle Painter
+    description: Relive the LOGO turtle from your first programming lessons. Type commands like "FD 100 RT 90" and watch the turtle trace paths step by step. Move forward, turn, lift/lower the pen, set color and width, and use REPEAT loops plus Chinese aliases to quickly draw stars, flowers, spirals and more. Save artworks with auto-generated thumbnails, then reload, edit or delete them anytime. Works are isolated per account and persisted automatically. Great for programming enlightenment, geometry teaching, or casual doodling. Open and play — no setup needed.

@@ -1,0 +1,26 @@
+# 小海龟画图 — 懒猫微服运行结构（远程 Docker 镜像方式）
+#
+# 鉴权：平台 lzc-ingress 已完成 SSO，后端 AUTH_MODE=header 直接信任 X-HC-User-ID。
+# 单镜像自带 /api 路由 + 前端静态托管 + SPA fallback，故一条 routes 全量转发即可。
+# 数据：/lzcapp/var 由平台自动持久化，binds 绑到容器内 /config（程序读 CONFIG_DIR=/config）。
+application:
+  subdomain: turtle
+  multi_instance: false
+  background_task: false
+  public_path:
+    - /api/health
+  health_check:
+    test_url: http://turtle:8000/api/health
+  routes:
+    - /=http://turtle:8000
+services:
+  turtle:
+    image: registry.lazycat.cloud/ety001/ety001/lzc-turtle:6132bf2f4db717a0
+    environment:
+      - AUTH_MODE=header
+      - CONFIG_DIR=/config
+      - STATIC_DIR=/app/dist
+      - LISTEN_ADDR=0.0.0.0
+      - PORT=8000
+    binds:
+      - /lzcapp/var:/config
