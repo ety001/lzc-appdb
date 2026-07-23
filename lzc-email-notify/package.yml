@@ -1,5 +1,5 @@
 package: ink.akawa.ety001.emailnotify
-version: 0.3.2
+version: 0.3.3
 name: 邮件提醒器
 description: 通过 IMAP/POP3 定时巡检多个邮箱，新邮件到达时向懒猫客户端发送系统通知，点击通知直达网页版邮箱
 author: ety001
