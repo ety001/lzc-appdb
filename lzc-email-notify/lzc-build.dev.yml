@@ -1,0 +1,4 @@
+package_override:
+  package: ink.akawa.ety001.emailnotify.dev
+envs:
+  - DEV_MODE=1

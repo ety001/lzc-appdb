@@ -1,0 +1,21 @@
+package: ink.akawa.ety001.emailnotify
+version: 0.2.0
+name: 邮件提醒器
+description: 通过 IMAP/POP3 定时巡检多个邮箱，新邮件到达时向懒猫客户端发送系统通知，点击通知直达网页版邮箱
+author: ety001
+homepage: https://github.com/ety001/lzc-email-notify
+license: https://choosealicense.com/licenses/mit/
+min_os_version: 1.5.0
+locales:
+  zh:
+    name: 邮件提醒器
+    description: 通过 IMAP/POP3 定时巡检多个邮箱，新邮件到达时向懒猫客户端发送系统通知，点击通知直达网页版邮箱
+  zh-CN:
+    name: 邮件提醒器
+    description: 通过 IMAP/POP3 定时巡检多个邮箱，新邮件到达时向懒猫客户端发送系统通知，点击通知直达网页版邮箱
+  en:
+    name: Email Notifier
+    description: Periodically checks multiple mailboxes via IMAP/POP3, sends client notifications on new mail, and jumps to the webmail page on click.
+permissions:
+  required:
+    - net.internet

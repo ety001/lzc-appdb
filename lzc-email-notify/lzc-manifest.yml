@@ -1,0 +1,14 @@
+application:
+  subdomain: email-notify
+  # 本应用需要持续在后台轮询邮箱，声明后台任务避免平台主动休眠
+  background_task: true
+  routes:
+    - /=http://server:8000
+
+services:
+  server:
+    image: registry.lazycat.cloud/ety001/ety001/lzc-email-notify:3db4ac406c56c573
+    binds:
+      - /lzcapp/var/data:/data
+    environment:
+      - TZ=Asia/Shanghai
