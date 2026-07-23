@@ -1,7 +1,7 @@
 application:
   subdomain: narratoai
   background_task: true
-  multi_instance: false
+  multi_instance: true
   gpu_accel: true
   routes:
     - /=http://narratoai:8501
@@ -13,11 +13,12 @@ services:
       - PYTHONUNBUFFERED=1
       - TZ=Asia/Shanghai
     binds:
-      # 用户数据（视频、脚本、任务产物）
+      # 用户数据（视频、脚本、任务产物；其中 tasks 目录由 setup_script 软链到私有文稿目录）
       - /lzcapp/var/data/storage:/NarratoAI/storage
       # 持久化目录（config.toml + 字体），由 setup_script 在启动时恢复到应用根目录
       - /lzcapp/var/data/persist:/lzcapp/var/data/persist
-    # 启动前恢复持久化的 config.toml / 字体，并启动后台回写以保留用户设置
+    # 启动前：恢复持久化的 config.toml / 字体，补丁 entrypoint 的 CORS 参数，
+    # 软链 tasks 输出目录到私有文稿目录，并启动后台回写以保留用户设置
     setup_script: |
       set -e
       PERSIST_DIR="/lzcapp/var/data/persist"
@@ -51,6 +52,33 @@ services:
       # Streamlit 1.56 在反代后因 Origin 与 Host 不一致拒绝 ws 握手（403 Cross origin websockets
       # not allowed），页面一直 loading。启动前把 entrypoint 补丁为 false。
       sed -i 's/--server\.enableCORS=true/--server.enableCORS=false/' /usr/local/bin/docker-entrypoint.sh
+
+      # 将任务输出目录（含最终视频 combined.mp4）软链到当前用户的私有文稿目录
+      # /lzcapp/documents/<uid>/tasks，方便用户在网盘中直接管理成品视频。
+      # 多实例模式下 /lzcapp/documents 只挂载当前实例 owner 的 uid 目录，取第一个即可。
+      DOC_ROOT="/lzcapp/documents"
+      TASKS_DIR="/NarratoAI/storage/tasks"
+      if [ -d "$DOC_ROOT" ]; then
+        UID_DIR=$(ls "$DOC_ROOT" 2>/dev/null | head -n 1 || true)
+        if [ -n "$UID_DIR" ]; then
+          TARGET="$DOC_ROOT/$UID_DIR/tasks"
+          mkdir -p "$TARGET"
+          if [ -L "$TASKS_DIR" ]; then
+            # 已是软链：目标不属于当前实例的 uid 时重新指向（如从单实例迁移过来）
+            if [ "$(readlink "$TASKS_DIR")" != "$TARGET" ]; then
+              rm -f "$TASKS_DIR"
+              ln -s "$TARGET" "$TASKS_DIR"
+            fi
+          elif [ -d "$TASKS_DIR" ]; then
+            # 迁移既有任务数据到文稿目录后替换为软链
+            cp -a "$TASKS_DIR"/. "$TARGET"/ 2>/dev/null || true
+            rm -rf "$TASKS_DIR"
+            ln -s "$TARGET" "$TASKS_DIR"
+          elif [ ! -e "$TASKS_DIR" ]; then
+            ln -s "$TARGET" "$TASKS_DIR"
+          fi
+        fi
+      fi
 
       # 后台回写 config.toml 到持久化目录，保留 API Key 等设置（set +e 容错）
       setsid sh -c '

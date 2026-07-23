@@ -5,7 +5,14 @@ description: NarratoAI is a one-stop AI video narration and automated clipping t
 author: linyqh
 license: https://github.com/linyqh/NarratoAI?tab=MIT-1-ov-file#readme
 homepage: https://github.com/linyqh/NarratoAI
-min_os_version: 1.3.0
+min_os_version: 1.6.0
+permissions:
+  required:
+    - document.private
+    - document.read
+    - document.write
+    - media.read
+    - media.write
 locales:
   zh:
     description: "一站式 AI 影视解说+自动化剪辑工具🎬🎞️"
