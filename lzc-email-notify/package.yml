@@ -6,6 +6,9 @@ author: ety001
 homepage: https://github.com/ety001/lzc-email-notify
 license: https://choosealicense.com/licenses/mit/
 min_os_version: 1.6.0
+unsupported_platforms:
+  - ios
+  - android
 locales:
   zh:
     name: 邮件提醒器
