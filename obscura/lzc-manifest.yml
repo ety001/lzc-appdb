@@ -1,0 +1,20 @@
+application:
+  subdomain: obscura
+  routes:
+    # 对齐官方 browser-skill 模式：根路由转发，MCP 服务内部处理 /mcp
+    # 上游必须用完整内部 DNS（service.包名.lzcapp），ingress 在应用网络外解析不了短名
+    - /=http://obscura.ink.akawa.ety001.obscura.lzcapp:3000
+  public_path:
+    - /mcp
+
+services:
+  obscura:
+    # 薄镜像：官方 obscura + busybox entrypoint 脚本（读 /data/config/obscura.env 拼代理等参数）
+    # 源码见 docker/ 目录，构建：docker buildx build --builder ssd-builder --platform linux/amd64 --push
+    image: registry.lazycat.cloud/ety001/ety001/obscura:345e377f29b15236
+    binds:
+      # 运行时配置文件目录：/data/config/obscura.env（PROXY/STEALTH/USER_AGENT/ALLOW_PRIVATE_NETWORK）
+      - /lzcapp/var/config:/data/config
+    environment:
+      - TZ=Asia/Shanghai
+      - RUST_LOG=obscura=info

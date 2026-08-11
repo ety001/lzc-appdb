@@ -1,0 +1,7 @@
+resource_exports:
+  - kind: skills
+    source: ./resources/skills
+  - kind: mcp-providers
+    source: ./resources/mcp-providers
+pkgout: ./
+icon: ./icon.png

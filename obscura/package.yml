@@ -1,0 +1,30 @@
+package: ink.akawa.ety001.obscura
+version: 0.1.0
+name: Obscura MCP
+description: |
+  Headless browser MCP server for AI agents (Obscura).
+  为小龙猫等 AI agent 提供 headless 浏览器能力：导航、点击、表单填写、
+  提取页面内容、截图等。数据与状态只保存在容器内，不落盘。
+author: ety001
+license: MIT
+homepage: https://github.com/h4ckf0r0day/obscura
+hidden_from_launcher: true
+min_os_version: 1.5.3
+unsupported_platforms:
+  - ios
+  - android
+
+locales:
+  zh:
+    name: Obscura MCP
+    description: "Headless 浏览器 MCP 服务（Obscura），为小龙猫等 AI agent 提供网页导航、点击、表单填写、内容提取与截图能力。"
+  zh_CN:
+    name: Obscura MCP
+    description: "Headless 浏览器 MCP 服务（Obscura），为小龙猫等 AI agent 提供网页导航、点击、表单填写、内容提取与截图能力。"
+  en:
+    name: Obscura MCP
+    description: "Headless browser MCP server (Obscura) for AI agents: navigate, click, fill forms, extract content, and take screenshots."
+
+permissions:
+  required:
+    - net.internet
