@@ -2,9 +2,15 @@ package: ink.akawa.ety001.obscura
 version: 0.1.0
 name: Obscura MCP
 description: |
-  Headless browser MCP server for AI agents (Obscura).
-  为小龙猫等 AI agent 提供 headless 浏览器能力：导航、点击、表单填写、
-  提取页面内容、截图等。数据与状态只保存在容器内，不落盘。
+  Obscura 是一个本地 headless 浏览器 MCP 服务，为小龙猫等 AI 智能体提供
+  完整的网页访问能力：打开网页、提取正文与 Markdown、查看链接、点击元素、
+  填写表单、模拟键盘鼠标、滚动页面、执行 JavaScript、获取截图与 PDF、
+  管理多标签页。智能体遇到需要真实浏览器环境的场景——JavaScript 渲染、
+  动态内容、交互操作、反爬校验——会自动调用本服务。
+
+  内置 stealth 反爬指纹与广告追踪拦截；支持通过配置文件动态设置
+  HTTP/SOCKS5 代理，访问受限或海外站点。所有浏览行为都在微服本机容器内
+  完成，页面数据不外传。
 author: ety001
 license: MIT
 homepage: https://github.com/h4ckf0r0day/obscura
@@ -17,13 +23,13 @@ unsupported_platforms:
 locales:
   zh:
     name: Obscura MCP
-    description: "Headless 浏览器 MCP 服务（Obscura），为小龙猫等 AI agent 提供网页导航、点击、表单填写、内容提取与截图能力。"
+    description: "Obscura 是一个本地 headless 浏览器 MCP 服务，为小龙猫等 AI 智能体提供完整的网页访问能力：打开网页、提取正文与 Markdown、查看链接、点击元素、填写表单、模拟键盘鼠标、滚动页面、执行 JavaScript、获取截图与 PDF、管理多标签页。内置 stealth 反爬指纹，支持动态配置 HTTP/SOCKS5 代理访问受限站点。所有浏览行为在微服本机容器内完成，数据不外传。"
   zh_CN:
     name: Obscura MCP
-    description: "Headless 浏览器 MCP 服务（Obscura），为小龙猫等 AI agent 提供网页导航、点击、表单填写、内容提取与截图能力。"
+    description: "Obscura 是一个本地 headless 浏览器 MCP 服务，为小龙猫等 AI 智能体提供完整的网页访问能力：打开网页、提取正文与 Markdown、查看链接、点击元素、填写表单、模拟键盘鼠标、滚动页面、执行 JavaScript、获取截图与 PDF、管理多标签页。内置 stealth 反爬指纹，支持动态配置 HTTP/SOCKS5 代理访问受限站点。所有浏览行为在微服本机容器内完成，数据不外传。"
   en:
     name: Obscura MCP
-    description: "Headless browser MCP server (Obscura) for AI agents: navigate, click, fill forms, extract content, and take screenshots."
+    description: "Obscura is a local headless browser MCP service for AI agents. It provides full web capabilities: navigate pages, extract text and Markdown, list links, click elements, fill forms, simulate keyboard/mouse, scroll, execute JavaScript, capture screenshots and PDFs, and manage tabs. Built-in stealth fingerprinting and ad/tracker blocking; supports dynamic HTTP/SOCKS5 proxy configuration. All browsing runs inside the Microserver container — page data never leaves the box."
 
 permissions:
   required:
