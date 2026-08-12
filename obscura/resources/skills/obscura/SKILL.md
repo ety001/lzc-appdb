@@ -1,6 +1,6 @@
 ---
 name: obscura
-description: 当用户要求搜索网页、查看网页内容、打开/访问/测试链接、提取页面正文、将页面转为 Markdown、查看页面链接列表、点击页面元素、填写表单、模拟键盘/鼠标操作、滚动页面、执行页面 JavaScript、获取浏览器控制台消息或网络请求、获取页面截图或 PDF、管理浏览器标签页时使用。也适用于普通 HTTP/fetch 无法满足的场景：页面依赖 JavaScript/AJAX 渲染、需要交互操作、需要视觉输出、遇到反爬或动态内容。本技能通过 obscura MCP 服务调用本地 headless 浏览器能力。
+description: 当用户要求搜索网页、查看网页内容、打开/访问/测试链接、提取页面正文、将页面转为 Markdown、查看页面链接列表、点击页面元素、填写表单、模拟键盘/鼠标操作、滚动页面、执行页面 JavaScript、获取浏览器控制台消息或网络请求、获取页面截图或 PDF、管理浏览器标签页时使用。也适用于普通 HTTP/fetch 无法满足的场景：页面依赖 JavaScript/AJAX 渲染、需要交互操作、需要视觉输出、遇到反爬或动态内容。**当用户要求为 Obscura 配置/修改代理、设置浏览器代理、配置 stealth 反爬、设置 User-Agent、允许访问内网、查看/修改 Obscura 运行时配置（obscura.env）时，也必须使用本技能**。本技能通过 obscura MCP 服务调用本地 headless 浏览器能力。
 ---
 
 # Obscura 浏览器
@@ -77,8 +77,11 @@ MCP 模式无文件级 Cookie 持久化（`--storage-dir` 仅 fetch/serve/scrape
 容器生效**：
 
 ```ini
-# HTTP 或 SOCKS5 代理，留空/不写 = 直连
-PROXY=socks5://192.168.1.100:1080
+# 代理 URL，支持 http:// 和 socks5:// 两种协议。
+# ⚠️ 协议前缀必须与代理实际类型一致（写错会导致访问失败）：
+#   HTTP 代理 → PROXY=http://192.168.1.100:8080
+#   SOCKS5 代理 → PROXY=socks5://192.168.1.100:1080
+PROXY=http://192.168.1.100:8080
 # 1 = 启用 stealth（一致指纹 + 广告/追踪拦截），反爬站点建议开启
 STEALTH=1
 # 自定义 User-Agent（可选）
@@ -87,15 +90,11 @@ USER_AGENT=Mozilla/5.0 (Windows NT 10.0; Win64; x64)
 ALLOW_PRIVATE_NETWORK=1
 ```
 
-### 修改途径
+### 修改途径（用户手动）
 
-1. **小龙猫**：通过懒猫网盘的文件能力，向应用数据目录
-   `ink.akawa.ety001.obscura/config/` 写入/更新 `obscura.env`（如网盘
-   界面不可见应用数据目录，用下方 SSH 途径）。
-2. **用户手动（懒猫网盘）**：在懒猫网盘中找到该应用数据目录
-   `config/` 下创建 `obscura.env`。
-3. **SSH（可靠兜底）**：`ssh root@192.168.199.52` 编辑
-   `/lzcsys/data/appvar/ink.akawa.ety001.obscura/config/obscura.env`。
+在懒猫网盘中导航到该应用的数据目录 `config/` 下，创建/编辑
+`obscura.env`（应用数据目录为 `ink.akawa.ety001.obscura`）。保存后按
+下方"生效方式"重启容器。
 
 ### 生效方式
 
