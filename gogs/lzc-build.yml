@@ -1,4 +1,3 @@
-manifest: ./lzc-manifest.yml
-icon: ./lzc-icon.png
+# Gogs 0.14.3 LPK v2 构建配置
 pkgout: ./
-
+icon: ./lzc-icon.png

@@ -1,0 +1,25 @@
+# Gogs 0.14.3（官方镜像 gogs/gogs:0.14.3，2026-06-07）
+package: ink.akawa.ety001.gogs
+version: 0.14.3
+name: Gogs
+description: Gogs is a painless self-hosted Git service. It is similar to GitHub, Bitbucket, and GitLab, but is an open source lightweight solution written in Go.
+author: gogs
+license: https://github.com/gogs/gogs/blob/main/LICENSE
+homepage: https://gogs.io/
+min_os_version: 1.5.0
+
+locales:
+  zh:
+    name: Gogs
+    description: "Gogs 是一个无痛的自托管 Git 服务。它类似于 GitHub、Bitbucket 和 GitLab，但是一个用 Go 编写的开源轻量级解决方案。"
+  zh_CN:
+    name: Gogs
+    description: "Gogs 是一个无痛的自托管 Git 服务。它类似于 GitHub、Bitbucket 和 GitLab，但是一个用 Go 编写的开源轻量级解决方案。"
+  en:
+    name: Gogs
+    description: "Gogs is a painless self-hosted Git service. It is similar to GitHub, Bitbucket, and GitLab, but is an open source lightweight solution written in Go."
+
+permissions:
+  required:
+    - net.internet
+    - net.lan
