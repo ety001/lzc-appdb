@@ -8,10 +8,12 @@ application:
     - /=http://multitune:8080
 services:
   multitune:
-    image: registry.lazycat.cloud/ety001/ety001/multitune:04eff74b049007d5
+    image: registry.lazycat.cloud/ety001/ety001/multitune:f1621528f09459ff
     binds:
       - /lzcapp/var/data:/app/data
+      - /lzcapp/cache/thumbnails:/app/cache/thumbnails
     environment:
       - DATA_PATH=/app/data
+      - CACHE_PATH=/app/cache/thumbnails
       - PORT=8080
       - LAZYCAT_DEPLOY=true
