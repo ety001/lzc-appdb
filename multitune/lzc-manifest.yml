@@ -8,7 +8,7 @@ application:
     - /=http://multitune:8080
 services:
   multitune:
-    image: registry.lazycat.cloud/ety001/ety001/multitune:1a19d64a36c96c6b
+    image: registry.lazycat.cloud/ety001/ety001/multitune:985320ffa41ff090
     binds:
       - /lzcapp/var/data:/app/data
       - /lzcapp/cache/thumbnails:/app/cache/thumbnails
