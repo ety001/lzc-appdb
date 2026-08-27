@@ -1,5 +1,5 @@
 package: ink.akawa.ety001.obscura
-version: 0.1.0
+version: 0.2.1
 name: Obscura MCP
 description: |
   Obscura 是一个本地 headless 浏览器 MCP 服务，为小龙猫等 AI 智能体提供

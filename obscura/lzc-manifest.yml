@@ -10,8 +10,9 @@ application:
 services:
   obscura:
     # 薄镜像：官方 obscura + busybox entrypoint 脚本（读 /data/config/obscura.env 拼代理等参数）
-    # 源码见 docker/ 目录，构建：docker buildx build --builder ssd-builder --platform linux/amd64 --push
-    image: registry.lazycat.cloud/ety001/ety001/obscura:345e377f29b15236
+    # 源码见 docker/ 目录，基础镜像 h4ckf0r0day/obscura:0.2.1
+    # 构建：docker buildx build --builder ssd-builder --platform linux/amd64 --push
+    image: registry.lazycat.cloud/ety001/ety001/obscura:39475fb701af62df
     binds:
       # 运行时配置文件目录：/data/config/obscura.env（PROXY/STEALTH/USER_AGENT/ALLOW_PRIVATE_NETWORK）
       - /lzcapp/var/config:/data/config
