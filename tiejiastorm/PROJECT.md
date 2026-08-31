@@ -6,17 +6,17 @@
 
 ## 〇、最终交付物（镜像名）
 
-**当前线上运行镜像**：
+**当前线上运行镜像**（v3.8.0 商店发布版）：
 ```
-dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273
+registry.lazycat.cloud/ety001/ety001/tiejiafengbao:10edc5a000b0cc67
 ```
-- 镜像 ID：83f219969855，大小 904MB
+- 来源：`lzc-cli appstore copy-image ety001/tiejiafengbao:latest`（Docker Hub → 官方 registry）
+- 镜像 ID：83f219969855（内容与 hotkey2-1788125273 完全相同）
 - 容器：inkakawaety001tiejiastorm-tiejiastorm-1（懒猫微服）
-- LPK：~/workspace/lzc-appdb/tiejiastorm/ink.akawa.ety001.tiejiastorm-v3.7.1.lpk
-- **Docker Hub 正式名**：`ety001/tiejiafengbao:latest`（digest sha256:7ebb5ce4…，compressed 563MB，
-  同一镜像 83f219969855 的别名；nuc 本地已打 tag）
-- **nuc 本地离线备份**：~/workspace/tie/doswasmx-final-v3.7.1.tar（866MB，docker save 导出，
-  恢复命令：`docker load -i doswasmx-final-v3.7.1.tar`）
+- LPK：本目录 ink.akawa.ety001.tiejiastorm-v3.8.0.lpk（lint 干净，含 locales）
+- **Docker Hub**：`ety001/tiejiafengbao:latest`（copy-image 源）
+- **历史 dev registry 地址**：dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273（已弃用）
+- **nuc 本地离线备份**：~/workspace/tie/doswasmx-final-v3.7.1.tar（866MB，docker save 导出）
 
 ## 一、最终架构
 

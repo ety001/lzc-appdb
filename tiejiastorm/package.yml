@@ -1,7 +1,14 @@
 package: ink.akawa.ety001.tiejiastorm
-version: 3.7.1
+version: 3.8.0
 name: 铁甲风暴
 description: 经典即时战略游戏《铁甲风暴》(Metal Knight) WASM 完美版——浏览器内运行 Windows 95 + DOSBox-X 模拟器，原生 CD 音轨畅玩
 author: ety001
 license: Freeware (Abandonware)
-homepage: https://tiejiastorm.example.com
+homepage: https://github.com/ety001/lzc-appdb
+locales:
+  zh:
+    name: 铁甲风暴
+  zh_CN:
+    name: 铁甲风暴
+  en:
+    name: Metal Knight

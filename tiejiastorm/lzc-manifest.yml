@@ -5,4 +5,4 @@ application:
 
 services:
   tiejiastorm:
-    image: dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273
+    image: registry.lazycat.cloud/ety001/ety001/tiejiafengbao:10edc5a000b0cc67
