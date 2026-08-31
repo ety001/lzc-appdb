@@ -90,6 +90,31 @@ NAS 路径：`smb://192.168.199.30/家庭共享/游戏/`（nuc 挂载点
 另有整镜像级备份：`doswasmx-final-v3.7.1.tar`（866MB，docker save 导出）也在 NAS `游戏/` 下，
 `docker load -i` 即可恢复最终镜像，无需重新编译。
 
+### 离线 tar 恢复（最全的找回方式）
+
+`doswasmx-final-v3.7.1.tar` 就是 `ety001/tiejiafengbao:latest` 镜像的 docker save 导出
+（同一镜像 ID `83f219969855`，含全部 gitignore 资源：windows95.img、cue、Track01.iso、
+Track02-12.bin——已实测逐层核对）。注意 tar 内记录的 RepoTag 是制作时的名字
+`dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273`，load 后需重新打 tag：
+
+```bash
+# 从 NAS tar 直接恢复完整镜像（不需要重新编译）
+docker load -i /path/to/doswasmx-final-v3.7.1.tar
+# load 进来的 tag 是旧名，重新打 tag
+docker tag dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273 ety001/tiejiafengbao:latest
+docker run -d --name tiejiafengbao -p 6080:6080 ety001/tiejiafengbao:latest
+
+# 如果只需要 tar 里的某个资源文件（如 windows95.img），不用 load，直接解层：
+# 游戏数据在 manifest.json 的第 4 个 layer（index 3），解开即得 /opt/game 全部 24 个文件
+python3 - <<'EOF'
+import tarfile, json, io
+t = tarfile.open("doswasmx-final-v3.7.1.tar")
+m = json.load(t.extractfile("manifest.json"))
+inner = tarfile.open(fileobj=io.BytesIO(t.extractfile(m[0]["Layers"][3]).read()))
+inner.extractall("game-from-tar", members=[n for n in inner.getnames() if "/opt/game/" in n])
+EOF
+```
+
 ## LPK 工程文件说明
 
 nuc 源目录下的 `icon.png / lzc-build.yml / lzc-manifest.yml / package.yml / mk.ico` 是
