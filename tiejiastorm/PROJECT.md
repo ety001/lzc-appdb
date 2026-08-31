@@ -18,6 +18,16 @@ registry.lazycat.cloud/ety001/ety001/tiejiafengbao:10edc5a000b0cc67
 - **历史 dev registry 地址**：dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273（已弃用）
 - **nuc 本地离线备份**：~/workspace/tie/doswasmx-final-v3.7.1.tar（866MB，docker save 导出）
 
+## 〇.一、普通 Linux 独立启动（不依赖懒猫微服）
+
+```bash
+docker run -d --name tiejiafengbao --restart unless-stopped -p 6080:6080 ety001/tiejiafengbao:latest
+```
+
+启动后浏览器访问 `http://<主机IP>:6080`，点 "Start Computer" 引导 Win95 进游戏。
+容器是纯静态文件服务（python http.server :6080，无状态、无卷、无环境变量），
+模拟器跑在浏览器端，删除容器不影响任何游戏进度（存档在浏览器 IndexedDB）。
+
 ## 一、最终架构
 
 **DosWasmX**（https://github.com/nbarkhina/DosWasmX）= DOSBox-X 的 Emscripten/WASM 移植，
