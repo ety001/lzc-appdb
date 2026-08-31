@@ -1,0 +1,8 @@
+application:
+  subdomain: tiejiastorm
+  routes:
+    - /=http://tiejiastorm.ink.akawa.ety001.tiejiastorm.lzcapp:6080
+
+services:
+  tiejiastorm:
+    image: dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273
