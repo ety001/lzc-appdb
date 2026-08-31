@@ -1,0 +1,5 @@
+# 铁甲风暴镜像构建资源（NAS 已存档，勿入 git）
+# 详见本目录 AGENTS.md 的"资源文件"章节
+docker-build/game/windows95.img
+docker-build/game/CD/
+docker-build/game/*.bak-esdi
