@@ -35,7 +35,7 @@ dev.ecat.heiyu.space/ety001/doswasmx:hotkey2-1788125273
 | nuc DosWasmX 原始 dist | ~/workspace/tie/doswasmx/ |
 | nuc 修改版 web | ~/workspace/tie/doswasmx-web/ |
 | nuc 游戏原盘 | ~/workspace/tie/铁甲风暴DOSBox完美版/ |
-| 本机 LPK 工程 | ~/workspace/lzc-appdb/tiejiastorm/（已入 lzc-appdb git 仓库）|
+| 本机 LPK 工程 | 本目录（~/workspace/lzc-appdb/tiejiastorm/，已入 lzc-appdb git 仓库）|
 | 本机项目档案 | ~/workspace/tie/PROJECT.md（本文件）|
 | 镜像仓库 | dev.ecat.heiyu.space/ety001/doswasmx:* |
 
