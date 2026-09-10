@@ -1,0 +1,19 @@
+package: ink.akawa.ety001.multica
+version: 0.4.42
+name: Multica
+description: 开源团队工作区：像给同事派活一样把任务交给 AI 编码智能体，它自己接手、边做边汇报，做完交回来审核。支持 26 种智能体 CLI（Claude Code、Codex、Kimi 等）。
+author: multica-ai
+license: SEE LICENSE IN LICENSE
+homepage: https://multica.ai
+
+permissions:
+  required:
+    - net.internet
+
+locales:
+  zh:
+    name: "Multica"
+  zh_CN:
+    name: "Multica"
+  en:
+    name: "Multica"

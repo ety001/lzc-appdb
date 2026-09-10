@@ -1,0 +1,66 @@
+application:
+  subdomain: multica
+  public_path:
+    - /
+  routes:
+    - /=http://web.ink.akawa.ety001.multica.lzcapp:3000
+  upstreams:
+    - location: /
+      domain_prefix: api
+      backend: http://backend.ink.akawa.ety001.multica.lzcapp:8080
+      use_backend_host: false
+
+services:
+  postgres:
+    image: registry.lazycat.cloud/ety001/ety001/multica-pgvector:9087049d3fef4746
+    environment:
+      - POSTGRES_DB={{ .U.pg_db }}
+      - POSTGRES_USER={{ .U.pg_user }}
+      - POSTGRES_PASSWORD={{ stable_secret "pg_password" }}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U {{ .U.pg_user }} -d {{ .U.pg_db }}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: registry.lazycat.cloud/ety001/ety001/multica-backend:9c394c9358e481c1
+    depends_on:
+      - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O- http://localhost:8080/readyz | grep -q '\"migrations\":\"ok\"'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30m
+      start_interval: 10s
+    environment:
+      - DATABASE_URL=postgres://{{ .U.pg_user }}:{{ stable_secret "pg_password" }}@postgres:5432/{{ .U.pg_db }}?sslmode=disable
+      - PORT=8080
+      - JWT_SECRET={{ stable_secret "jwt_secret" }}
+      - FRONTEND_ORIGIN=https://multica.{{ .S.BoxDomain }}
+      - MULTICA_APP_URL=https://multica.{{ .S.BoxDomain }}
+      - MULTICA_PUBLIC_URL=https://multica.{{ .S.BoxDomain }}
+      - MULTICA_DAEMON_SERVER_URL=https://api-multica.{{ .S.BoxDomain }}
+      # 登录方式：未配置 Resend/SMTP 时验证码打印到 backend 容器日志
+      # （docker logs 后端容器，找 "[DEV] Verification code for ...:"）
+      - RESEND_API_KEY={{ .U.resend_api_key }}
+      - RESEND_FROM_EMAIL={{ .U.resend_from_email }}
+      - SMTP_HOST={{ .U.smtp_host }}
+      - SMTP_PORT={{ .U.smtp_port }}
+      - SMTP_USERNAME={{ .U.smtp_username }}
+      - SMTP_PASSWORD={{ .U.smtp_password }}
+      - SMTP_FROM_EMAIL={{ .U.smtp_from_email }}
+      - APP_ENV={{ .U.app_env }}
+      - ALLOW_SIGNUP={{ .U.allow_signup }}
+      - MULTICA_TRUSTED_PROXIES=10.0.0.0/8,172.16.0.0/12,192.168.0.0/16
+    binds:
+      - /lzcapp/var/uploads:/app/data/uploads
+
+  web:
+    image: registry.lazycat.cloud/ety001/ety001/multica-web:c4e3243255d2e106
+    depends_on:
+      - backend
+    environment:
+      - HOSTNAME=0.0.0.0
+      - REMOTE_API_URL=http://backend.ink.akawa.ety001.multica.lzcapp:8080

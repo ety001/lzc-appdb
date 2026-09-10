@@ -1,0 +1,61 @@
+# lzc-deploy-params.yml — Multica 懒猫部署参数
+params:
+  - id: app_env
+    type: string
+    name: "运行环境"
+    description: "production=正式（默认）；development 时可用固定验证码 888888 登录（仅限内网测试）"
+    default_value: "production"
+
+  - id: allow_signup
+    type: bool
+    name: "允许注册新用户"
+    description: "首个注册用户建好工作区后建议关闭"
+    default_value: "true"
+
+  - id: resend_api_key
+    type: secret
+    name: "Resend API Key（邮件验证码，可选）"
+    description: "留空则验证码打印在 backend 容器日志中（[DEV] Verification code for ...）"
+    optional: true
+
+  - id: resend_from_email
+    type: string
+    name: "Resend 发件邮箱"
+    optional: true
+    default_value: "noreply@example.com"
+
+  - id: smtp_host
+    type: string
+    name: "SMTP 服务器（可选，与 Resend 二选一）"
+    optional: true
+
+  - id: smtp_port
+    type: string
+    name: "SMTP 端口"
+    optional: true
+    default_value: "25"
+
+  - id: smtp_username
+    type: string
+    name: "SMTP 用户名"
+    optional: true
+
+  - id: smtp_password
+    type: secret
+    name: "SMTP 密码"
+    optional: true
+
+  - id: smtp_from_email
+    type: string
+    name: "SMTP 发件邮箱"
+    optional: true
+
+  - id: pg_db
+    type: string
+    name: "PostgreSQL 数据库名"
+    default_value: "multica"
+
+  - id: pg_user
+    type: string
+    name: "PostgreSQL 用户名"
+    default_value: "multica"
