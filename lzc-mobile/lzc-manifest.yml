@@ -24,7 +24,7 @@ application:
       publish_port: 40890-40920
 services:
   lzcmobile:
-    image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:5c6a6ab56c20fcfe
+    image: registry.lazycat.cloud/ety001/ety001/lzc-mobile:f0c4a786a8071e9b
     #image: dev.ecat.heiyu.space/ety001/lzc-mobile:1774085383
     network_mode: host
     environment:
