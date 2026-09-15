@@ -5,4 +5,4 @@ application:
 
 services:
   tiejiastorm:
-    image: registry.lazycat.cloud/ety001/ety001/tiejiafengbao:10edc5a000b0cc67
+    image: ety001/tiejiafengbao:latest
