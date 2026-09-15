@@ -12,7 +12,7 @@ application:
 
 services:
   postgres:
-    image: registry.lazycat.cloud/ety001/ety001/multica-pgvector:9087049d3fef4746
+    image: pgvector/pgvector:pg17
     environment:
       - POSTGRES_DB={{ .U.pg_db }}
       - POSTGRES_USER={{ .U.pg_user }}
@@ -26,7 +26,7 @@ services:
       - /lzcapp/var/pgdata:/var/lib/postgresql/data
 
   backend:
-    image: registry.lazycat.cloud/ety001/ety001/multica-backend:9c394c9358e481c1
+    image: ghcr.io/multica-ai/multica-backend:latest
     depends_on:
       - postgres
     healthcheck:
@@ -60,7 +60,7 @@ services:
       - /lzcapp/var/uploads:/app/data/uploads
 
   web:
-    image: registry.lazycat.cloud/ety001/ety001/multica-web:c4e3243255d2e106
+    image: ghcr.io/multica-ai/multica-web:latest
     depends_on:
       - backend
     environment:
