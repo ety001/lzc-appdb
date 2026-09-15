@@ -22,6 +22,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    binds:
+      - /lzcapp/var/pgdata:/var/lib/postgresql/data
 
   backend:
     image: registry.lazycat.cloud/ety001/ety001/multica-backend:9c394c9358e481c1

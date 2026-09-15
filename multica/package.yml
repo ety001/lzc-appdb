@@ -5,6 +5,7 @@ description: 开源团队工作区：像给同事派活一样把任务交给 AI 
 author: multica-ai
 license: SEE LICENSE IN LICENSE
 homepage: https://multica.ai
+min_os_version: 1.5.3
 
 permissions:
   required:
