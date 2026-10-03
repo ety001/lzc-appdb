@@ -1,0 +1,38 @@
+application:
+  subdomain: aira-sync
+  # 同步服务器需要常驻，避免每次轮询冷启动
+  background_task: true
+  # Aira 自带完整鉴权（一次性配对码 + 每设备 Bearer 令牌，服务端只存 SHA-256 哈希）。
+  # 手机 App / 浏览器扩展的请求无法携带懒猫网关登录态，必须关闭网关鉴权让应用自己认证。
+  # 未认证端点只有 /health、/.well-known/aira 和需要有效配对码的 /v1/pairing/exchange。
+  public_path:
+    - /
+  # 直连入口（可选备用）：http://aira-sync.<box>.heiyu.space:8787
+  # 四层转发绕过网关，无网关请求体限制；同样只在懒猫虚拟网络内可达，由 Aira 自身鉴权保护。
+  ingress:
+    - protocol: tcp
+      description: Aira Personal Server direct HTTP
+      port: 8787
+      service: aira-server
+  routes:
+    - /=http://aira-server:8787
+
+services:
+  aira-server:
+    # 容器内以 node 用户（UID 1000）运行，声明 run_as 让 /lzcapp/var/data 归属同 UID，
+    # 否则 SQLite 打不开数据库（SQLITE_CANTOPEN）
+    run_as: "1000:1000"
+    # 源码: https://github.com/mason173/aira-browser services/personal-server @ f6fcbc6
+    # 构建: docker/Dockerfile (与上游 Dockerfile 一致，补 AIRA_HOST=0.0.0.0)
+    image: registry.lazycat.cloud/ety001/ety001/aira-personal-server:7c51f9167cdd7865
+    binds:
+      - /lzcapp/var/data:/data
+    environment:
+      - AIRA_HOST=0.0.0.0
+      - AIRA_PORT=8787
+      - AIRA_DATA_DIR=/data
+      # 留空时各设备以自己填写的地址为准（手机端忽略该值，扩展端回退到用户输入）。
+      # 注意：可选参数未填写时 .U.public_url 为 nil，渲染成字面量 "<no value>" 会破坏
+      # 扩展端的 baseUrl 解析，必须用 sprig default 归一为空串。
+      # 若经自有 HTTPS 反代对外暴露，安装时填 public_url 参数。
+      - AIRA_PUBLIC_URL={{ .U.public_url | default "" }}
