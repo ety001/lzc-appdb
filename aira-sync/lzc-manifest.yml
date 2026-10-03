@@ -5,17 +5,25 @@ application:
   # Aira 自带完整鉴权（一次性配对码 + 每设备 Bearer 令牌，服务端只存 SHA-256 哈希）。
   # 手机 App / 浏览器扩展的请求无法携带懒猫网关登录态，必须关闭网关鉴权让应用自己认证。
   # 未认证端点只有 /health、/.well-known/aira 和需要有效配对码的 /v1/pairing/exchange。
+  # /admin 管理界面保留网关鉴权（! 排除语法优先级最高），再加管理令牌，双重校验。
+  # （domain_prefix 前缀域名方案已废弃：API-token/CLI 身份在网关鉴权下的 <prefix>-<subdomain>
+  #  域名上会 404 "Unable to retrieve corresponding service information"。）
   public_path:
     - /
+    - !/admin/*
+    - !/admin
   # 直连入口（可选备用）：http://aira-sync.<box>.heiyu.space:8787
   # 四层转发绕过网关，无网关请求体限制；同样只在懒猫虚拟网络内可达，由 Aira 自身鉴权保护。
+  # （admin 界面不在此入口上，只走网关域名。）
   ingress:
     - protocol: tcp
       description: Aira Personal Server direct HTTP
       port: 8787
       service: aira-server
+  # 全部流量先进 Go sidecar：/admin* 由它直接服务，其余反代到 Node 同步服务。
+  # （upstreams 的 location 路径分流实测只有精确匹配生效，子路径不可靠，故在容器内分流）
   routes:
-    - /=http://aira-server:8787
+    - /=http://aira-admin.ink.akawa.ety001.aira-sync.lzcapp:8080
 
 services:
   aira-server:
@@ -36,3 +44,21 @@ services:
       # 扩展端的 baseUrl 解析，必须用 sprig default 归一为空串。
       # 若经自有 HTTPS 反代对外暴露，安装时填 public_url 参数。
       - AIRA_PUBLIC_URL={{ .U.public_url | default "" }}
+
+  aira-admin:
+    # Go 管理界面（配对码展示/签发、设备管理）。源码: ~/workspace/aira-sync-admin
+    # 与 aira-server 共享 /data（读 SQLite + 写 pairing_codes/devices.revoked_at，
+    # WAL 模式下跨进程读写安全，busy_timeout 5s）。
+    run_as: "1000:1000"
+    image: registry.lazycat.cloud/ety001/ety001/aira-personal-server:1a56b9b0cc93f82c
+    depends_on:
+      - aira-server
+    binds:
+      - /lzcapp/var/data:/data
+    environment:
+      - AIRA_ADMIN_LISTEN=0.0.0.0:8080
+      - AIRA_ADMIN_DB=/data/aira-personal-server.db
+      - AIRA_ADMIN_SETUP_CODE=/data/setup-code
+      - AIRA_ADMIN_UPSTREAM=http://aira-server:8787
+      # 登录管理界面用的令牌；不填则每次启动随机生成（见容器日志）
+      - AIRA_ADMIN_TOKEN={{ .U.admin_token | default "" }}

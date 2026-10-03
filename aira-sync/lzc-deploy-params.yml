@@ -5,3 +5,9 @@ params:
     description: "仅当通过自己的 HTTPS 反向代理对外暴露时填写，如 https://sync.example.com；留空即可正常在懒猫内使用"
     default_value: ""
     optional: true
+  - id: admin_token
+    type: secret
+    name: "管理界面令牌（可选）"
+    description: "登录 Web 管理界面（/admin）用的令牌。留空则每次启动随机生成，可用容器日志查看"
+    default_value: "$random(len=16)"
+    optional: true
