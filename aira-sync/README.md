@@ -11,7 +11,7 @@ v0.4.0 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 - 上游源码: https://github.com/mason173/aira-browser (`services/personal-server`)
 - 上游版本: 0.3.0 @ commit `f6fcbc6`
 - 镜像: `ety001/aira-personal-server:upstream-f6fcbc6` (Docker Hub) → `registry.lazycat.cloud/ety001/ety001/aira-personal-server:7c51f9167cdd7865`
-- 管理界面源码: `~/workspace/aira-sync-admin`（Go，GPL-3.0），镜像 `...aira-personal-server:1a56b9b0cc93f82c`
+- 管理界面源码: `vendor/aira-sync-admin/`（本仓库内，Go，GPL-3.0），镜像 `...aira-personal-server:1a56b9b0cc93f82c`
 - License: GPL-3.0-only（源码）；名称使用符合上游 TRADEMARKS.md（"based on Aira Personal Server"）
 
 ## 部署形态
