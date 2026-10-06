@@ -379,11 +379,8 @@ func main() {
 		}
 		return
 	}
-	if adminToken == "" {
-		b := make([]byte, 24)
-		rand.Read(b)
-		adminToken = base64.RawURLEncoding.EncodeToString(b)
-		log.Printf("AIRA_ADMIN_TOKEN not set; generated ephemeral admin token: %s", adminToken)
+	if t := strings.TrimSpace(adminToken); t == "" || t == "<no value>" {
+		log.Fatalf("AIRA_ADMIN_TOKEN is required: set the admin_token deploy param on the LazyCat setup wizard (required field), then reinstall. Refusing to generate a token automatically.")
 	}
 	key := sha256.Sum256([]byte("aira-admin-session:" + adminToken))
 	sessionKey = key[:]

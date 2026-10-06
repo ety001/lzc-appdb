@@ -50,7 +50,7 @@ services:
     # 与 aira-server 共享 /data（读 SQLite + 写 pairing_codes/devices.revoked_at，
     # WAL 模式下跨进程读写安全，busy_timeout 5s）。
     run_as: "1000:1000"
-    image: registry.lazycat.cloud/ety001/ety001/aira-personal-server:1a56b9b0cc93f82c
+    image: registry.lazycat.cloud/ety001/ety001/aira-personal-server:fcd0eba16d4c3580
     depends_on:
       - aira-server
     binds:
@@ -60,5 +60,8 @@ services:
       - AIRA_ADMIN_DB=/data/aira-personal-server.db
       - AIRA_ADMIN_SETUP_CODE=/data/setup-code
       - AIRA_ADMIN_UPSTREAM=http://aira-server:8787
-      # 登录管理界面用的令牌；不填则每次启动随机生成（见容器日志）
-      - AIRA_ADMIN_TOKEN={{ .U.admin_token | default "" }}
+      # 登录管理界面用的令牌；必填部署参数（懒猫引导页强制填写）。注意：懒猫模板引擎不支持
+      # sprig 的 required/default 管道（"function required not defined"），必填保证由
+      # deploy-params 的 optional 缺省 + lpk-manager 的 need-setup-deploy-params 拦截兜底，
+      # sidecar 内再对空值/<no value> fail-fast。
+      - AIRA_ADMIN_TOKEN={{ .U.admin_token }}

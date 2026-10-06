@@ -1,6 +1,6 @@
 # aira-sync-admin
 
-Aira Personal Server（`../aira-sync` 的 LPK）的 Go Web 管理界面。
+Aira Personal Server（`~/workspace/lzc-appdb/aira-sync` 的 LPK）的 Go Web 管理界面。
 
 作为 sidecar 与上游 Node 同步服务共库运行：`/admin` 提供管理页面，其余路径反代到
 `AIRA_ADMIN_UPSTREAM`（Node 服务）。LPK 里它是网关域名的唯一入口容器。
@@ -33,7 +33,7 @@ Aira Personal Server（`../aira-sync` 的 LPK）的 Go Web 管理界面。
 | `AIRA_ADMIN_DB` | `/data/aira-personal-server.db` | SQLite 路径 |
 | `AIRA_ADMIN_SETUP_CODE` | `/data/setup-code` | 初始配对码文件 |
 | `AIRA_ADMIN_UPSTREAM` | `http://aira-server:8787` | Node 同步服务地址 |
-| `AIRA_ADMIN_TOKEN` | 随机生成（打印到日志） | 管理令牌 |
+| `AIRA_ADMIN_TOKEN` | 无（**必填**） | 管理令牌。未设置时进程直接退出（fail-fast），由懒猫引导页部署参数注入，不做自动生成 |
 
 ## 构建
 

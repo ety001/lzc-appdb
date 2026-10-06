@@ -7,7 +7,5 @@ params:
     optional: true
   - id: admin_token
     type: secret
-    name: "管理界面令牌（可选）"
-    description: "登录 Web 管理界面（/admin）用的令牌。留空则每次启动随机生成，可用容器日志查看"
-    default_value: "$random(len=16)"
-    optional: true
+    name: "管理界面令牌"
+    description: "登录 Web 管理界面（/admin）用的令牌，必填。请使用足够长的强随机串（如 24 位以上），安装后用它登录管理界面"

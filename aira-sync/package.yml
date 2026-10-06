@@ -1,5 +1,5 @@
 package: ink.akawa.ety001.aira-sync
-version: 0.4.0
+version: 0.4.1
 name: Aira Sync
 description: Aira 浏览器私有化同步服务器（based on Aira Personal Server）。同步书签、历史记录、个性化设置与小说书架，支持网页接力与跨设备标签页。
 author: ETY001

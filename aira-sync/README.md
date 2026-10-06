@@ -6,7 +6,7 @@
 
 单用户私有化同步服务器：手机 Aira App 与电脑 Aira-sync 浏览器扩展配对到同一台服务器后，可同步书签、历史记录、个性化设置、小说书架，并使用网页接力（Page Push）与跨设备标签页。无需华为账号或 Aira Pro。
 
-v0.4.0 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.heiyu.space/admin`）：查看初始配对码、一键签发新配对码、设备列表与吊销——不用再 SSH 到盒子。
+v0.4.1 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.heiyu.space/admin`）：查看初始配对码、一键签发新配对码、设备列表与吊销——不用再 SSH 到盒子。管理令牌为**必填**部署参数（懒猫引导页填写），不再自动生成。
 
 - 上游源码: https://github.com/mason173/aira-browser (`services/personal-server`)
 - 上游版本: 0.3.0 @ commit `f6fcbc6`
@@ -19,7 +19,7 @@ v0.4.0 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 | 访问方式 | 地址 | 说明 |
 |---|---|---|
 | 懒猫网关域名 | `https://aira-sync.<box>.heiyu.space` | Go sidecar 入口：`/admin` 管理界面，其余反代同步 API（public_path `/`，Aira 自身鉴权） |
-| 管理界面 | `https://aira-sync.<box>.heiyu.space/admin` | 令牌登录（安装参数 `admin_token`，不填则启动随机生成，`lzc-docker logs` 查看） |
+| 管理界面 | `https://aira-sync.<box>.heiyu.space/admin` | 令牌登录（必填部署参数 `admin_token`，安装时在引导页填写） |
 | 四层直连 | `http://aira-sync.<box>.heiyu.space:8787` | TCP ingress 直达 Node 服务，绕过网关体限制，懒猫虚拟网络内可达 |
 
 `AIRA_PUBLIC_URL` 通过可选部署参数 `public_url` 注入，默认留空（各设备以自己填写的地址为准：手机端忽略 discovery 的 baseUrl，扩展端空值时回退到用户输入地址）。
@@ -27,9 +27,8 @@ v0.4.0 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 ## 使用步骤
 
 1. 打开 `https://aira-sync.<box>.heiyu.space/admin`，输入管理令牌登录
-   （未设置 `admin_token` 参数时，SSH 执行
-   `ssh root@<box-ip> "/lzcsys/bin/lzc-docker logs inkakawaety001aira-sync-aira-admin-1 2>&1 | grep 'admin token'"`
-   查看随机生成的令牌）
+   （令牌即安装引导页填写的必填参数 `admin_token`；忘记时可在懒猫网盘的应用数据目录或 SSH 查看
+   `/lzcsys/data/system/pkgm/deploy.var/ink.akawa.ety001.aira-sync/deploy_params_value.json`）
 2. 首页直接显示**初始配对码**（24 小时有效，仅第一台设备；被使用后此卡片自动转为引导签发新码）
 3. 手机: Aira → 设置 → 同步 → 私有化部署，填 `https://aira-sync.<box>.heiyu.space` + 配对码
 4. 电脑: 安装 Aira-sync 扩展（Chrome/Edge/Firefox 商店，或 GitHub Releases 的 Community 包）→ 连接私有化部署 → 填同一地址
