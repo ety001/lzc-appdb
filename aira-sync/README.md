@@ -22,7 +22,7 @@ v0.4.1 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 | 管理界面 | `https://aira-sync.<box>.heiyu.space/admin` | 令牌登录（必填部署参数 `admin_token`，安装时在引导页填写） |
 | 四层直连 | `http://aira-sync.<box>.heiyu.space:8787` | TCP ingress 直达 Node 服务，绕过网关体限制，懒猫虚拟网络内可达 |
 
-`AIRA_PUBLIC_URL` 通过可选部署参数 `public_url` 注入，默认留空（各设备以自己填写的地址为准：手机端忽略 discovery 的 baseUrl，扩展端空值时回退到用户输入地址）。
+不设 `AIRA_PUBLIC_URL`：各设备以自己填写的地址为准（手机端忽略 discovery 的 baseUrl，扩展端空值时回退到用户输入地址），网关域名和直连两种填法都兼容。原 `public_url` 部署参数已从引导页移除。
 
 ## 使用步骤
 
@@ -45,7 +45,7 @@ v0.4.1 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 
 1. **`run_as: "1000:1000"` 必须声明**: 上游容器以 `node` 用户（UID 1000）运行且数据在 `/data`。不声明 run_as 时 `/lzcapp/var/data` 归 root，better-sqlite3 报 `SQLITE_CANTOPEN` 退出。
 2. **`public_path: /`**: 手机 App / 扩展的请求不带懒猫网关登录态，会被 307 到登录页。Aira 自带一次性配对码 + 设备 Bearer 令牌鉴权（服务端只存 SHA-256 哈希），未认证可达端点仅 `/health`、`/.well-known/aira`、`/v1/pairing/exchange`（需有效配对码）。
-3. **可选部署参数的 `<no value>` 坑**: 未填写的可选参数渲染成字面量 `<no value>`。`AIRA_PUBLIC_URL={{ .U.public_url | default "" }}` 必须加 `default ""`，否则 discovery 返回的 baseUrl 是 `<no value>` 字符串，扩展端 normalizeBaseUrl 抛 `invalid_personal_server_url`。
+3. **可选部署参数的 `<no value>` 坑**: 未填写的可选参数渲染成字面量 `<no value>`。历史版本曾用 `AIRA_PUBLIC_URL={{ .U.public_url | default "" }}`，未加 `default ""` 时 discovery 返回的 baseUrl 是 `<no value>` 字符串，扩展端 normalizeBaseUrl 抛 `invalid_personal_server_url`。现在 public_url 参数已整个移除，但今后新增可选参数仍需注意此坑。
 4. **网关请求体限制**: 网关域名走 routes 有体限制，书签全量快照（上限 12 MiB）可能被网关拦截；TCP ingress 直连 8787 无此限制。日常同步增量很小，网关域名一般够用。
 5. **更新应用不触发 ingress 重新注册**: 改 ingress 配置后要卸载重装（uninstall + install），不是覆盖安装。
 6. **服务名不能用 `app`**: service 名 `aira-server`。

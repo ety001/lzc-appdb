@@ -1,10 +1,4 @@
 params:
-  - id: public_url
-    type: string
-    name: "对外公开地址（可选）"
-    description: "仅当通过自己的 HTTPS 反向代理对外暴露时填写，如 https://sync.example.com；留空即可正常在懒猫内使用"
-    default_value: ""
-    optional: true
   - id: admin_token
     type: secret
     name: "管理界面令牌"

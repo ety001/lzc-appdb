@@ -39,11 +39,10 @@ services:
       - AIRA_HOST=0.0.0.0
       - AIRA_PORT=8787
       - AIRA_DATA_DIR=/data
-      # 留空时各设备以自己填写的地址为准（手机端忽略该值，扩展端回退到用户输入）。
-      # 注意：可选参数未填写时 .U.public_url 为 nil，渲染成字面量 "<no value>" 会破坏
-      # 扩展端的 baseUrl 解析，必须用 sprig default 归一为空串。
-      # 若经自有 HTTPS 反代对外暴露，安装时填 public_url 参数。
-      - AIRA_PUBLIC_URL={{ .U.public_url | default "" }}
+      # 不设 AIRA_PUBLIC_URL（留空）：各设备以自己填写的地址为准（手机端忽略 discovery 的
+      # baseUrl，扩展端空值时回退到用户输入地址），网关域名和直连两种填法都兼容。
+      # 旧版本的 public_url 部署参数已从引导页移除；确需经自有 HTTPS 反代对外暴露时，
+      # 用 /lzcapp/var/data 下的自定义环境方式或在 manifest 这里按需填写。
 
   aira-admin:
     # Go 管理界面（配对码展示/签发、设备管理）。源码: ~/workspace/aira-sync-admin
