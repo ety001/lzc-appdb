@@ -10,9 +10,11 @@ application:
 services:
   obscura:
     # 薄镜像：官方 obscura + busybox entrypoint 脚本（读 /data/config/obscura.env 拼代理等参数）
-    # 源码见 docker/ 目录，基础镜像 h4ckf0r0day/obscura:0.2.1
-    # 构建：docker buildx build --builder ssd-builder --platform linux/amd64 --push
-    image: registry.lazycat.cloud/ety001/ety001/obscura:39475fb701af62df
+    # + relay TCP 转发器（0.2.3 起 MCP 非回环绑定强制 token，lzc 客户端无法带
+    #   Authorization 头，故 obscura 绑回环、relay 把 0.0.0.0 转发到回环口）
+    # 源码见 docker/ 目录，基础镜像 h4ckf0r0day/obscura:0.2.4
+    # 构建：docker buildx build --builder ssd --platform linux/amd64 --push
+    image: registry.lazycat.cloud/ety001/ety001/obscura:15702134e17c9188
     binds:
       # 运行时配置文件目录：/data/config/obscura.env（PROXY/STEALTH/USER_AGENT/ALLOW_PRIVATE_NETWORK）
       - /lzcapp/var/config:/data/config
