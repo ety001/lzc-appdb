@@ -43,7 +43,7 @@ v0.4.1 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 
 ## 移植要点（坑）
 
-1. **`run_as: "1000:1000"` 必须声明**: 上游容器以 `node` 用户（UID 1000）运行且数据在 `/data`。不声明 run_as 时 `/lzcapp/var/data` 归 root，better-sqlite3 报 `SQLITE_CANTOPEN` 退出。**注意 `min_os_version` 必须跟着写 1.6.0**：run_as 是 v1.6.0 能力，min_os_version 写低了（如 1.5.0）会放行旧系统安装，pkgm 准备 idmapped 挂载目录时直接失败（`mkdir /lzcsys/run/pkgm/idmapped/...: value too large for defined data type`，EOVERFLOW），三容器起不来（0.4.2 在 lzcwlf01 盒子上的实际教训，v0.4.3 修复）。
+1. **不用 run_as，镜像内处理权限（v0.4.4）**: run_as 的 idmapped 挂载在部分盒子（lzcwlf01，lzcos 1.6.2）上 EOVERFLOW 失败且与系统版本无关（同版本 ecat 盒子正常）。两个镜像 root 启动 → entrypoint chown /data → setpriv 降权到 UID 1000（aira-server=node，aira-admin 同 UID 共写 SQLite WAL），manifest 不声明 run_as，min_os_version 保持 1.5.0。
 2. **`public_path: /`**: 手机 App / 扩展的请求不带懒猫网关登录态，会被 307 到登录页。Aira 自带一次性配对码 + 设备 Bearer 令牌鉴权（服务端只存 SHA-256 哈希），未认证可达端点仅 `/health`、`/.well-known/aira`、`/v1/pairing/exchange`（需有效配对码）。
 3. **可选部署参数的 `<no value>` 坑**: 未填写的可选参数渲染成字面量 `<no value>`。历史版本曾用 `AIRA_PUBLIC_URL={{ .U.public_url | default "" }}`，未加 `default ""` 时 discovery 返回的 baseUrl 是 `<no value>` 字符串，扩展端 normalizeBaseUrl 抛 `invalid_personal_server_url`。现在 public_url 参数已整个移除，但今后新增可选参数仍需注意此坑。
 4. **网关请求体限制**: 网关域名走 routes 有体限制，书签全量快照（上限 12 MiB）可能被网关拦截；TCP ingress 直连 8787 无此限制。日常同步增量很小，网关域名一般够用。
@@ -51,7 +51,7 @@ v0.4.1 起内置 **Web 管理界面**（Go sidecar，`https://aira-sync.<box>.he
 6. **服务名不能用 `app`**: service 名 `aira-server`。
 7. **upstreams 的 location 路径分流只有精确匹配生效**: `location: /admin` 只命中精确的 `/admin`，`/admin/login` 等子路径仍落到 `routes /`（文档语义与实测不符）。要在同一域名下分流路径，让一个容器自己分流（Go sidecar 内部路由），别指望 ingress。
 8. **domain_prefix 前缀域名 + 网关鉴权 = API/CLI 404**: `<prefix>-<subdomain>.<box>.heiyu.space` 域名在需要网关鉴权时，Lzc-Api-Auth-Token 身份会得到 404 "Unable to retrieve corresponding service information"（gogs 等普通子域名同 token 正常 200）。multica 的 api- 域名能用是因为它 public_path 全开不走鉴权路径。浏览器 cookie 是否正常未验证。
-9. **binds 不支持 `:ro` 后缀**: `invalid bind: /lzcapp/var/data:/data:ro`，读写都写裸路径，权限靠 UID 对齐（run_as）。
+9. **binds 不支持 `:ro` 后缀**: `invalid bind: /lzcapp/var/data:/data:ro`，读写都写裸路径，权限靠 UID 对齐（v0.4.4 起靠镜像 entrypoint chown+降权）。
 10. **public_path 的 `!` 排除语法实测未生效**: `!/admin/*` 写法构建/安装不报错，但网关层并未对 `/admin` 恢复鉴权（未带登录态访问直达后端）。安全边界要按"public_path 排除不生效"来设计（本应用靠管理令牌层兜底）。
 11. **Go sidecar 反代必须转发所有方法**: `mux.HandleFunc("GET /", ...)` 的 Go 1.22 method pattern 会把 POST 落到内置 405。同步 API 全是 POST，根路由 pattern 写 `"/"` 不带方法。
 
