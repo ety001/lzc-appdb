@@ -26,7 +26,7 @@ services:
       - /lzcapp/var/pgdata:/var/lib/postgresql/data
 
   backend:
-    image: ghcr.io/multica-ai/multica-backend:latest
+    image: ghcr.io/multica-ai/multica-backend:v0.6.1
     depends_on:
       - postgres
     healthcheck:
@@ -60,7 +60,7 @@ services:
       - /lzcapp/var/uploads:/app/data/uploads
 
   web:
-    image: ghcr.io/multica-ai/multica-web:latest
+    image: ghcr.io/multica-ai/multica-web:v0.6.1
     depends_on:
       - backend
     environment:
