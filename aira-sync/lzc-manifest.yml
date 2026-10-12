@@ -27,12 +27,12 @@ application:
 
 services:
   aira-server:
-    # 容器内以 node 用户（UID 1000）运行，声明 run_as 让 /lzcapp/var/data 归属同 UID，
-    # 否则 SQLite 打不开数据库（SQLITE_CANTOPEN）
-    run_as: "1000:1000"
+    # 权限处理已移入镜像 entrypoint（root 启动 → chown /data → setpriv 降权到 UID 1000）。
+    # 不再用 run_as：其 idmapped 挂载机制在部分盒子（lzcwlf01, lzcos 1.6.2）上
+    # EOVERFLOW 失败（mkdir .../idmapped/...: value too large for defined data type）。
     # 源码: https://github.com/mason173/aira-browser services/personal-server @ f6fcbc6
-    # 构建: docker/Dockerfile (与上游 Dockerfile 一致，补 AIRA_HOST=0.0.0.0)
-    image: registry.lazycat.cloud/ety001/ety001/aira-personal-server:7c51f9167cdd7865
+    # 构建: docker/Dockerfile (上游 + entrypoint.sh 降权 + AIRA_HOST=0.0.0.0)
+    image: ety001/aira-personal-server:upstream-f6fcbc6-norunas
     binds:
       - /lzcapp/var/data:/data
     environment:
@@ -45,11 +45,10 @@ services:
       # 用 /lzcapp/var/data 下的自定义环境方式或在 manifest 这里按需填写。
 
   aira-admin:
-    # Go 管理界面（配对码展示/签发、设备管理）。源码: ~/workspace/aira-sync-admin
+    # Go 管理界面（配对码展示/签发、设备管理）。源码: vendor/aira-sync-admin
     # 与 aira-server 共享 /data（读 SQLite + 写 pairing_codes/devices.revoked_at，
-    # WAL 模式下跨进程读写安全，busy_timeout 5s）。
-    run_as: "1000:1000"
-    image: registry.lazycat.cloud/ety001/ety001/aira-personal-server:fcd0eba16d4c3580
+    # WAL 模式下跨进程读写安全，busy_timeout 5s）。同样 entrypoint 降权到 UID 1000，不用 run_as。
+    image: ety001/aira-personal-server:admin-norunas
     depends_on:
       - aira-server
     binds:
