@@ -1,11 +1,14 @@
 package: ink.akawa.ety001.aira-sync
-version: 0.4.2
+version: 0.4.3
 name: Aira Sync
 description: Aira 浏览器私有化同步服务器（based on Aira Personal Server）。同步书签、历史记录、个性化设置与小说书架，支持网页接力与跨设备标签页。
 author: ETY001
 homepage: https://github.com/mason173/aira-browser
 license: https://github.com/mason173/aira-browser/blob/main/services/personal-server/LICENSE
-min_os_version: "1.5.0"
+# run_as（idmapped 挂载）要求 lzcos >= 1.6.0，min_os_version 必须同步抬高，
+# 否则 1.5.x 盒子上安装即报 "mkdir /lzcsys/run/pkgm/idmapped/...: value too
+# large for defined data type"（pkgm 的 idmapped 准备失败，EOVERFLOW）。
+min_os_version: "1.6.0"
 locales:
   zh:
     name: Aira 同步服务器
