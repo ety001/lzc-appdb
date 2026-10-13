@@ -5,9 +5,8 @@ description: Aira 浏览器私有化同步服务器（based on Aira Personal Ser
 author: ETY001
 homepage: https://github.com/mason173/aira-browser
 license: https://github.com/mason173/aira-browser/blob/main/services/personal-server/LICENSE
-# 不再使用 run_as（权限在镜像 entrypoint 内处理），min_os_version 回落到
-# lzc-sdk v2 格式所需的 1.5.0，1.5.x / 1.6.x 盒子均可安装。
-min_os_version: "1.5.0"
+# 按用户要求锁定 1.6.0（缩小支持面；当前构建不使用 1.6.0 独有能力，纯门槛决策）
+min_os_version: "1.6.0"
 locales:
   zh:
     name: Aira 同步服务器
