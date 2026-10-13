@@ -1,5 +1,5 @@
 lzc-sdk-version: 0.1
-name: LazyCat Story
+name: Cat Story
 package: ink.akawa.ety001.lzcstory
 version: 0.0.12
 description: A story reader for LazyCat
@@ -24,11 +24,11 @@ services:
       - /lzcapp/var/data:/app/data
 locales:
   zh:
-    name: 懒猫故事机
+    name: 大虎故事机
     description: "️一款面向 LazyCat 的故事机"
   zh_CN:
-    name: 懒猫故事机
+    name: 大虎故事机
     description: "️一款面向 LazyCat 的故事机"
   en:
-    name: LazyCat Story
+    name: Cat Story
     description: "A story reader for LazyCat"
