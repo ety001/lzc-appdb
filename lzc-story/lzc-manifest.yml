@@ -18,7 +18,7 @@ application:
     - /=http://lzcstory.ink.akawa.ety001.lzcstory.lzcapp:3000
 services:
   lzcstory:
-    image: registry.lazycat.cloud/ety001/ety001/lzc-story:a4a9fe572f86576f
+    image: registry.lazycat.cloud/ety001/ety001/lzc-story:29966e4e8c2e7591
     #image: dev.ecat.heiyu.space/ety001/lzc-story:v3
     binds:
       - /lzcapp/var/data:/app/data
