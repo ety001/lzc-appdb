@@ -4,7 +4,7 @@
 # 与 /data 共写方 aira-server 统一用 UID 1000：root 启动 → entrypoint chown → setpriv 降权。
 # 不再用镜像 USER / manifest run_as：run_as 的 idmapped 挂载在部分盒子（lzcwlf01）上
 # EOVERFLOW 失败。
-FROM golang:1.27-bookworm AS build
+FROM golang:1.27.3-bookworm AS build
 WORKDIR /src
 ENV CGO_ENABLED=0 GOOS=linux
 COPY go.mod go.sum ./
